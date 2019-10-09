@@ -1,9 +1,9 @@
 export default {
-	methods:{
+  methods: {
 
-		dpsDownloadCollection(c){
-			return this.$dps.run({
-				script:`
+    dpsDownloadCollection(c) {
+      return this.$dps.run({
+          script: `
 					<?javascript
 					    $scope.mapper = d => {
 					        let res = d.value;
@@ -36,13 +36,14 @@ export default {
 
 					export("${c}.xlsx")
 
-			`})
-			.then( res => this.$dps.getBaseURL() + res.data.url)
-		},
+			`
+        })
+        .then(res => this.$dps.getBaseURL() + res.data.url)
+    },
 
-		dpsLoadCollectionSample(concept){
-			return this.$dps.run({
-				script: `
+    dpsLoadCollectionSample(concept) {
+      return this.$dps.run({
+          script: `
 					<?javascript
 					    $scope.mapper = d => {
 					        let res = d.value;
@@ -83,34 +84,36 @@ export default {
 					    };
 					?>
 					return("res")
-				`})
-			.then( res => res.data )
-		},
+				`
+        })
+        .then(res => res.data)
+    },
 
-		dpsLoadSchema(){
-			return new Promise( (resolve,reject) => {
-				this.$dps.run({
-				script:`
+    dpsLoadSchema() {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+            script: `
 					<?javascript
 					    $scope.mapper = d => d.identity
 					?>
 					ddl.desc("dj-data")
 					c.map({{mapper}})
-				`})
-				.then( res => {
-					// console.log(res)
-					if(res.type == "error") {
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}	
-				})	
-			})
-		},
+				`
+          })
+          .then(res => {
+            // console.log(res)
+            if (res.type == "error") {
+              reject(res.data)
+            } else {
+              resolve(res.data)
+            }
+          })
+      })
+    },
 
-		dpsUploadCollections(file){
-			return this.$dps.run({
-				script:`
+    dpsUploadCollections(file) {
+      return this.$dps.run({
+        script: `
 
 					<?javascript
 					    $scope.file = $scope.$file.name;
@@ -229,9 +232,9 @@ export default {
 					run({{dmlScript}})
 					log()
 					`,
-					state: {},
-          			file: file
-			}).then(res => res.data)
-		}
-	}
+        state: {},
+        file: file
+      }).then(res => res.data)
+    }
+  }
 }

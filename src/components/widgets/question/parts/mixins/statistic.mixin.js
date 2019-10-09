@@ -40,7 +40,7 @@ export default {
       }
     },
 
-    stat(value){
+    stat(){
       // console.log("STAT",this.config.id, this.stat)
       this.statOptions = this.calculateStat()
       this.statOptions.redraw = false

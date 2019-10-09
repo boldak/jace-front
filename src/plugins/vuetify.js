@@ -5,7 +5,7 @@ import VueI18n from 'vue-i18n'
 
 import en from 'vuetify/es5/locale/en'
 import uk from 'vuetify/es5/locale/uk'
-import * as _ from "lodash"
+// import * as _ from "lodash"
 
 
 let en_msg = { $vuetify: en }

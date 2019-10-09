@@ -39,6 +39,7 @@ export default {
           {
             name: "Settings",
             children: [
+              
               {
                 name: 'Application',
                 editor: () => import("@/components/dialogs/config/parts/app-editor.vue")
@@ -55,6 +56,14 @@ export default {
               {
                 name: "Resources",
                 editor: () => import("./parts/resource-manager.vue")
+              },
+              {
+                name: 'Publication',
+                editor: () => import("@/components/dialogs/config/parts/app-pub.vue")
+              },
+              {
+                name: 'Dev Service Settings',
+                editor: () => import("@/components/dialogs/config/parts/portal-config.vue")
               },
 
               // {

@@ -121,7 +121,7 @@ export default {
                 series: [
                         {   name: "1",
                             type:"line",
-                            areaStyle: {},
+                            // areaStyle: {},
                             data:[43.3, 85.8, 93.7,79.4],
                             smooth: true,
                             areaStyle:{
@@ -130,7 +130,7 @@ export default {
                         },    
                         {   name: "2",
                             type:"line",
-                            areaStyle: {},
+                            // areaStyle: {},
                             data:[37.3, 28.8, 77.7, 100],
                             smooth: true,
                             areaStyle:{
@@ -301,7 +301,7 @@ export default {
                 series: [
                         {   name: "1",
                             type:"line",
-                            areaStyle: {},
+                            // areaStyle: {},
                             data:[43.3, 85.8, 93.7,79.4],
                             smooth: true,
                             "stack": "a",
@@ -311,7 +311,7 @@ export default {
                         },    
                         {   name: "2",
                             type:"line",
-                            areaStyle: {},
+                            // areaStyle: {},
                             data:[37.3, 28.8, 77.7, 100],
                             smooth: true,
                             "stack": "a",

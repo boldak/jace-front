@@ -3,7 +3,7 @@ export default {
 
     icon: "mdi-code-braces",
 
-    getInitialConfig( snippet ){
+    getInitialConfig(){
 
         let res = {
             type:"dps-highlight-widget", 

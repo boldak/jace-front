@@ -1,24 +1,24 @@
 export default {
-	methods:{
+  methods: {
 
-		// _run(script){
-		// 	return new Promise( (resolve, reject) => {
-		// 		this.$dps.run({script: script})
-		// 		.then( res => {
-		// 			if(res.type =="error"){
-		// 				reject(res.data)
-		// 			} else {
-		// 				resolve(res.data)
-		// 			}
-		// 		})
-		// 	})
+    // _run(script){
+    // 	return new Promise( (resolve, reject) => {
+    // 		this.$dps.run({script: script})
+    // 		.then( res => {
+    // 			if(res.type =="error"){
+    // 				reject(res.data)
+    // 			} else {
+    // 				resolve(res.data)
+    // 			}
+    // 		})
+    // 	})
 
-		// },
+    // },
 
-		dpsLoadCollectionSample(concept){
-			return new Promise( (resolve, reject) => {
-				this.$dps.run({
-				script: `
+    dpsLoadCollectionSample(concept) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 					
 					dml.select(from:"${concept}", return:"value")
 					set("data")
@@ -52,35 +52,37 @@ export default {
 					    };
 					?>
 					return("res")
-				`}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-			})
-		},
+				`
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+      })
+    },
 
-		dpsLoadSchema(){
-			return new Promise( (resolve, reject) => {
-				this.$dps.run({
-				script:`
+    dpsLoadSchema() {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 					ddl.desc("dj-data", return:"identity")
-				`}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-			})
-		},
+				`
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+      })
+    },
 
-		dpsUploadCollections(file){
-			return new Promise( (resolve, reject) => {
-				this.$dps.run({
-				script:`
+    dpsUploadCollections(file) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 
 					<?javascript
 					    $scope.file = $scope.$file.name;
@@ -199,22 +201,22 @@ export default {
 					run({{dmlScript}})
 					log()
 					`,
-					state: {},
-          			file: file
-			}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-		})
-		},
+          state: {},
+          file: file
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+      })
+    },
 
-		dpsDownloadCollection(c){
-			return new Promise( (resolve, reject) => {
-				this.$dps.run({
-				script:`
+    dpsDownloadCollection(c) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 					
 					dml.select(from:"${c.concept}", return:"value")
 					set("data")
@@ -240,21 +242,22 @@ export default {
 
 					export("${c.concept}.xlsx")
 
-			`}).then( res => {
-					if(res.type =="error"){
-						reject(res)
-					} else {
-						resolve(this.$dps.getBaseURL() + res.data.url)
-					}
-				})
-			})
-			
-		},
+			`
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res)
+          } else {
+            resolve(this.$dps.getBaseURL() + res.data.url)
+          }
+        })
+      })
 
-		dpsLoadConcepts( metadata ){
-			return new Promise( (resolve, reject) => {
-				this.$dps.run({
-				script:`
+    },
+
+    dpsLoadConcepts(metadata) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 					dml.select(from:"${metadata.concepts}", return:"value")
 					c.uniqueBy("topic")
 					c.order()
@@ -289,21 +292,22 @@ export default {
 					?>
 
 					return ("tree")
-					`}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-			})		
-			
-		},
+					`
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+      })
 
-		dpsLoadEntityInfo(metadata,e){
-	        return new Promise( (resolve, reject) => {
-				this.$dps.run({
-		        script:`
+    },
+
+    dpsLoadEntityInfo(metadata, e) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 		        	<?javascript
 				    $scope.mapper = d => d.value; 
 				?>
@@ -357,22 +361,23 @@ export default {
 				return ("res")
 
 
-		        `}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-	        })	
-	  
-      },
+		        `
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+      })
 
-      dpsLoadDatapointInfo(metadata, dp){
-      	// console.log("dpsLoadDatapointInfo", metadata, dp)
-        return new Promise( (resolve, reject) => {
-				this.$dps.run({
-	        script:`
+    },
+
+    dpsLoadDatapointInfo(metadata, dp) {
+      // console.log("dpsLoadDatapointInfo", metadata, dp)
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 				
 				dml.select(from:"${dp.concept}", return:"value")
 				set("data")
@@ -419,58 +424,61 @@ export default {
 				    })
 				?>
 				return ("res")
-        `}).then( res => {
-        	
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-        })
-        
-      },
+        `
+        }).then(res => {
 
-      dpsLoadDatapoints(metadata){
-       return new Promise( (resolve, reject) => {
-				this.$dps.run({
-        	script:`
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+      })
+
+    },
+
+    dpsLoadDatapoints(metadata) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 				dml.select(from:"${metadata.collections}", where:<? d => d.value.type == "datapoint" ?>, return:"value")
-        `}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
+        `
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
         })
-      },
+      })
+    },
 
-    dpsLoadEntities(metadata){
-        return new Promise( (resolve, reject) => {
-				this.$dps.run({
-        	script:`
+    dpsLoadEntities(metadata) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 				dml.select(
 				    from:"${metadata.collections}", 
 				    where: <? d => d.value.type == "entity" ?>, 
 				    return: "value"
 				)
 
-        `}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-        	
-       	})
-      },
+        `
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
 
-    dpsLoadSample(metadata, dp){
-        return new Promise( (resolve, reject) => {
-				this.$dps.run({
-          	script:`
+      })
+    },
+
+    dpsLoadSample(metadata, dp) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
           		dml.select(
 				    from:"${metadata.collections}", 
 				    where:<? d => d.value.concept.startsWith("${dp.concept}.") && d.value.concept.split(".").length > 1 ?>, 
@@ -490,21 +498,22 @@ export default {
 				    };
 				?>
 				return("res")
-        `}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-        	
-       })
+        `
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+
+      })
     },
 
-    dpsLoadEntitySample(metadata,e){
-        return new Promise( (resolve, reject) => {
-				this.$dps.run({
-          script:`
+    dpsLoadEntitySample(metadata, e) {
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
           	dml.select(
 			    from:"${metadata.collections}", 
 			    where:<? d => d.value.concept.startsWith("${e.concept}.") && d.value.concept.split(".").length > 1 ?>, 
@@ -524,23 +533,24 @@ export default {
 			    };
 			?>
 			return("res")
-          `}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-          	
-       	})
-      },
+          `
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
+        })
+
+      })
+    },
 
 
-    dpsLoadIndicators(metadata, p){
-                
-        return new Promise( (resolve, reject) => {
-				this.$dps.run({
-        	script: `
+    dpsLoadIndicators(metadata, p) {
+
+      return new Promise((resolve, reject) => {
+        this.$dps.run({
+          script: `
 				<?javascript
 				    
 				    $scope.mapper = d => {
@@ -621,16 +631,17 @@ export default {
 				?>
 
 				return("res")
-			`}).then( res => {
-					if(res.type =="error"){
-						reject(res.data)
-					} else {
-						resolve(res.data)
-					}
-				})
-				
+			`
+        }).then(res => {
+          if (res.type == "error") {
+            reject(res.data)
+          } else {
+            resolve(res.data)
+          }
         })
-      }
 
-	}
+      })
+    }
+
+  }
 }

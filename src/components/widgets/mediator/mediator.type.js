@@ -3,7 +3,7 @@ export default {
 
     icon: "mdi-language-javascript",
 
-    getInitialConfig( snippet ){
+    getInitialConfig(){
 
         let res = {
             type:"mediator-widget", 

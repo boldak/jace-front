@@ -121,7 +121,7 @@
 	    }
 	  },
 	  created(){
-	  	this.items = _.toPairs(this.object).map( d => ({key:d[0],value:d[1][this.value]}))
+	  	this.items = _.toPairs(this.object).map( d => ({key:d[0],value:((this.value)?d[1][this.value]:d[1])}))
 	  }
 
 	}  
