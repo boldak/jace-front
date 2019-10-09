@@ -18,8 +18,6 @@ import "katex/dist/katex.min.css"
 import VueSocketIoExt from "vue-socket.io-extended";
 import io from "socket.io-client";
 
-import Autoscroll from 'vue-autoscroll'
-
 
 let _io = io(devService.config.pubService) //"http://localhost:8081")
 Vue.use(VueSocketIoExt, _io);
@@ -34,8 +32,6 @@ Vue.use(VueClipboard)
 //       console.log(window.appRouter)
 //       window.appRouter.push(path)
 // }
-
-Vue.use(Autoscroll)
 
 Vue.use(cookiePlugin)
 Vue.use(portalPlugin, { baseURL: `${(initialConfig.portalUrl)?initialConfig.portalUrl:''}/` })
