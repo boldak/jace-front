@@ -33,13 +33,11 @@
       
       </v-container>
     </v-card>
-    </v-tabs>
-    <!--  <pre>
-        {{JSON.stringify(statOptions,null,"\t")}}
-      </pre>   -->
+    
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js";
@@ -88,7 +86,7 @@ export default {
 
       let r = _.union(_.uniq(left), _.uniq(right)).sort((a, b) => a - b).map(item => ({ title: item }))
 
-      let result = r.map((n, index) => {
+      let result = r.map( n => {
         let l = _.countBy(left)[n.title]
         let r = _.countBy(right)[n.title]
 
@@ -202,4 +200,4 @@ export default {
 }
 
 </script>
-</style>
+

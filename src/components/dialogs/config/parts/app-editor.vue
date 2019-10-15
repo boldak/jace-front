@@ -48,7 +48,7 @@
       <v-flex xs1 pl-3 pr-3 justify-center>
       </v-flex>
       <v-flex xs11 pl-3 pr-3 justify-center>
-          <v-autocomplete v-model="appKeywords" :items="availableKeywords" color="primary" label="Keywords" multiple :search-input.sync="searchKeyword" chips>
+        <v-autocomplete v-model="appKeywords" :items="availableKeywords" color="primary" label="Keywords" multiple :search-input.sync="searchKeyword" chips>
           <template v-slot:selection="data">
             <v-chip close-icon="mdi-close-outline" close color="primary" outlined label :input-value="data.selected" v-bind="data.attrs" @click="data.select" @click:close="removeKeyword(data.item)">
               {{ data.item }}

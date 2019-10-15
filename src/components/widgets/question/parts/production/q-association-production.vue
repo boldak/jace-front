@@ -8,29 +8,18 @@
         <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
-          
-
           <v-tab-item key="response" ripple>
             <v-card v-if="!options.entities || options.entities.length < 2" flat color="transparent" class="mt-3">
               <h3 class="headline warning--text font-weight-light">{{translate('Answer_not_configured')}}</h3>
             </v-card>
-
-              <v-card v-else flat color="transparent" class="mt-3 mx-0 pa-3">
-              <v-data-table
-                  :headers="headers"
-                  :items="items"
-                  style="border:1px solid #dedede;"
-                  dense
-                  :items-per-page="Number.POSITIVE_INFINITY"
-                  hide-default-footer
-                  item-key="id"
-                >
-                  <template v-slot:body="{items}">
+            <v-card v-else flat color="transparent" class="mt-3 mx-0 pa-3">
+              <v-data-table :headers="headers" :items="items" style="border:1px solid #dedede;" dense :items-per-page="Number.POSITIVE_INFINITY" hide-default-footer item-key="id">
+                <template v-slot:body="{items}">
                   <tbody>
                     <tr v-for="(item, rowIndex) in items" :key="rowIndex">
-                      <td v-for="(col, index) in headers" :class="(index==0) ? 'text-start' : 'text-center'" style="font-size:12px;">
+                      <td v-for="(col, index) in headers" :key="index" :class="(index==0) ? 'text-start' : 'text-center'" style="font-size:12px;">
                         <span v-if="index==0 || (index <= rowIndex+1)" class="caption text-start" style="line-height:1.4em;">
-                         {{(item[col.value] == 'null')? ' ': item[col.value]}}
+                          {{(item[col.value] == 'null')? ' ': item[col.value]}}
                         </span>
                         <v-menu v-else close-on-content-click>
                           <template v-slot:activator="{on}">
@@ -39,71 +28,18 @@
                             </v-chip>
                           </template>
                           <v-list>
-                            <v-list-item-title  v-for="v in scale" :style="`${v.style} padding:0.25em 1em;cursor:pointer;`" @click="setValue(v.value,item,col)">
+                            <v-list-item-title v-for="(v, scaleIndex) in scale" :key="scaleIndex" :style="`${v.style} padding:0.25em 1em;cursor:pointer;`" @click="setValue(v.value,item,col)">
                               {{(v.value) ? v.value : '...'}}
                             </v-list-item-title>
-                          </v-list>  
+                          </v-list>
                         </v-menu>
                       </td>
                     </tr>
                   </tbody>
                 </template>
-              
-                </v-data-table>
+              </v-data-table>
             </v-card>
-
-
-
-
-
-
-
-
-
-            <!-- <v-card v-else flat color="transparent" class="mt-3">
-              <v-layout fill-height row>
-                <v-flex xs2 pa-2 class="text-xs-center headline" style="border-left:1px solid #dedede; border-bottom:1px solid #dcdcdc;  border-top:1px solid #dcdcdc;">
-                </v-flex>
-                <v-flex v-for="(e, idx) in options.entities" :class="`${cellClass} text-xs-center`" :style="`
-                      min-height:3em; 
-                      border-left:1px solid #dedede; 
-                      border-bottom:1px solid #dcdcdc;  
-                      border-top:1px solid #dcdcdc;
-                      ${ (idx == (options.entities.length-1)) ? 'border-right: 1px solid #dcdcdc !important;' : ''}
-                    `">
-                  <span class="caption">{{e.title}}</span>
-                </v-flex>
-              </v-layout>
-              <v-layout fill-height row v-for="(f, index1) in options.entities">
-                <v-flex xs2 pa-2 class="caption" align-center style="border-left: 1px solid #dcdcdc;
-                    border-bottom:1px solid #dcdcdc; ">
-                  {{f.title}}
-                </v-flex>
-                <v-flex v-for="(e, index2) in options.entities" :class="`${cellClass} text-xs-center`" :style="`
-                    min-height:3em; 
-                    border-left: 1px solid #dcdcdc;
-                    border-bottom:1px solid #dcdcdc; 
-                    ${ (index2 < (options.entities.length-1)) ? '' :'border-right: 1px solid #dcdcdc !important;'}
-                  `" align-center>
-                  <v-layout v-if="index2 > index1" align-center :style="`${getStyle(f,e)} height:100%; cursor:pointer;`" @click="onSetValue($event,f,e)">
-                    <v-flex class="text-xs-center body-2">{{getValue(f,e)}}</v-flex>
-                  </v-layout>
-                  <v-layout v-else style="height:100%;"></v-layout>
-                </v-flex>
-              </v-layout>
-              <v-menu v-model="showMenu" :position-x="posX" :position-y="posY" absolute offset-y>
-                <v-layout column>
-                  <div v-for="v in scale" :style="`${v.style} padding:0.25em 1em;cursor:pointer;`" @click="setValue(v.value)">
-                    {{ v.value }}
-                  </div>
-                </v-layout>
-              </v-menu>
-            </v-card>
- -->
-
           </v-tab-item>
-
-
           <v-tab-item key="statistic" ripple v-if="options.showResponsesStat">
             <v-card v-if="options.entities.length < 2" flat color="transparent" class="mt-3">
               <h3 class="headline warning--text font-weight-light">{{translate('No_data_available')}}</h3>
@@ -112,7 +48,7 @@
               <v-layout fill-height row>
                 <v-flex xs2 pa-2 class="text-xs-center headline" style="border-left:1px solid #dedede; border-bottom:1px solid #dcdcdc;  border-top:1px solid #dcdcdc;">
                 </v-flex>
-                <v-flex v-for="(e, idx) in options.entities" :class="`${cellClass} text-xs-center`" :style="`
+                <v-flex v-for="(e, idx) in options.entities" :key="idx" :class="`${cellClass} text-xs-center`" :style="`
                       min-height:3em; 
                       border-left:1px solid #dedede; 
                       border-bottom:1px solid #dcdcdc;  
@@ -122,12 +58,12 @@
                   <span class="caption">{{e.title}}</span>
                 </v-flex>
               </v-layout>
-              <v-layout fill-height row v-for="(f, index1) in options.entities">
+              <v-layout fill-height row v-for="(f, index1) in options.entities" :key="index1">
                 <v-flex xs2 pa-2 class="caption" align-center style="border-left: 1px solid #dcdcdc;
                     border-bottom:1px solid #dcdcdc; ">
                   {{f.title}}
                 </v-flex>
-                <v-flex v-for="(e, index2) in options.entities" :class="`${cellClass} text-xs-center`" :style="`
+                <v-flex v-for="(e, index2) in options.entities" :key="index2" :class="`${cellClass} text-xs-center`" :style="`
                     min-height:3em; 
                     border-left: 1px solid #dcdcdc;
                     border-bottom:1px solid #dcdcdc; 
@@ -143,17 +79,13 @@
               </v-layout>
             </v-card>
           </v-tab-item>
-        </v-tabs>  
+        </v-tabs>
       </v-container>
     </v-card>
-    </v-tabs>
-    <!-- <pre> -->
-    <!-- {{JSON.stringify(statOptions,null,"\t")}} -->
-    <!-- {{JSON.stringify(options,null,"\t")}} -->
-    <!-- </pre> -->
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -202,8 +134,7 @@ export default {
       s.push({
         value: null,
         style: (this.options.undefinedValue) ?
-          this.options.undefinedValue.style :
-          `color:${this.$vuetify.theme.secondary} !important;`,
+          this.options.undefinedValue.style : `color:${this.$vuetify.theme.secondary} !important;`,
         title: ""
       })
       return s
@@ -227,7 +158,7 @@ export default {
 
     getValue(e1, e2) {
 
-      if(!this.answer) return "null"
+      if (!this.answer) return "null"
 
       let f = _.find(this.answer.data, a => a.e1 == e1.id && a.e2 == e2.id)
 
@@ -272,11 +203,11 @@ export default {
         `color:${this.$vuetify.theme.secondary} !important;`
     },
 
-   setValue(value, item, col) {
+    setValue(value, item, col) {
       item[col.value] = value
-      let factor = _.find(this.options.entities, d => d.id == item.id) 
+      let factor = _.find(this.options.entities, d => d.id == item.id)
       let effect = _.find(this.options.entities, d => d.id == col.id)
-      
+
       let index = _.findIndex(this.answer.data, a => a.e1 == factor.id && a.e2 == effect.id)
       if (index >= 0) {
         this.answer.data.splice(index, 1, { e1: factor.id, e2: effect.id, value: value })
@@ -284,25 +215,11 @@ export default {
         this.answer.data.push({ e1: factor.id, e2: effect.id, value: value })
       }
       if (this.answer && this.answer.valid != this.isValid) this.answer.valid = this.isValid;
-      
+
       this.$emit("update:answer", this.answer)
 
     },
 
-
-    // setValue(value) {
-    //   if (!this.selection) return
-
-    //   let index = _.findIndex(this.answer.data, a => a.e1 == this.selection.e1.id && a.e2 == this.selection.e2.id)
-    //   if (index >= 0) {
-    //     this.answer.data.splice(index, 1, { e1: this.selection.e1.id, e2: this.selection.e2.id, value: value })
-    //   } else {
-    //     this.answer.data.push({ e1: this.selection.e1.id, e2: this.selection.e2.id, value: value })
-    //   }
-    //   if (this.answer && this.answer.valid != this.isValid) this.answer.valid = this.isValid;
-    //   this.selection = null;
-    //   this.$emit("update:answer", this.answer)
-    // },
 
     getChartOptions(e1, e2) {
       let f = _.find(this.statOptions, s => s.e1.id == e1.id && s.e2.id == e2.id)
@@ -345,26 +262,6 @@ export default {
           value: (c[v.value]) ? c[v.value] : 0
         }))
       })
-
-      // r.forEach(s => {
-      //   s.chartOptions = {
-
-      //     tooltip: {
-      //       trigger: 'item',
-      //       formatter: "{a} <br/>{b}: {c} ({d}%)"
-      //     },
-
-      //     color: this.options.scale.map(v => v.background),
-      //     series: [{
-      //       type: 'pie',
-
-      //       name: `${s.factor.title} => ${s.effect.title}`,
-      //       radius: ['5%', '25%'],
-      //       data: s.data.map(d => ({ name: d.title, value: d.value }))
-      //     }]
-      //   }
-      // })
-
 
 
       r.forEach(s => {
@@ -417,8 +314,8 @@ export default {
     selection: null,
     posX: null,
     posY: null,
-    headers:[],
-    items:[],
+    headers: [],
+    items: [],
 
     i18n: {
       en: {
@@ -440,30 +337,27 @@ export default {
 
   }),
 
-  watch:{
-    options:{
-      handler(value){
-        console.log(value)
-        if(!value) return
-        console.log(this.options)
-        this.headers = [{
-          text:"Entity",
-          value:"$entity"
-        }].concat(this.options.entities.map( d => {
-            d.value = d.title
-            d.text = d.title
-            return d
-        }))
-        console.log("headers", this.headers)
+  watch: {
+    options: {
+      handler(value) {
 
-        this.items = this.options.entities.map( f => {
-          let keys = ["id","$entity"].concat( this.options.entities.map( e => e.title))
-          let values = [f.id, f.title].concat( this.options.entities.map( e => this.getValue(f,e)))
+        if (!value) return
+
+        this.headers = [{
+          text: "Entity",
+          value: "$entity"
+        }].concat(this.options.entities.map(d => {
+          d.value = d.title
+          d.text = d.title
+          return d
+        }))
+        this.items = this.options.entities.map(f => {
+          let keys = ["id", "$entity"].concat(this.options.entities.map(e => e.title))
+          let values = [f.id, f.title].concat(this.options.entities.map(e => this.getValue(f, e)))
           return _.zipObject(keys, values)
         })
-        console.log("items", this.items)  
       },
-      deep:true
+      deep: true
     }
   },
 

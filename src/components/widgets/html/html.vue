@@ -12,6 +12,7 @@
   
   import _katex from "katex"
   import asciimath2latex from "asciimath-to-latex" 
+  import * as _ from "lodash"
   
   let compile = (template,context) => {
      _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
@@ -64,7 +65,7 @@
         return this.$asciiMath(formula)
       },
 
-      onUpdate ({data, options}) {
+      onUpdate ({data}) {
        this.template = data;
       },
 
@@ -105,6 +106,7 @@
                       text:e.toString()
                     })
         }
+        return "<div></div>"
       }
 
     },

@@ -1,3 +1,4 @@
+import moment from "moment"
 
  let round = ( date, start, level, value) => {
       let defFormat = "YYYY-MM-DD HH:mm";
@@ -19,8 +20,7 @@
 export default (timeline) => {
 
     let defFormat = "YYYY-MM-DD HH:mm";
-    let inputFormat = "DD/MM/YY HH:mm";
-
+    
 
     let RStat = timeline
         .map(item => moment(new Date(item)))

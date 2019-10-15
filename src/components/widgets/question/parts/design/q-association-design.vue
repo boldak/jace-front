@@ -36,7 +36,7 @@
           <v-container>
             <v-select :items="[3,5,7,9]" label="Maximum rate value" v-model="max">
             </v-select>
-            <v-layout row v-for="s in options.scale">
+            <v-layout row v-for="(s, scaleIndex) in options.scale" :key="scaleIndex">
               <v-text-field :label="`${s.value} title`" v-model="s.title" @input="$emit('update:options',options)"></v-text-field>
             </v-layout>
             <v-divider></v-divider>
@@ -57,7 +57,7 @@
               <v-layout fill-height row>
                 <v-flex xs2 pa-2 class="text-xs-center headline" style="border-left:1px solid #dedede; border-bottom:1px solid #dcdcdc;  border-top:1px solid #dcdcdc;">
                 </v-flex>
-                <v-flex v-for="(e, idx) in options.entities" :class="`${cellClass} text-xs-center`" :style="`
+                <v-flex v-for="(e, idx) in options.entities" :key="idx" :class="`${cellClass} text-xs-center`" :style="`
                       min-height:3em; 
                       border-left:1px solid #dedede; 
                       border-bottom:1px solid #dcdcdc;  
@@ -67,12 +67,12 @@
                   <span class="caption">{{e.title}}</span>
                 </v-flex>
               </v-layout>
-              <v-layout fill-height row v-for="(f, index1) in options.entities">
+              <v-layout fill-height row v-for="(f, index1) in options.entities" :key="index1">
                 <v-flex xs2 pa-2 class="caption" align-center style="border-left: 1px solid #dcdcdc;
                     border-bottom:1px solid #dcdcdc; ">
                   {{f.title}}
                 </v-flex>
-                <v-flex v-for="(e, index2) in options.entities" :class="`${cellClass} text-xs-center`" :style="`
+                <v-flex v-for="(e, index2) in options.entities" :key="index2" :class="`${cellClass} text-xs-center`" :style="`
                     min-height:3em; 
                     border-left: 1px solid #dcdcdc;
                     border-bottom:1px solid #dcdcdc; 
@@ -91,15 +91,13 @@
         </v-card>    
       </v-tab-item>
     </v-tabs>
-    <!-- <pre>
-        {{JSON.stringify(options,null,"\t")}}
-      </pre>   -->
+    
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
-// import djList from "@/components/core/ext/dj-list.vue"
 import palettePicker from "@/components/core/ext/palette-picker.vue"
 import statMixin from "../mixins/statistic.mixin.js"
 import colorUtility from "../../color-utility.js"

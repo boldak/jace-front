@@ -4,8 +4,7 @@
       {{options.title}}
     </div>
     <v-spacer></v-spacer>
-    
-    <span v-for="page in options.references">
+    <span v-for="(page, pageIndex) in options.references" :key="pageIndex">
       <router-link v-if="page.id" :to="`/${page.id || ''}`" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
         {{page.title}}
       </router-link>
@@ -13,23 +12,21 @@
         {{page.title}}
       </a>
     </span>
-
     <v-divider vertical v-if="options.login || options.locale || options.user"></v-divider>
     <v-tooltip left v-if="!app.user.isLoggedIn && options.login">
       <template v-slot:activator="{ on }">
         <v-btn icon v-on:click="login()" v-on="on">
           <v-icon>mdi-google-plus</v-icon>
         </v-btn>
-      </template>  
+      </template>
       <span>Login with Google</span>
     </v-tooltip>
-
     <v-menu offset-y v-if="options.locale">
       <template v-slot:activator="{ on }">
         <v-btn v-on="on" icon>
           <img :src="'./img/'+$i18n.locale+'.png'" small>
         </v-btn>
-      </template>  
+      </template>
       <v-list>
         <v-list-item key="uk" @click="setLocale('uk')">
           <img :src="'./img/uk.png'" small>
@@ -44,17 +41,10 @@
         <v-avatar size="32" class="ml-2" v-on="on" style="border: 1px solid rgba(255, 255, 255, 0.3);">
           <dj-img :src="app.user.photo" icon="mdi-account"></dj-img>
         </v-avatar>
-      </template>  
+      </template>
       <span>{{app.user.name}}</span>
     </v-tooltip>
   </v-app-bar>
-
-
-
-
-
-
-
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";

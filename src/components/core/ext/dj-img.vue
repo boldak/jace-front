@@ -23,7 +23,7 @@
 			}
 		},
 		watch:{
-			src(newValue,oldValue){
+			src(newValue){
 				this.error = true
 				let img = new Image()
 				

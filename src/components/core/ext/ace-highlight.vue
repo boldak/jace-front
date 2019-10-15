@@ -28,23 +28,23 @@
       // var lang = vm.lang;
       // var theme = vm.theme;
      
-      this.highlight = ace.require("ace/ext/static_highlight");
+      this.highlight = window.ace.require("ace/ext/static_highlight");
 
 
-      let mode = ace.require("ace/mode/"+ this.lang);
+      let mode = window.ace.require("ace/mode/"+ this.lang);
       mode = (mode) ? mode.Mode : mode;  
-      let theme = ace.require("ace/theme/tomorrow");
+      let theme = window.ace.require("ace/theme/tomorrow");
       
       if(!mode){
-          console.error("Highlighter mode: "+this.lang+" not supported")
+          window.console.error("Highlighter mode: "+this.lang+" not supported")
           return
       }
       
       if(!theme){
-          console.error("Highlighter theme: "+this.theme+" not supported")
+          window.console.error("Highlighter theme: "+this.theme+" not supported")
       }
 
-      let content = (this.content) ? JSON.parse(JSON.stringify(this.content)) : ""
+      // let content = (this.content) ? JSON.parse(JSON.stringify(this.content)) : ""
 
       this.highlighted = this.highlight.renderSync(
               this.content,
@@ -56,7 +56,7 @@
       
       
 
-      ace.require("ace/lib/dom").importCssString(
+      window.ace.require("ace/lib/dom").importCssString(
           this.highlighted.css
               .replace("font-size: 12px;","")
               .replace(
@@ -67,32 +67,32 @@
       );     
       
       // elm.html(highlighted.html)
-      
-      // var session = vm.session = editor.getSession();
-      // editor.$blockScrolling = Infinity;
-      // session.setMode('ace/mode/' + lang);
-      // editor.setTheme('ace/theme/' + theme);
-      // session.setValue(vm.content, 1);
-      // session.on('change', () => {
-      //    vm.$emit('change', session.getValue());
-      // });
+// var session = vm.session = editor.getSession();
+// editor.$blockScrolling = Infinity;
+// session.setMode('ace/mode/' + lang);
+// editor.setTheme('ace/theme/' + theme);
+// session.setValue(vm.content, 1);
+// session.on('change', () => {
+// vm.$emit('change', session.getValue());
+// });
+
      
     },
 
     watch: {
       
       content: function (newContent) {
-        let mode = ace.require("ace/mode/"+ this.lang);
+        let mode = window.ace.require("ace/mode/"+ this.lang);
         mode = (mode) ? mode.Mode : mode;  
-        let theme = ace.require("ace/theme/tomorrow");
+        let theme = window.ace.require("ace/theme/tomorrow");
         
         if(!mode){
-            console.error("Highlighter mode: "+this.lang+" not supported")
+            window.console.error("Highlighter mode: "+this.lang+" not supported")
             return
         }
         
         if(!theme){
-            console.error("Highlighter theme: "+this.theme+" not supported")
+            window.console.error("Highlighter theme: "+this.theme+" not supported")
         }
 
         let content = (newContent) ? JSON.parse(JSON.stringify(newContent)) : ""
@@ -103,7 +103,7 @@
                 theme
         );
         
-        ace.require("ace/lib/dom").importCssString(
+        window.ace.require("ace/lib/dom").importCssString(
             this.highlighted.css
                 .replace("font-size: 12px;","")
                 .replace(

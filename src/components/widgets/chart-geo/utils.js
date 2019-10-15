@@ -1,3 +1,5 @@
+import * as _ from "lodash"
+
 
 let unionRect = (b1,b2) => {
 	if(!b1){

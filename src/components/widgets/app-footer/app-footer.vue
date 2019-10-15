@@ -1,31 +1,30 @@
 <template>
   <div>
-  <v-footer height="auto" color="primary darken-1 white--text" class="px-0">
-    <v-col cols-12>
-      <v-row>
-        <v-flex xs12 md6 px-5 py-2>
-          <h3 class="headline font-weight-light">{{options.title}}</h3>
-          <p class="font-weight-thin body-2">
-            {{options.description}}
-          </p>
-        </v-flex>
-      </v-row>
-      <v-divider v-if="options.references && options.references.length > 0" class="theme--dark"></v-divider>
-      <v-row>
-        <v-layout justify-center row wrap py-2 style="font-weight:300;">
-          <div v-for="page in options.references">
-            <router-link v-if="page.id" :to="`/${page.id || ''}`" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
-              {{page.title}}
-            </router-link>
-            <a v-if="page.url" :href="page.url" :target="page.target" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
-              {{page.title}}
-            </a>
-          </div>
-        </v-layout>
-      </v-row>
-      
-    </v-col>
-  </v-footer>
+    <v-footer height="auto" color="primary darken-1 white--text" class="px-0">
+      <v-col cols-12>
+        <v-row>
+          <v-flex xs12 md6 px-5 py-2>
+            <h3 class="headline font-weight-light">{{options.title}}</h3>
+            <p class="font-weight-thin body-2">
+              {{options.description}}
+            </p>
+          </v-flex>
+        </v-row>
+        <v-divider v-if="options.references && options.references.length > 0" class="theme--dark"></v-divider>
+        <v-row>
+          <v-layout justify-center row wrap py-2 style="font-weight:300;">
+            <div v-for="(page, pageIndex) in options.references" :key="pageIndex">
+              <router-link v-if="page.id" :to="`/${page.id || ''}`" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
+                {{page.title}}
+              </router-link>
+              <a v-if="page.url" :href="page.url" :target="page.target" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
+                {{page.title}}
+              </a>
+            </div>
+          </v-layout>
+        </v-row>
+      </v-col>
+    </v-footer>
     <v-row class="font-weight-thin secondary darken-1 py-3 white--text justify-right pb-4 pt-1 px-3">
       <v-spacer></v-spacer>
       <v-col class="py-0 px-2" style="max-width:18em;">
@@ -38,12 +37,10 @@
         <div class="mt-1 caption font-weight-thin" style="height: 1em;">
           Licensed under the terms of the MIT License
         </div>
-      </v-col>  
+      </v-col>
     </v-row>
-</div>
+  </div>
 </template>
-
-
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
@@ -74,7 +71,7 @@ export default {
 
     currentYear() {
       return moment(new Date()).format("YYYY")
-    } 
+    }
 
   },
 

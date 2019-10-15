@@ -1,7 +1,7 @@
 
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  {merge, extend} from "lodash"
+import  * as _ from "lodash"
 export default {
 
     extends: echartWidget,
@@ -13,7 +13,7 @@ export default {
     computed:{
       chartOptions(){
          if(!this.options) return 
-         let res = extend({}, this.options);
+         let res = _.extend({}, this.options);
          
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){
             

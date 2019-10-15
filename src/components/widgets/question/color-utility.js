@@ -1,4 +1,5 @@
 import tinycolor from "./tinycolor.js"
+import * as _ from "lodash"
 
 let ColorUtility = class {
   constructor() {}

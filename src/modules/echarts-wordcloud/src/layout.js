@@ -148,9 +148,14 @@ var minFontSize = (function getMinFontSize() {
 
 // Based on http://jsfromhell.com/array/shuffle
 var shuffleArray = function shuffleArray(arr) {
-  for (var j, x, i = arr.length; i; j = Math.floor(Math.random() * i),
+  let noop = () => { return }
+  for (
+    var j, x, i = arr.length; 
+    i; 
+    j = Math.floor(Math.random() * i),
     x = arr[--i], arr[i] = arr[j],
-    arr[j] = x) {}
+    arr[j] = x
+  ) { noop(); }
   return arr;
 };
 
@@ -701,14 +706,14 @@ var WordCloud = function WordCloud(elements, options) {
       classes = settings.classes;
     }
 
-    var dimension;
-    var bounds = info.bounds;
-    dimension = {
-      x: (gx + bounds[3]) * g,
-      y: (gy + bounds[0]) * g,
-      w: (bounds[1] - bounds[3] + 1) * g,
-      h: (bounds[2] - bounds[0] + 1) * g
-    };
+    // var dimension;
+    // var bounds = info.bounds;
+    // dimension = {
+    //   x: (gx + bounds[3]) * g,
+    //   y: (gy + bounds[0]) * g,
+    //   w: (bounds[1] - bounds[3] + 1) * g,
+    //   h: (bounds[2] - bounds[0] + 1) * g
+    // };
 
     elements.forEach(function(el) {
       if (el.getContext) {

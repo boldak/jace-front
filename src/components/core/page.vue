@@ -3,10 +3,7 @@
     <component :is="layout" :options="options"></component>
   </div>
 </template>
-
-
 <script>
-
 import layouts from "@/components/layouts/index.js"
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
@@ -14,7 +11,7 @@ import listenerMixin from "@/mixins/core/listener.mixin.js"
 
 export default {
 
-  mixins: [djvueMixin,listenerMixin],
+  mixins: [djvueMixin, listenerMixin],
   components: layouts,
 
   props: {
@@ -27,11 +24,11 @@ export default {
   data: () => ({
     layout: "empty",
     djId: null,
-    djType:"page"
+    djType: "page"
   }),
 
   watch: {
-    '$route'(to, from) {
+    '$route'() {
       this.setCurrentPage(this.getPage(this.$route.params.page))
       this.layout = "empty"
       this.$nextTick(() => {

@@ -1,9 +1,9 @@
 <script>
 import getGeoJson from "./maps.js"
 import getLocations from "./locations.js"
-import geo_util from "./utils.js"
+// import geo_util from "./utils.js"
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue"
-import { merge, extend } from "lodash"
+import * as _ from "lodash"
 import echarts from "echarts/dist/echarts-en"
 
 export default {

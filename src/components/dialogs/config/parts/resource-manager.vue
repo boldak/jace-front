@@ -69,11 +69,12 @@
 
 </template>
 <script>
+
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-import i18nMixin from "@/mixins/core/i18n.mixin.js"
+// import i18nMixin from "@/mixins/core/i18n.mixin.js"
 
 import extIcon from "@/modules/ext-icons/index.js"
-import * as _ from "lodash"
+// import * as _ from "lodash"
 
 
 let i18n = {
@@ -123,7 +124,7 @@ export default {
           if(!file) return
           this.onAddResource(file)
         })
-        .catch(e => {} )
+        .catch(() => {} )
     },
     
     onAddResource(file) {
@@ -141,7 +142,7 @@ export default {
         }
       ).then(() => {
         this.getResources()
-      }).catch(e => {
+      }).catch((e) => {
         this.$djvue.warning({
             type: "error",
             title: e.response.data.name,

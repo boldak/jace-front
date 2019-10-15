@@ -29,7 +29,7 @@ export default echarts => {
 
     var toneSum = 0;
     var toneCnt = 0;
-    for (var i = 0; i < imageData.data.length; i += 4) {
+    for (let i = 0; i < imageData.data.length; i += 4) {
       var alpha = imageData.data[i + 3];
       if (alpha > 128) {
         var tone = imageData.data[i] +
@@ -41,11 +41,11 @@ export default echarts => {
     }
     var threshold = toneSum / toneCnt;
 
-    for (var i = 0; i < imageData.data.length; i += 4) {
-      var tone = imageData.data[i] +
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      let tone = imageData.data[i] +
         imageData.data[i + 1] +
         imageData.data[i + 2];
-      var alpha = imageData.data[i + 3];
+      let alpha = imageData.data[i + 3];
 
       if (alpha < 128 || tone > threshold) {
         // Area not to draw
@@ -87,8 +87,8 @@ export default echarts => {
           ctx.drawImage(maskImage, 0, 0, canvas.width, canvas.height);
           updateCanvasMask(canvas);
         } catch (e) {
-          console.error('Invalid mask image');
-          console.error(e.toString());
+          window.console.error('Invalid mask image');
+          window.console.error(e.toString());
         }
       }
 

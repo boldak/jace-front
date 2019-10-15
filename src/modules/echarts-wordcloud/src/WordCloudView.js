@@ -1,14 +1,14 @@
 // import echarts from "echarts/dist/echarts-en"
 export default echarts => {
-  function getShallow(model, path) {
-    return model && model.getShallow(path);
-  }
+  // function getShallow(model, path) {
+  //   return model && model.getShallow(path);
+  // }
 
   echarts.extendChartView({
 
     type: 'wordCloud',
 
-    render: function(seriesModel, ecModel, api) {
+    render: function(seriesModel) {
       var group = this.group;
       group.removeAll();
 

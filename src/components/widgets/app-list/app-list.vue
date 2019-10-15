@@ -47,7 +47,7 @@
             background:transparent !important;    
             max-height: 650px;
             overflow: auto;">
-            <v-list-item v-for="(item, index) in appList" @click="toggle(item)">
+            <v-list-item v-for="(item, index) in appList" :key="index" @click="toggle(item)">
               <v-list-item-avatar tile size="24" class="ma-0">
                 <dj-img :src="item.icon" icon="mdi-application"></dj-img>
               </v-list-item-avatar>
@@ -125,144 +125,9 @@
     <v-divider></v-divider>
   </v-card>    
 
-
-<!--   <v-card flat style="background:transparent !important;">
-    <v-container>
-      <v-card-title primary-title class="pt-0 pb-0">
-        <div>
-          <h3 class="headline mb-0">DjVue Apps</h3>
-          <div>{{portalURL}}</div>
-        </div>
-        <v-spacer></v-spacer>
-        <v-menu bottom left>
-          <v-btn slot="activator" icon>
-            <v-icon>more_vert</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-tile @click="openNewAppDialog">
-              <v-list-tile-title>
-                <v-icon>mdi-plus</v-icon> New App...
-              </v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="importApp">
-              <v-list-tile-title>
-                <v-icon>mdi-download</v-icon> Import App...
-              </v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-      </v-card-title>
-      <v-card-title class="pr-5 pt-0 pb-0">
-        <v-autocomplete v-model="keywordsSelection" :items="keywords" color="primary" label="Select keywords" multiple>
-          <template slot="selection" slot-scope="data">
-            <v-chip outline label color="primary" :selected="data.selected" close class="chip--select-multi" @input="remove(data.item)">
-              {{ data.item }}
-            </v-chip>
-          </template>
-          <template slot="item" slot-scope="data">
-            <template v-if="typeof data.item !== 'object'">
-              <v-list-tile-content v-text="data.item"></v-list-tile-content>
-            </template>
-            <template v-else>
-              <v-list-tile-content>
-                <v-list-tile-title v-html="data.item"></v-list-tile-title>
-              </v-list-tile-content>
-            </template>
-          </template>
-        </v-autocomplete>
-      </v-card-title>
-      <v-divider></v-divider>
-      <v-container fluid grid-list-md>
-        <v-layout row wrap>
-          <v-flex d-flex xs12 sm12 md12 lg4>
-            <v-list style="
-            background:transparent !important;    
-            height: 350px;
-            border:1px solid #dedede;
-            overflow: auto;">
-              <template v-for="(item, index) in apps">
-                <v-subheader v-if="item.header" :key="item.header">
-                  {{ item.header }}
-                </v-subheader>
-                <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider>
-                <v-list-tile v-else :key="item.name" avatar ripple :class="{'blue-grey lighten-4':(selected == index)}" @click="toggle(index)">
-                  <v-list-tile-avatar tile size="24">
-                    <dj-img :src="item.icon" icon="mdi-application"></dj-img>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{item.name}}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{item.description}}</v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-            </v-list>
-          </v-flex>
-          <v-flex d-flex xs12 sm12 md12 lg8>
-            <v-card flat style="background:transparent !important; border:1px solid #dedede;" v-if="selected != null">
-              <v-toolbar flat card dense color="blue-grey lighten-5">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary">
-                  <a :href="'./app/'+apps[selected].name" :target="'blank_'+apps[selected].name">
-                    Open
-                  </a>
-                </v-btn>
-                <v-btn flat color="primary">
-                  <a target="_blank" :href="`/api/app/export/${apps[selected].id}`">
-                    Export
-                  </a>
-                </v-btn>
-                <v-btn flat color="error" :disabled="app.config.name == apps[selected].name" @click="deleteApp(apps[selected])">
-                  Delete...
-                </v-btn>
-              </v-toolbar>
-              <v-card-title primary-title class="pt-0 pb-0">
-                <div>
-                  <h5 class="headline ma-1">
-                    <v-avatar tile>
-                      <dj-img :src="apps[selected].icon" icon="mdi-application"></dj-img>
-                    </v-avatar>
-                    {{apps[selected].name}}
-                  </h5>
-                  <h6 class="title ma-1">{{apps[selected].title}}</h6>
-                </div>
-                <v-spacer></v-spacer>
-                <div>
-                  <v-tooltip tag="div" top>
-                    <div slot="activator">
-                      <v-icon>mdi-update</v-icon>
-                      <span>{{timeAgo(apps[selected].updatedAt)}}</span>
-                    </div>
-                    <div>Updated at {{formatDate(apps[selected].updatedAt)}}</div>
-                  </v-tooltip>
-                  <v-tooltip tag="div" bottom>
-                    <div slot="activator">
-                      <v-icon material-icons>access_time</v-icon>
-                      <span>{{timeAgo(apps[selected].createdAt)}}</span>
-                    </div>
-                    <div>Created at {{formatDate(apps[selected].createdAt)}}</div>
-                  </v-tooltip>
-                </div>
-              </v-card-title>
-              <v-card-text class="body-1" style="text-align:justify;">
-                {{apps[selected].description}}
-                <h5 class="subheading">Team: {{(apps[selected].owner) ? "" : "DjVue"}}</h5>
-                <div v-if="apps[selected].owner">
-                  <a :href="'mailto:'+apps[selected].owner.email">
-                    <v-avatar>
-                      <v-img :src="apps[selected].owner.photo"></v-img>
-                    </v-avatar>
-                    {{apps[selected].owner.name}}
-                  </a>&nbsp; (Author)
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-container>
-  </v-card> -->
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import moment from "moment"
@@ -301,7 +166,7 @@ export default {
                 })
 
             })
-            .catch(e => {
+            .catch( () => {
               // console.log("ERROR")
             })
         })
@@ -435,7 +300,7 @@ export default {
     keywords: [],
     keywordsSelection: [],
     portalURL: "",
-    user,
+    user: window.user,
     overlay:false
   })
 

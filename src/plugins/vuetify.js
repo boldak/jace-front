@@ -25,8 +25,6 @@ i18n.setLocaleMessage("uk", uk_msg);
 
 Vue.prototype._i18n = i18n
 
-
-console.log("Install VUETIFY")
 export default new Vuetify({
   theme: {
     dark: false,

@@ -1,29 +1,22 @@
 <template>
-    <config-dialog 
-      :options="props"
-      :submit="submit"
-    ></config-dialog>  
- </template> 
-
-
-
-
+  <config-dialog :options="props" :submit="submit"></config-dialog>
+</template>
 <script>
 import configDialog from "./settings-dialog-layout.vue"
 
 export default {
-	
-  name: "settingsDialog",
-  
-  
-	props:["options","submit"],
 
-  components:{
-    "config-dialog": configDialog 
+  name: "settingsDialog",
+
+
+  props: ["options", "submit"],
+
+  components: {
+    "config-dialog": configDialog
   },
 
-  computed:{
-    props(){
+  computed: {
+    props() {
       return {
         icon: "mdi-settings",
         title: `Application Settings`,
@@ -32,54 +25,50 @@ export default {
       }
     }
   },
-	
-  data () {
-      return {
-        editorTree:[
+
+  data() {
+    return {
+      editorTree: [{
+        name: "Settings",
+        children: [
+
           {
-            name: "Settings",
-            children: [
-              
-              {
-                name: 'Application',
-                editor: () => import("@/components/dialogs/config/parts/app-editor.vue")
-              },
+            name: 'Application',
+            editor: () => import("@/components/dialogs/config/parts/app-editor.vue")
+          },
 
-              {
-                name: "Pages",
-                editor: () => import("./parts/page-manager.vue")
-              },
-              {
-                name: "I18n",
-                editor: () => import("./parts/i18n-manager.vue")
-              },
-              {
-                name: "Resources",
-                editor: () => import("./parts/resource-manager.vue")
-              },
-              {
-                name: 'Publication',
-                editor: () => import("@/components/dialogs/config/parts/app-pub.vue")
-              },
-              {
-                name: 'Dev Service Settings',
-                editor: () => import("@/components/dialogs/config/parts/portal-config.vue")
-              },
+          {
+            name: 'Collaborations',
+            editor: () => import("@/components/dialogs/config/parts/collaborations.vue")
+          },
 
-              // {
-              //   name: "Decoration",
-              //   editor:() => import("@/components/dialogs/config/parts/decoration-editor.vue")
-              // },
-              // {
-              //   name: "Select-data Behavior",
-              //   editor: () => import("@/components/dialogs/config/parts/data-select-emitters.vue")
-              // }
+          {
+            name: "Pages",
+            editor: () => import("./parts/page-manager.vue")
+          },
+          {
+            name: "I18n",
+            editor: () => import("./parts/i18n-manager.vue")
+          },
+          {
+            name: "Resources",
+            editor: () => import("./parts/resource-manager.vue")
+          },
 
-            ]
+          {
+            name: 'Publication',
+            editor: () => import("@/components/dialogs/config/parts/app-pub.vue")
+          },
+
+          {
+            name: 'Dev Service Settings',
+            editor: () => (window.user.isAdmin) ? import("@/components/dialogs/config/parts/portal-config.vue") : import("@/components/dialogs/config/parts/no-portal-config.vue")
           }
-        ],
-      }
+
+        ]
+      }],
     }
+  }
 }
 
 </script>

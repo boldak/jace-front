@@ -27,8 +27,8 @@
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
 
-  import * as _ from "lodash"
-  import moment from "moment"
+  // import * as _ from "lodash"
+  // import moment from "moment"
   
   let components = {
         editor: () => import("@/components/core/ext/ace-editor.vue"),

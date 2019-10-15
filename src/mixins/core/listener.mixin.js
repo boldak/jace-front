@@ -30,7 +30,7 @@ export default {
 
 
     emit(event, ...args) {
-      return new Promise((resolve, reject) => {
+      return new Promise( resolve => {
         this.$eventHub.emit(event, ...args)
         resolve()
       })

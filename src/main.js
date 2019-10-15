@@ -2,7 +2,7 @@ import Vue from '@/plugins/vue'
 import vuetify from "@/plugins/vuetify"
 import VueRouter from "vue-router"
 import VueClipboard from "vue-clipboard2"
-import { portalPlugin, httpPlugin, djvuePlugin, cookiePlugin, eventhubPlugin, dpsPlugin } from "@/plugins"
+import { portalPlugin, httpPlugin, djvuePlugin, cookiePlugin, eventhubPlugin, dpsPlugin, socketPlugin } from "@/plugins"
 
 
 import App from '@/App.vue'
@@ -15,16 +15,19 @@ import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/dist/vuetify.min.css"
 import "katex/dist/katex.min.css"
 
-import VueSocketIoExt from "vue-socket.io-extended";
-import io from "socket.io-client";
 
 
-let _io = io(devService.config.pubService) //"http://localhost:8081")
-Vue.use(VueSocketIoExt, _io);
+// import VueSocketIoExt from "vue-socket.io-extended";
+// import io from "socket.io-client";
+
+Vue.use(socketPlugin, window.devService.config.pubService);
 
 
+<<< 
+  if(jace.mode == "development") $include("./1.js") 
+>>>
+window.console.log("JACE",`<<<= JSON.stringify(jace) >>>`)
 
-// Vue.use(dialogManagerPlugin)
 
 Vue.use(VueClipboard)
 
@@ -34,10 +37,10 @@ Vue.use(VueClipboard)
 // }
 
 Vue.use(cookiePlugin)
-Vue.use(portalPlugin, { baseURL: `${(initialConfig.portalUrl)?initialConfig.portalUrl:''}/` })
+Vue.use(portalPlugin, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/` })
 Vue.use(dpsPlugin, {
-  baseURL: dpsURL.trim() || "http://127.0.0.1:8098/",
-  client: { user: user, app: appName }
+  baseURL: window.dpsURL.trim() || "http://127.0.0.1:8098/",
+  client: { user: window.user, app: window.appName }
 });
 
 Vue.use(httpPlugin)

@@ -2,19 +2,12 @@
   <v-container fluid>
     <v-layout wrap>
       <v-flex xs12>
-        <editor 
-        	:content="embeddedSource" 
-        	lang="json" 
-        	:sync="true" 
-        	@change="onUpdateSource" 
-        	style="border:1px solid #999;height:28em !important"
-        >
+        <editor :content="embeddedSource" lang="json" :sync="true" @change="onUpdateSource" style="border:1px solid #999;height:28em !important">
         </editor>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
-
 <script>
 import editor from '@/components/core/ext/ace-editor.vue';
 
@@ -43,9 +36,9 @@ export default {
     },
 
     onUpdateSource(value) {
-      try {
-        this.config.data.embedded = JSON.parse(value)
-      } catch (e) {}
+
+      this.config.data.embedded = JSON.parse(value)
+
     },
 
     onUpdateScript(value) {

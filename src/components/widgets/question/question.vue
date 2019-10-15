@@ -1,44 +1,16 @@
 <template>
   <div class="mb-1" :style="(display) ? 'border:1px solid #dedede;  background:white;' : '' ">
-    <component 
-      v-if="config && !disabled" 
-      :is="config.question.type[(production) ? 'production' : 'design']" 
-      :config="config" 
-      :options="options" 
-      :answer="answer" 
-      :stat="stat" 
-      @init="onInitChild" 
-      @update:options="onOptionsUpdate" 
-      @update:answer="onAnswerUpdate" 
-      @extend:options="onOptionsExtend"
-    ></component>
+    <component v-if="config && !disabled" :is="config.question.type[(production) ? 'production' : 'design']" :config="config" :options="options" :answer="answer" :stat="stat" @init="onInitChild" @update:options="onOptionsUpdate" @update:answer="onAnswerUpdate" @extend:options="onOptionsExtend"></component>
     <div v-else class="pa-3 warning--text font-weight-light subheading">
       Cannot display question. Swith to design mode and fix form.
-    </div>  
-  
-<!-- <pre>
-    {{JSON.stringify(options, null,"\t")}}
-  </pre>
-  <pre>
-    {{JSON.stringify(config, null,"\t")}}
-  </pre>    
-
- -->
-
-  <!-- <pre v-if="answer" class="primary">
-    {{JSON.stringify(answer, null,"\t")}}
-  </pre>     -->
-
+    </div>
   </div>
-  
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import components from "./parts/index.js"
-
-
-
+import * as _ from "lodash"
 export default {
 
   name: "question-widget",
@@ -63,7 +35,7 @@ export default {
       this.emit("form-delete-question", this.config.id)
     },
 
-    onOptionsUpdate(newOptions) {
+    onOptionsUpdate() {
       this.setNeedSave(true)
     },
 
@@ -92,11 +64,11 @@ export default {
     // console.log("CREATE", this.config.id, this.config.question.options)
 
     // if (this.config.question.options) {
-      this.emit("form-insert-question", {
-        id: this.config.id,
-        options: this.config.question.options
-      })
-      // this.config.question.options = undefined
+    this.emit("form-insert-question", {
+      id: this.config.id,
+      options: this.config.question.options
+    })
+    // this.config.question.options = undefined
     // }
 
     this.on({
@@ -116,8 +88,8 @@ export default {
         // console.log("SET STAT")
         let founded = _.find(stat.questions, q => q.id == this.config.id)
         // if (!this.stat){
-          this.stat = (founded) ? JSON.parse(JSON.stringify(founded)) : null  
-          // console.log("SET STAT",this.config.id, this.stat)  
+        this.stat = (founded) ? JSON.parse(JSON.stringify(founded)) : null
+        // console.log("SET STAT",this.config.id, this.stat)  
         // }
       },
       rule: () => true
@@ -131,8 +103,7 @@ export default {
         let founded = _.find(answers, a => a.id == this.config.id)
         // console.log("Founded", JSON.stringify(founded,null,"\t"))
         this.answer = (founded) ?
-          founded :
-          {
+          founded : {
             id: this.config.id,
             type: this.config.question.type.title,
             data: JSON.parse(JSON.stringify(this.config.question.answer.data))

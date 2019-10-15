@@ -8,7 +8,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import DataSelectorConfigDialog from "./data-selector-config.vue";
-
+import * as _ from "lodash"
 export default {
 
   props: ["config"],
@@ -25,7 +25,7 @@ export default {
 
   methods: {
 
-    onUpdate({ data, options }) {
+    onUpdate({ data }) {
 
       this.source = data
       // this.mapper = options.mapper;
@@ -37,7 +37,7 @@ export default {
     },
 
     onReconfigure(widgetConfig) {
-      return this.$dialogManager.showAndWait( DataSelectorConfigDialog, {width:"90%"}, {config:widgetConfig} )
+      return this.$dialogManager.showAndWait(DataSelectorConfigDialog, { width: "90%" }, { config: widgetConfig })
     },
 
     onClear() {

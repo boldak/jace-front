@@ -15,7 +15,7 @@ export default echarts => {
       option.gridSize = Math.max(Math.floor(option.gridSize), 4);
     },
 
-    getInitialData: function(option, ecModel) {
+    getInitialData: function(option) {
       var dimensions = completeDimensions(['value'], option.data);
       var list = new echarts.List(dimensions, this);
       list.initData(option.data);

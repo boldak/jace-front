@@ -12,7 +12,7 @@
           <v-tab key="entities" ripple>Entities</v-tab>
           <v-tab-item key="indicators" ripple>
             <v-treeview class="pa-2" :items="items" item-key="key" :load-children="loadIndicators" open-on-click :open.sync="open" :active.sync="active" transition item-text="" color="transparent" dense>
-              <template slot="prepend" slot-scope="{ item, open, leaf }">
+              <template slot="prepend" slot-scope="{ item }">
                 <div v-if="item.type == 'topic'" class="subheading font-weight-light primary--text">
                   {{item.name}}
                 </div>
@@ -21,15 +21,15 @@
                     mdi-file-table-outline
                   </v-icon>
                   <!-- <div style="line-height: 1.2em; padding: 0.5em 0 0.5em 0.5em;"> -->
-                    {{item.name}}
+                  {{item.name}}
                   <!-- </div> -->
                 </v-layout>
               </template>
             </v-treeview>
           </v-tab-item>
           <v-tab-item key="datapoints">
-            <v-container>
-              <v-row v-if="datapoints" v-for="dp in datapoints" class="pt-2 mx-2" @click="selectDatapoint(dp)" style="cursor:pointer;">
+            <v-container v-if="datapoints">
+              <v-row  v-for="dp in datapoints" :key="dp" class="pt-2 mx-2" @click="selectDatapoint(dp)" style="cursor:pointer;">
                 <v-icon :class="(selectedDp && dp.concept == selectedDp.concept)?'primary--text':'secondary--text font-weight-light'" class="subtitle-2  pr-2">
                   mdi-grid-large
                 </v-icon>
@@ -40,8 +40,8 @@
             </v-container>
           </v-tab-item>
           <v-tab-item key="entities">
-            <v-container>
-              <v-row v-if="entities" v-for="e in entities" pt-2 @click="selectEntity(e)" class="pt-2 mx-2" style="cursor:pointer;">
+            <v-container v-if="entities">
+              <v-row v-for="e in entities" :key="e" pt-2 @click="selectEntity(e)" class="pt-2 mx-2" style="cursor:pointer;">
                 <v-icon :class="(selectedEntity && e.concept == selectedEntity.concept)?'primary--text':'secondary--text font-weight-light'" class="subtitle-2 pr-2">
                   mdi-ballot-outline
                 </v-icon>
@@ -92,30 +92,30 @@
               </span>
               {{selected.source}} <a :href="selected.href">{{selected.href}}</a>
             </p>
-            <p class="subtitle-2 pr-3 mb-0 font-weight-light dj-meta" v-if="selected.args && selected.args.length>0">
+            <div class="subtitle-2 pr-3 mb-0 font-weight-light dj-meta" v-if="selected.args && selected.args.length>0">
               <span class="font-weight-medium pb-0">
                 Arguments:
               </span>
-              <p v-for="a in selected.args" class="mb-0 pl-2">
+              <p v-for="a in selected.args" :key="a" class="mb-0 pl-2">
                 <a @click="navigate({tab:0,indicator:a})">
                   <v-icon style="border:1px solid" class="body-2 primary--text ml-2 mr-1">mdi-call-made</v-icon>
                   {{a.name}}
                 </a>
               </p>
-            </p>
+            </div>
             <div v-if="selected.datapoints">
               <h2 class="primary--text subheading font-weight-light">
                 Datapoints
               </h2>
               <v-divider></v-divider>
-              <v-layout column v-for="dp in selected.datapoints" pt-2>
+              <v-layout column v-for="dp in selected.datapoints" :key="dp" pt-2>
                 <h3 class="primary--text body-2">
                   <a @click="navigate({tab:1,datapoint:dp})">
                     <v-icon style="border:1px solid" class="body-2 primary--text ml-2 mr-1">mdi-call-made</v-icon>
                     {{dp.name}}
                   </a>
                 </h3>
-                <div class="subtitle-2 pl-3" v-for="f in dp.attr">
+                <div class="subtitle-2 pl-3" v-for="f in dp.attr" :key="f">
                   <span>
                     <span class="font-weight-medium">
                       <v-icon class="subheading pr-1">{{fieldTypeIcon(f.type)}}</v-icon>
@@ -144,7 +144,7 @@
             </v-row>
             <h3 class="primary--text subheading font-weight-light">{{dpInfo.name}} ( {{dpInfo.count}} items )</h3>
             <v-divider></v-divider>
-            <div class="subtitle-2" v-for="f in dpInfo.attr">
+            <div class="subtitle-2" v-for="f in dpInfo.attr" :key="f">
               <span>
                 <span class="font-weight-medium">
                   <v-icon class="subheading pr-1">{{fieldTypeIcon(f.type)}}</v-icon>
@@ -202,7 +202,7 @@
             </v-row>
             <h3 class="primary--text subheading font-weight-light">{{entityInfo.name}} ( {{entityInfo.count}} items )</h3>
             <v-divider></v-divider>
-            <div class="subtitle-2" v-for="f in entityInfo.attr">
+            <div class="subtitle-2" v-for="f in entityInfo.attr" :key="f">
               <span>
                 <span class="font-weight-medium">
                   <v-icon class="subheading pr-1">{{fieldTypeIcon(f.type)}}</v-icon>
@@ -263,7 +263,7 @@ import listenerMixin from "@/mixins/core/listener.mixin.js";
 import ioMixin from "./io.mixin.js";
 import dsExplorerConfig from "./ds-explorer-config.vue"
 import highlight from '@/components/core/ext/ace-highlight.vue';
-
+import * as _ from "lodash"
 
 
 let getTopicNode = (items, path) => {
@@ -390,7 +390,7 @@ export default {
           this.entities = res
           // this.message = null
         })
-        .catch((res) => {
+        .catch(() => {
           this.error3 = true
           this.message = "Cannot load entities"
         })
@@ -482,11 +482,11 @@ collection.limit(5)`
       }
     },
 
-    onUpdate({ data, options }) {
-      // console.log("OnUpdate", data, options)
-      // data = this.normalize(data)
-      // this.items = data;
-    },
+    // onUpdate({ data, options }) {
+    //   // console.log("OnUpdate", data, options)
+    //   // data = this.normalize(data)
+    //   // this.items = data;
+    // },
 
     loadConcepts(metadata) {
       this.dpsLoadConcepts(metadata)
@@ -540,7 +540,7 @@ collection.limit(5)`
 
   watch: {
 
-    selectedDp(newValue, oldValue) {
+    selectedDp(newValue) {
       // console.log(newValue, oldValue)
       // if (newValue == oldValue) return
       if (newValue) {
@@ -554,7 +554,7 @@ collection.limit(5)`
       // }
     },
 
-    selectedEntity(newValue, oldValue) {
+    selectedEntity(newValue) {
       // console.log(newValue)
       // if (newValue == oldValue) return
       if (newValue) {

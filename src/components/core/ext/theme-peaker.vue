@@ -10,18 +10,18 @@
       <template
         v-if="item === Object(item)"
         slot="selection"
-        slot-scope="{ item, parent, selected }"
+        slot-scope="{ item }"
       >
-            <span v-for="c in item"   :style="`margin:0; padding:0; background:${c};  width:16px; height:20px;`">
+            <span v-for="c in item"  :key="c" :style="`margin:0; padding:0; background:${c};  width:16px; height:20px;`">
             </span> 
         
       </template>
       <template
         slot="item"
-        slot-scope="{ index, item, parent }"
+        slot-scope="{ item }"
       >
             <v-layout row >
-              <span v-for="c in item"   :style="`margin:0; padding:0; background:${c};  width:16px; height:20px;`">
+              <span v-for="c in item"   :key="c" :style="`margin:0; padding:0; background:${c};  width:16px; height:20px;`">
               </span> 
       
             </v-layout>

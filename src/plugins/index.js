@@ -1,5 +1,4 @@
 import djImg from "@/components/core/ext/dj-img.vue"
-
 import warningDialog from "@/components/dialogs/core/warning.vue"
 import confirmDialog from "@/components/dialogs/core/confirm.vue"
 import progressDialog from "@/components/dialogs/core/progress.vue"
@@ -7,6 +6,7 @@ import selectFileDialog from "@/components/dialogs/core/select-file.vue"
 import customDialog from "@/components/dialogs/core/custom-dialog.vue"
 import splashDialog from "@/components/dialogs/core/splash.vue"
 import Vue from "vue"
+import io from "socket.io-client";
 
 import * as Cookie from "tiny-cookie"
 import * as _ from "lodash"
@@ -29,6 +29,12 @@ var _dialog_manager = (app) => {
 // } 
 
 
+
+let url2fileName = url => {
+  const hashIndex = url.indexOf('#')
+  url = hashIndex !== -1 ? url.substring(0, hashIndex) : url
+  return (url.split('/').pop() || '').replace(/[?].*$/g, '')
+} 
 
 export var dialogManagerPlugin = {
   install(Vue) {
@@ -84,6 +90,14 @@ export var portalPlugin = {
     Vue.prototype.$portal = axios.create(options)
   }
 }
+
+
+export var socketPlugin = {
+  install(Vue, service) {
+    Vue.prototype.$socket = io(service)
+  }
+}
+
 
 export var httpPlugin = {
   install(Vue, options) {
@@ -333,14 +347,35 @@ export var djvuePlugin = {
       },
 
       saveLocalFile(fileName, object) {
-
+       
         if (!object) return;
 
-        let a = document.createElement('a');
-        a.setAttribute('href', 'data:text/plain;charset=utf-u,' + encodeURIComponent(JSON.stringify(object, null, '\t')));
-        a.setAttribute('download', fileName);
-        a.click()
+          const url = window.URL.createObjectURL(new Blob([object]));
+           const link = document.createElement('a');
+           link.href = url;
+           link.setAttribute('download', fileName); //or any other extension
+           document.body.appendChild(link);
+           link.click();
 
+      },
+
+      downloadFile(url){
+       
+        axios({
+          url,
+          method: 'GET',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+          responseType: 'blob', // important
+        }).then((response) => {
+           const url = window.URL.createObjectURL(new Blob([response.data]));
+           const link = document.createElement('a');
+           link.href = url;
+           link.setAttribute('download', url2fileName(url));
+           document.body.appendChild(link);
+           link.click();
+        });
       }
 
 

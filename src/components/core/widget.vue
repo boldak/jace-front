@@ -47,6 +47,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import widgetMixin from "@/mixins/core/widget.mixin.js";
 import components from "@/components/widgets"
+import * as _ from "lodash"
 // let components = requiredWidgets();
 
 // console.log(components)

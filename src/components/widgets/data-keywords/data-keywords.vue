@@ -57,7 +57,7 @@
     
     methods: {
 
-      onUpdate ({data, options}) {
+      onUpdate ({data}) {
          this.availableKeywords = data
       },
 

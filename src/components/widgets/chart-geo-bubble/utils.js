@@ -1,3 +1,4 @@
+import * as _ from "lodash"
 
 let unionRect = (b1,b2) => {
 	if(!b1){
@@ -52,9 +53,6 @@ let getCenter = geodata => {
 
 let getZoom = (g, b) => {
 	let s = getBounds(g)
-	console.log(s)
-	console.log(b)
-	console.log("-------------")
 	return Math.min ( (b.right-b.left)/(s.right-s.left+7), (b.bottom-b.top)/(s.bottom-s.top+7) )
 }
 

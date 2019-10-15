@@ -1,5 +1,6 @@
 
 import geodata from "./geodata.js"
+import * as _ from "lodash"
 
 export default (scope, locale) => {
 	scope = scope || "World"

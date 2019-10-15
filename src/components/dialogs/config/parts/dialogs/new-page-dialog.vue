@@ -17,7 +17,7 @@
       </v-text-field>
     </v-flex>
     <v-flex xs12 pl-3 pr-3 justify-center>
-      <v-combobox v-model.sync="layout" :items="options.layouts" label="Select layout" @change="onChangeSelectedLayout">
+      <v-combobox v-model="layout" :items="options.layouts" label="Select layout" @change="onChangeSelectedLayout">
         <template slot="item" slot-scope="data">
           <v-avatar tile size=24>
             <dj-img :src="data.item.layoutIcon" icon="mdi-application" width="24"></dj-img>

@@ -82,11 +82,11 @@
 
       _runScript () {
 
-        console.log(`Run script ${this.config.id}`,this)
+        window.console.log(`Run script ${this.config.id}`,this)
 
         this.api = {
           selectWidgets: (filter) => {
-            filter = filter || (item => true);
+            filter = filter || ( () => true);
             if(!_.isFunction(filter)){
               let identifiers = (_.isArray(filter)) ? filter : [filter];
               filter = (item) => _.find(identifiers, i => item.config.id == i)  

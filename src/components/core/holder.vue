@@ -27,29 +27,29 @@
   </div>
 </template>
 <script>
-import Vue from "vue"
+// import Vue from "vue"
 import draggable from "vuedraggable";
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 import initiableMixin from "@/mixins/core/initiable.mixin.js"
 import * as _ from "lodash"
-import * as Cookie from "tiny-cookie"
+// import * as Cookie from "tiny-cookie"
 import insertWidgetDialog from "@/components/dialogs/config/insertWidgetDialog.vue"
 
 import Widget from "@/components/core//widget.vue"
 
 
 
-let accepted = null;
+// let accepted = null;
 
-let toTree = (object) =>
+// let toTree = (object) =>
 
-  _.keys(object).map(key => {
-    return {
-      name: (_.isObject(object[key])) ? key : `${key}: ${object[key]}`,
-      children: (!_.isObject(object[key])) ? undefined : toTree(object[key])
-    }
-  })
+//   _.keys(object).map(key => {
+//     return {
+//       name: (_.isObject(object[key])) ? key : `${key}: ${object[key]}`,
+//       children: (!_.isObject(object[key])) ? undefined : toTree(object[key])
+//     }
+//   })
 
 
 export default {
@@ -162,7 +162,7 @@ export default {
       this.setNeedSave(true)
     },
 
-    onMove({ relatedContext, draggedContext }) {
+    onMove({ relatedContext }) {
       this.emit("holder-accept", relatedContext.component.$parent)
       return true
     }

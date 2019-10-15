@@ -7,7 +7,7 @@ export default {
 
   props: ["config"],
 
-  mixins: [listenerMixin, initiableMixin],
+  mixins: [listenerMixin, initiableMixin, djvueMixin],
 
   data: () => ({
     widgetWrapper: true,
@@ -40,7 +40,6 @@ export default {
 
         this.$refs.instance.onReconfigure(c)
           .then(newConfig => {
-            // this.config = newConfig
             if (newConfig)
               this.emit(
                 "holder-update-widget-config",
@@ -59,10 +58,6 @@ export default {
     _updateConfig() {
 
       if (!this.pageStarted && this.isProductionMode) return
-      // console.log("UPDATE CONFIG")	
-
-      // this.doRemoveSubscriptions();
-      // this.doInitSubscriptions();
 
       new Promise((resolve, reject) => {
 
@@ -93,7 +88,6 @@ export default {
         }
 
         if (this.config.data.source == "dps") {
-          // console.log("DPS", JSON.stringify(this.config.data.script))
           this.$dps.run({
               script: this.config.data.script
             })
@@ -109,7 +103,6 @@ export default {
               })
               if (this.$refs.instance && this.$refs.instance.onError) this.$refs.instance.onError(error)
             })
-          // resolve("dps")
           return
         }
 
@@ -118,21 +111,15 @@ export default {
           resolve(this.config.data.embedded)
           return
         }
-
-        // reject("no data source")
       }).then(data => {
-        // console.log("RESOLVED")
         this.update({ data, options: this.config.options })
       })
 
     },
 
     run() {
-      // this.$nextTick(()=>{
-      // console.log(this.$refs.instance)
       if (this.$refs.instance && this.$refs.instance.onRun) return this.$refs.instance.onRun()
-      return new Promise((resolve, reject) => { resolve() })
-      // })
+      return new Promise( resolve => { resolve() })
     },
 
     update(state) {
@@ -219,7 +206,6 @@ export default {
       this.on({
         event: "page-start",
         callback: () => {
-          // console.log("widget page-start",this.config.name)
           this.pageStarted = true;
           this._updateConfig()
           if (this.$refs.instance && this.$refs.instance.onPageStart) this.$refs.instance.onPageStart()
@@ -252,7 +238,7 @@ export default {
 
   watch: {
 
-    config(value) { this._updateConfig() },
+    config() { this._updateConfig() },
 
     "config.dataSelectEmitters"(value) {
       this.dataSelectEmitters = value || []

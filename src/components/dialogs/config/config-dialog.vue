@@ -144,7 +144,7 @@
 </template> -->
 
 <script>
-
+import * as _ from "lodash"
 
 // import components from "./parts"
 

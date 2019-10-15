@@ -1,97 +1,95 @@
 <template>
   <div>
-      <v-container mt-2 mx-5 v-if="items">
-        <draggable class="list-group" element="div" v-model="items" :options="dragOptions" :move="onMove" @start="onStartDrag" @end="onEndDrag">
-          <transition-group type="transition" :name="title" tag="div">
-            <v-layout row v-for="item, index in items" :key="item.id" class="mx-0 list-group-item" style="padding-bottom:0.5em;">
-            	<v-flex xs12 style="margin:auto;line-height:1.2em;"  class="handle subheading py-2">
-                  	<span v-if="item.priority" class="accent white--text font-weight-black pl-1 pr-1">{{item.priority}}</span> 
-                    <span v-else><v-icon class="warning--text">mdi-help-circle-outline</v-icon></span> 
-                    {{item.title}}
-              	</v-flex>
-            </v-layout>
-          </transition-group>
-        </draggable>
-      </v-container>
+    <v-container mt-2 mx-5 v-if="items">
+      <draggable class="list-group" element="div" v-model="items" :options="dragOptions" :move="onMove" @start="onStartDrag" @end="onEndDrag">
+        <transition-group type="transition" :name="title" tag="div">
+          <v-layout row v-for="(item, index) in items" :key="index" class="mx-0 list-group-item" style="padding-bottom:0.5em;">
+            <v-flex xs12 style="margin:auto;line-height:1.2em;" class="handle subheading py-2">
+              <span v-if="item.priority" class="accent white--text font-weight-black pl-1 pr-1">{{item.priority}}</span>
+              <span v-else>
+                <v-icon class="warning--text">mdi-help-circle-outline</v-icon>
+              </span>
+              {{item.title}}
+            </v-flex>
+          </v-layout>
+        </transition-group>
+      </draggable>
+    </v-container>
   </div>
 </template>
-
 <script>
+import * as _ from "lodash"
+import djvueMixin from "@/mixins/core/djvue.mixin.js";
+import draggable from "vuedraggable";
 
-	import djvueMixin from "@/mixins/core/djvue.mixin.js";
-  import draggable from "vuedraggable";
+export default {
 
-  	export default {
+  mixins: [djvueMixin],
 
-  		mixins:[djvueMixin],
-		
-		props:["list"],
+  props: ["list"],
 
-		components:{
-			draggable
-		},
+  components: {
+    draggable
+  },
 
-		computed:{
-			
-			dragOptions() {
-		    	return {
-			        animation: 150,
-			        group: {
-			          name: this.title
-			        },
-			        ghostClass: "ghost",
-			        dragClass: "drag",
-			        handle: ".handle"
-		      	}
-		    }
+  computed: {
 
-		},
+    dragOptions() {
+      return {
+        animation: 150,
+        group: {
+          name: this.title
+        },
+        ghostClass: "ghost",
+        dragClass: "drag",
+        handle: ".handle"
+      }
+    }
 
-		methods:{
+  },
 
-			onStartDrag() {
-		      this.isDragging = true
-		    },
+  methods: {
 
-		    onEndDrag() {
-		      this.isDragging = false
-		      this.items = this.items.map( (item,index) => {
-		      	item.priority = index + 1;
-		      	return item
-		      })
+    onStartDrag() {
+      this.isDragging = true
+    },
 
-		      this.$emit("update", this.items)
-		    },
+    onEndDrag() {
+      this.isDragging = false
+      this.items = this.items.map((item, index) => {
+        item.priority = index + 1;
+        return item
+      })
 
-		    onMove({ relatedContext, draggedContext }) {
-		      return true
-		    }
-  		},
+      this.$emit("update", this.items)
+    },
 
-  		data:() => ({
-  			items:null,
-  			title:null
-  		}),
+    onMove() {
+      return true
+    }
+  },
 
-  		watch:{
-  			list(value){
-  				if(!value) return
-  				this.items = _.orderBy(JSON.parse(JSON.stringify(value)), "priority")
-  			}
-  		},
+  data: () => ({
+    items: null,
+    title: null
+  }),
+
+  watch: {
+    list(value) {
+      if (!value) return
+      this.items = _.orderBy(JSON.parse(JSON.stringify(value)), "priority")
+    }
+  },
 
 
-  		created(){
-  			if(this.list) this.items = _.orderBy(JSON.parse(JSON.stringify(this.list)), "priority")
-  			this.title = this.$djvue.randomName()
-  		}
-  	}	
-
+  created() {
+    if (this.list) this.items = _.orderBy(JSON.parse(JSON.stringify(this.list)), "priority")
+    this.title = this.$djvue.randomName()
+  }
+}
 
 </script>
-
 <style scoped>
-
 .drag {
   opacity: 0.3;
 }
@@ -115,6 +113,5 @@
 .list-group-item {}
 
 .list-group-item i {}
-
 
 </style>

@@ -1,22 +1,19 @@
 <template>
   <v-card v-if="options">
-    
     <v-card-title class="white--text title primary py-1">
-        <v-icon  class="white--text">{{options.icon}}</v-icon>
-        <span class="ml-1 font-weight-light">{{options.title}}</span>
-        <v-spacer></v-spacer>
-        <v-btn text icon small @click="reject">
-          <v-icon small class="white--text">mdi-close</v-icon>
-        </v-btn>  
-      </v-card-title>
-
+      <v-icon class="white--text">{{options.icon}}</v-icon>
+      <span class="ml-1 font-weight-light">{{options.title}}</span>
+      <v-spacer></v-spacer>
+      <v-btn text icon small @click="reject">
+        <v-icon small class="white--text">mdi-close</v-icon>
+      </v-btn>
+    </v-card-title>
     <div class="caption secondary--text mx-4 my-2">
       {{options.note}}
     </div>
     <v-divider></v-divider>
-
     <v-col cols="12" class="mr-2 px-1">
-      <v-row class="mx-2" v-for="(field,index) in opts" v-show="isShowed(field)">
+      <v-row class="mx-2" v-for="(field,index) in opts" :key="index" v-show="isShowed(field)">
         <v-col v-if="field.type == 'text'">
           <v-text-field v-model="field.value" prepend-icon="mdi-textbox" :label="field.label" :disabled="field.disabled" :required="field.required" :rules="field.rules" class="body-1"></v-text-field>
         </v-col>
@@ -47,118 +44,51 @@
             </div>
           </div>
         </v-col>
-
         <v-col v-if="field.type == 'date'">
-
-          <v-menu
-            v-model="field._menu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
+          <v-menu v-model="field._menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y full-width min-width="290px">
             <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="field.value"
-                :label="field.label" 
-                :disabled="field.disabled" 
-                :required="field.required" 
-                :error-messages="messages[index].join(' ')" 
-                :rules="field.rules" 
-                class="body-1"
-                prepend-icon="event"
-                readonly
-                v-on="on"
-              ></v-text-field>
+              <v-text-field v-model="field.value" :label="field.label" :disabled="field.disabled" :required="field.required" :error-messages="messages[index].join(' ')" :rules="field.rules" class="body-1" prepend-icon="event" readonly v-on="on"></v-text-field>
             </template>
             <v-date-picker v-model="field.value" @input="field._menu = false"></v-date-picker>
           </v-menu>
-
         </v-col>
-        
         <v-col v-if="field.type == 'time'">
-          <v-menu
-            ref="menu"
-            v-model="field._menu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            full-width
-            max-width="290px"
-            min-width="290px"
-          >
+          <v-menu ref="menu" v-model="field._menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y full-width max-width="290px" min-width="290px">
             <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="field.value"
-                :label="field.label" 
-                :disabled="field.disabled" 
-                :required="field.required" 
-                :error-messages="messages[index].join(' ')" 
-                :rules="field.rules" 
-                class="body-1"
-                prepend-icon="access_time"
-                readonly
-                v-on="on"
-              ></v-text-field>
+              <v-text-field v-model="field.value" :label="field.label" :disabled="field.disabled" :required="field.required" :error-messages="messages[index].join(' ')" :rules="field.rules" class="body-1" prepend-icon="access_time" readonly v-on="on"></v-text-field>
             </template>
-            <v-time-picker
-              v-if="field._menu"
-              v-model="field.value"
-              format="24hr"
-              full-width
-              @click:minute="field._menu = false"
-            ></v-time-picker>
+            <v-time-picker v-if="field._menu" v-model="field.value" format="24hr" full-width @click:minute="field._menu = false"></v-time-picker>
           </v-menu>
-
-
-
         </v-col>
         <v-col v-if=" field.type == 'select' ">
           <v-autocomplete v-model="field.value" :items="field.items" :filter="field.filter" color="primary" :label="field.label" :multiple="field.multiple" :clearable="field.multiple" :item-text="field.itemText" :item-value="item => item" :error-messages="messages[index].join(' ')" class="body-1"></v-autocomplete>
         </v-col>
         <v-col v-if=" field.type == 'number' ">
           <div class="v-input body-1 v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--is-booted">
-            
             <div class="v-input__prepend-outer">
               <div class="v-input__icon v-input__icon--prepend">
                 <v-icon>mdi-numeric</v-icon>
               </div>
             </div>
-            
             <div class="v-input__control">
-              
               <div class="v-input__slot">
                 <div class="v-text-field__slot">
                   <label :for="field._rid" class="v-label v-label--active theme--light" style="left: 0px; right: auto; position: absolute;">
                     {{field.label}}
                   </label>
-                  <input 
-                    :id="field._rid"
-                    type="number" 
-                    v-model="field.value"
-                    :min="field.range[0]"
-                    :max="field.range[1]"
-                  />
+                  <input :id="field._rid" type="number" v-model="field.value" :min="field.range[0]" :max="field.range[1]" />
                 </div>
-              
               </div>
-              
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">
                   <div class="v-messages__wrapper">{{messages[index].join(' ')}}.</div>
                 </div>
               </div>
             </div>
-
           </div>
-          
         </v-col>
       </v-row>
     </v-col>
-
     <v-divider></v-divider>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -168,6 +98,8 @@
   </v-card>
 </template>
 <script>
+import * as _ from "lodash"
+import moment from "moment"
 export default {
 
   name: "customDialog",
@@ -186,7 +118,7 @@ export default {
       },
 
       valid_url: value => {
-        const pattern = /^((https?:\/\/)([a-zA-Z0-9]+[a-zA-Z0-9_-]*)(:\d{0,4})?([a-zA-Z0-9_\-\/\%\=\{\}\?\+\&\.\:]*))$/
+        const pattern = /^((https?:\/\/)([a-zA-Z0-9]+[a-zA-Z0-9_-]*)(:\d{0,4})?([a-zA-Z0-9_\-/%={}?+&.:]*))$/
         return pattern.test(value) || 'Invalid url.'
       },
 
@@ -226,7 +158,7 @@ export default {
   },
 
   methods: {
-    
+
     defaultFilter(item, queryText) {
       return _.includes(item.toLowerCase(), queryText.toLowerCase())
     },
@@ -247,7 +179,7 @@ export default {
       return deps.reduce((r, d) => d && r, true)
     },
 
-    
+
     normalizeOptions(options) {
 
       let res = []
@@ -260,8 +192,7 @@ export default {
 
         let type = options.field[o].type || "text"
         let value = options.field[o].value || null
-        let rules = (options.field[o].required) ?
-          [this.rules.required].concat((options.field[o].rules) ? options.field[o].rules : []) : undefined
+        let rules = (options.field[o].required) ? [this.rules.required].concat((options.field[o].rules) ? options.field[o].rules : []) : undefined
 
         if (options.field[o].type == "range") {
           value = value || []
@@ -279,7 +210,7 @@ export default {
           //     value = [moment(new Date()).format("YYYY-MM-DD")]
           //   }
           // } else {
-            value = (value) ? moment(new Date(value)).format("YYYY-MM-DD") : null//moment(new Date()).format("YYYY-MM-DD")
+          value = (value) ? moment(new Date(value)).format("YYYY-MM-DD") : null //moment(new Date()).format("YYYY-MM-DD")
           // }
         }
 
@@ -306,39 +237,33 @@ export default {
         let range = options.field[o].range || []
         if (options.field[o].type == "range") {
           range = (options.field[o].type == "range" && options.field[o].range && _.isArray(options.field[o].range) && options.field[o].range.length == 2) ?
-            options.field[o].range :
-            [0, 1]
+            options.field[o].range : [0, 1]
         }
 
 
         res.push({
           id: o,
-          _rid:options.field[o]._rid,
-          _menu:false,
+          _rid: options.field[o]._rid,
+          _menu: false,
           type,
           value,
           label: options.field[o].label || o,
-          items: options.field[o].items || [],
+          // items: options.field[o].items || [],
           range,
           step: (options.field[o].range && _.isArray(options.field[o].range) && options.field[o].range.length == 2 && !_.isUndefined(options.field[o].step)) ?
-            options.field[o].step :
-            0.1,
+            options.field[o].step : 0.1,
           showChars: false,
           disabled: options.field[o].disabled || false,
           required: options.field[o].required || false,
           rules,
           items: (options.field[o].items) ?
-            options.field[o].items :
-            [],
+            options.field[o].items : [],
           multiple: (options.field[o].multiple) ?
-            options.field[o].multiple :
-            false,
+            options.field[o].multiple : false,
           itemText: (options.field[o].itemText) ?
-            options.field[o].itemText :
-            undefined,
+            options.field[o].itemText : undefined,
           filter: (options.field[o].itemText) ?
-            this.customFilter(options.field[o].itemText) :
-            this.defaultFilter
+            this.customFilter(options.field[o].itemText) : this.defaultFilter
 
         })
         this.messages.push([])

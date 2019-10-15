@@ -1,6 +1,6 @@
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  {merge, extend} from "lodash"
+import * as _ from "lodash"
 
 export default {
 

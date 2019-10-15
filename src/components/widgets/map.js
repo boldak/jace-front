@@ -20,7 +20,7 @@ export default {
 
 
       'tree-widget' :  "djvue/components/widgets/tree/tree.vue" ,
-      'echart-widget' :  "djvue/components/widgets/echart/echart.vue" ,
+      // 'echart-widget' :  "djvue/components/widgets/echart/echart.vue" ,
 
 
 

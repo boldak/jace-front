@@ -23,13 +23,10 @@
         </v-tabs>
       </v-container>
     </v-card>
-    </v-tabs>
-    <!-- <pre class="caption">
-	    	{{JSON.stringify(ss,null,"\t")}}
-	    </pre>	 -->
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -143,7 +140,7 @@ export default {
   },
 
   watch: {
-    
+
     answer(value) {
 
       if (value) {
@@ -201,6 +198,7 @@ export default {
 }
 
 </script>
+
 <style>
 .v-input__control {
   width: 100% !important;

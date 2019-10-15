@@ -1,20 +1,20 @@
 export default {
   app: {
     
-    config: initialConfig,
+    config: window.initialConfig,
     mode: 'production',
     currentPage:null,
     needSave: false,
-    id: initialConfig.id,
-    name: initialConfig.name,
-    icon: initialConfig.icon,
-    description:initialConfig.description,
-    title:initialConfig.title,
-    author: author,
-    user: user,
-    pages: initialConfig.pages,
-    skin: initialConfig.skin,
-    oldName:initialConfig.name
+    id: window.initialConfig.id,
+    name: window.initialConfig.name,
+    icon: window.initialConfig.icon,
+    description: window.initialConfig.description,
+    title: window.initialConfig.title,
+    author: window.author,
+    user: window.user,
+    pages: window.initialConfig.pages,
+    skin: window.initialConfig.skin,
+    oldName: window.initialConfig.name
 
   }
 }

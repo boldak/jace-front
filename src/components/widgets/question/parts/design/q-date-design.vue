@@ -17,7 +17,6 @@
           </v-container>
         </v-card>
       </v-tab-item>
-      
       <v-tab-item key="statistic" ripple>
         <v-card flat>
           <v-container>
@@ -28,10 +27,6 @@
         </v-card>
       </v-tab-item>
     </v-tabs>
-    <!-- <pre>
-	    	{{JSON.stringify(stat,null,"\t")}}
-	    </pre>	 -->
-      
   </div>
 </template>
 <script>
@@ -59,10 +54,10 @@ export default {
 
       let result = eventDynamic(stats);
 
-      if(!result) return {}
+      if (!result) return {}
 
       let statOptions = {
-        color:[this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.primary],
         grid: {
           left: '3%',
           right: '4%',
@@ -122,10 +117,10 @@ export default {
     height: null,
     date: null,
     l: null,
-    qq:1
+    qq: 1
   }),
 
-  
+
   mounted() {
     this.l = (this.$i18n.locale == "uk") ? "ua-uk" : null
     this.$emit("init")

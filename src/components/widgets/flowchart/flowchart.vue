@@ -22,7 +22,7 @@
     methods:{
 
      
-      onUpdate ({data, options}) {
+      onUpdate ({data}) {
        this.template = data;
        try {
           mermaid.render("d"+this.$djvue.randomName(), this.template, svg => {this.$nextTick(() => {this.html = svg})})  

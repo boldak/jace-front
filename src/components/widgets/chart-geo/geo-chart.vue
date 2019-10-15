@@ -2,7 +2,7 @@
 import getGeoJson from "./maps.js"
 import geo_util from "./utils.js"
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue"
-import { merge, extend } from "lodash"
+import * as _ from "lodash"
 import echarts from "echarts/dist/echarts-en"
 
 export default {
@@ -32,10 +32,9 @@ export default {
         let f = _.find(this.features, g => {
           return (g.id == d.selector) || _.find(g.properties.geocode, c => c == d.selector)
         })
-        if (!f) {
-          console.log("NOT FOUND", d.selector)
-          return null
-        }
+
+        if (!f) return null
+        
         d.selector = f.id
         return f
       }).filter(d => !_.isNull(d))

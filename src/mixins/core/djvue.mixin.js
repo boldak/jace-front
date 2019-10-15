@@ -47,7 +47,7 @@ export default {
           this.setNeedSave(false)
         })
         .then(() => {
-          this.$portal.post(`/api/app/config/set`, devService)
+          this.$portal.post(`/api/app/config/set`, window.devService)
         })
 
     },
@@ -87,16 +87,8 @@ export default {
     ),
 
     fullReload(url) {
-
-      this.$cookie.set(__application_Mode_Key, (this.isProductionMode) ? "production" : "development")
-      // this.$djvue.warning({
-      // 	type:"info",
-      // 	title:"Reload on "+Vue.cookie.get("mode")+" mode"
-      // })
-      // .then(()=> {
+      this.$cookie.set(window.__application_Mode_Key, (this.isProductionMode) ? "production" : "development")
       this.$djvue.fullReload(url)
-      // })
-
     },
 
     setLocale(locale) {

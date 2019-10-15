@@ -4,44 +4,25 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-        
         <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
-
-        <v-tabs
-          v-model="active"
-        >
+        <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
-
           <v-tab-item key="response" ripple>
-           
-              <v-row v-if="options" class="mx-0 pa-3 d-flex justify-center">
-                <v-col cols="8">  
-                  <v-date-picker
-                        v-model="answer.data[0]"
-                        full-width
-                        landscape
-                        class="mt-3 v-card--flat"
-                        style="border: 1px solid #dedede;"
-                        :locale="l"
-                  ></v-date-picker>
-                </v-col>  
-              </v-row>
+            <v-row v-if="options" class="mx-0 pa-3 d-flex justify-center">
+              <v-col cols="8">
+                <v-date-picker v-model="answer.data[0]" full-width landscape class="mt-3 v-card--flat" style="border: 1px solid #dedede;" :locale="l"></v-date-picker>
+              </v-col>
+            </v-row>
           </v-tab-item>
           <v-tab-item key="statistic" ripple v-if="options.showResponsesStat">
             <echart :options="statOptions" :height="height"></echart>
           </v-tab-item>
-        </v-tabs>  
+        </v-tabs>
       </v-container>
     </v-card>
-    </v-tabs>
-    <!-- <pre>
-        {{JSON.stringify(statOptions,null,"\t")}}
-      </pre>
- -->
   </div>
 </template>
-
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
@@ -57,7 +38,7 @@ export default {
   mixins: [djvueMixin, listenerMixin, statMixin, i18nMixin],
 
   components: {
-      "q-view": qView
+    "q-view": qView
   },
 
   props: ["config", "options", "answer", "stat"],
@@ -84,12 +65,12 @@ export default {
         stats = stats.concat(v)
       })
 
-      let result = eventDynamic(stats); 
+      let result = eventDynamic(stats);
 
-      if(!result) return {}
+      if (!result) return {}
 
       let statOptions = {
-        color:[this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.primary],
         grid: {
           left: '3%',
           right: '4%',
@@ -108,8 +89,8 @@ export default {
         series: [{
           name: '',
           type: 'bar',
-          itemStyle:{
-            opacity:0.5
+          itemStyle: {
+            opacity: 0.5
           },
           data: []
         }]
@@ -117,7 +98,7 @@ export default {
 
       statOptions.xAxis.data = result.map(r => r.title)
       statOptions.series[0].data = result.map(r => r.value)
-      
+
       this.height = 250;
       return statOptions
     }
@@ -146,31 +127,30 @@ export default {
     l: null,
 
     i18n: {
-          en: {
-            "Your_Response": "Your Response",
-            "Report": "Report",
-            "Validation_Error": "No response for this question but it is required.",
-            "Answer_not_configured": "Structure of answer not configured",
-            "No_data_available": "No data available",
-            "Alt_label": 'Type your response and press "Enter"'
-          },
+      en: {
+        "Your_Response": "Your Response",
+        "Report": "Report",
+        "Validation_Error": "No response for this question but it is required.",
+        "Answer_not_configured": "Structure of answer not configured",
+        "No_data_available": "No data available",
+        "Alt_label": 'Type your response and press "Enter"'
+      },
 
-          uk: {
-            "Your_Response": "Ваша відповідь",
-            "Report": "Звіт",
-            "Validation_Error": "Відсутня відповідь на обов'язкове запитання.",
-            "Answer_not_configured": "Структура відповіді не визначена",
-            "No_data_available": "Дані відсутні",
-            "Alt_label": 'Надрукуйте Вашу відповідь та натисніть "Enter"'
-          }
-        }
+      uk: {
+        "Your_Response": "Ваша відповідь",
+        "Report": "Звіт",
+        "Validation_Error": "Відсутня відповідь на обов'язкове запитання.",
+        "Answer_not_configured": "Структура відповіді не визначена",
+        "No_data_available": "Дані відсутні",
+        "Alt_label": 'Надрукуйте Вашу відповідь та натисніть "Enter"'
+      }
+    }
   }),
 
-  mounted() { 
+  mounted() {
     // this.l = (this.$i18n.locale == "uk") ? "ua-uk" : null  
-    this.$emit("init") 
+    this.$emit("init")
   }
 }
 
 </script>
-</style>

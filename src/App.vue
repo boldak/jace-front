@@ -1,5 +1,7 @@
 <template>
   <div class="app" v-show="started">
+   
+
     <v-app>
       <v-speed-dial v-model="fab" bottom right direction="top" fixed transition="scale-transition">
         <template v-slot:activator>
@@ -53,6 +55,7 @@
           </v-list>
         </v-menu>
       </v-speed-dial>
+
       <v-content>
         <div>
           <holder name="AppHeader" type="skin"></holder>
@@ -61,37 +64,25 @@
         </div>
       </v-content>
       <dialog-manager></dialog-manager>
-      <!-- <v-snackbar v-model="snbar" bottom :timeout="4000" style="opacity:0.5;">
-        
-        <v-col cols=12 class="headline text-center font-weight-light">
-          {{startMessage}} <span class="font-weight-light subtitle-1">starts in development mode.</span>
-        </v-col>
-       
-      </v-snackbar>   -->
     </v-app>
   </div>
 </template>
+
 <script>
-import page from "@/components/core/page.vue"
+
+
+
+
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
-
-import * as Cookie from "tiny-cookie"
-
 import holder from "@/components/core/holder.vue"
-import djDesignDrawer from "@/components/core/design-drawer/design-drawer.vue"
-
-
 import dialogManager from "@/components/core/ext/dialog-manager"
-
 import settingsDialog from "@/components/dialogs/config/settings-dialog.vue"
 import * as _ from "lodash"
 
 let components = {
   holder,
-  "dj-design-drawer": djDesignDrawer,
   "dialog-manager": dialogManager
-
 }
 
 
@@ -103,25 +94,15 @@ export default {
 
   data() {
     return {
-      user,
-      author,
-      designDrawer: false,
+      user: window.user,
+      author: window.author,
       started: false,
       djType: "app",
       progress: null,
       overlay: true,
       loadingMessage: "Please wait...",
       fab: null,
-      log: [],
-      // sockets: {
-      //   connect() {
-      //     console.log("connected");
-      //   // },
-      //   // log(msg) {
-      //   //   this.log.push(msg)
-      //   // }
-      // },
-      // snbar:false
+      log: []
     }
   },
   computed: {
@@ -141,59 +122,60 @@ export default {
       return p == this.app.currentPage
     },
 
-    openSettingsDialog() {
-      this.$dialogManager.showAndWait(settingsDialog, { width: "90%" })
-        .then(() => {
-          this.setNeedSave(true)
-        })
-    },
-
-    getPageInfo(page) {
-      if (!page) return {}
-      if (!this.app.currentPage) return {}
-
-      return {
-        title: page.title,
-        path: (page.id) ? '/' + page.id : '/',
-        current: page.id == this.app.currentPage.id
-      }
-    },
-
-    loadAppList() {
-      this.$portal
-        .get('api/app/get-list')
-        .then(response => {})
-    },
-
     login() {
       this.$djvue.login()
     },
 
-    switchMode() {
-      // this.splash({text:`Switch to ${ (this.isProductionMode) ? 'DESIGN' : "PRODUCTION" } mode.`})
 
-      this.started = false
-      if (this.app.mode == 'production') {
-        this.setMode('development')
-        this.$cookie.set(__application_Mode_Key, "development")
-        if (this.startedMode && this.startedMode == "production") {
-          this.fullReload();
-        } else {
-          this.designDrawer = true
-          this.emit("layout-page-start", this)
-        }
+        openSettingsDialog() {
+          this.$dialogManager.showAndWait(settingsDialog, { width: "90%" })
+            .then(() => {
+              this.setNeedSave(true)
+            })
+        },
 
-        // this.emit("design-drawer-show", this)
-      } else {
-        this.setMode('production')
-        this.$cookie.set(__application_Mode_Key, "production")
-        this.designDrawer = false
-        this.emit("layout-page-start", this)
-        // this.fullReload()production
-        // this.emit("design-drawer-hide", this)
-      }
+        getPageInfo(page) {
+          if (!page) return {}
+          if (!this.app.currentPage) return {}
 
-    },
+          return {
+            title: page.title,
+            path: (page.id) ? '/' + page.id : '/',
+            current: page.id == this.app.currentPage.id
+          }
+        },
+
+        loadAppList() {
+          this.$portal
+            .get('api/app/get-list')
+            .then(() => {})
+        },
+
+
+        switchMode() {
+
+          this.started = false
+          if (this.app.mode == 'production') {
+            this.setMode('development')
+            // eslint-disable-next-line
+            this.$cookie.set(window.__application_Mode_Key, "development")
+            if (this.startedMode && this.startedMode == "production") {
+              this.fullReload();
+            } else {
+              
+              this.emit("layout-page-start", this)
+            }
+          } else {
+            this.setMode('production')
+            // eslint-disable-next-line
+            this.$cookie.set(window.__application_Mode_Key, "production")
+            
+            this.emit("layout-page-start", this)
+
+          }
+
+        },
+
 
 
     setupI18n() {
@@ -211,15 +193,22 @@ export default {
 
   created() {
 
-    if (!this.$cookie.get(__application_Mode_Key)) {
-      this.$cookie.set(__application_Mode_Key, "production")
+
+
+    this.$socket.on("info", (socketID) => {
+      this.$socket.emit("init", socketID + " " + window.location.href)
+    })
+
+
+    if (!this.$cookie.get(window.__application_Mode_Key)) {
+      this.$cookie.set(window.__application_Mode_Key, "production")
     } else {
-      this.setMode(this.$cookie.get(__application_Mode_Key))
+      this.setMode(this.$cookie.get(window.__application_Mode_Key))
     }
 
     this.startedMode = (this.isProductionMode) ? "production" : "development"
-    console.log(`DjVue App starts on ${this.startedMode} mode`)
-    this.designDrawer = this.startedMode == "development"
+    window.console.log(`DjVue App starts on ${this.startedMode} mode`)
+   
 
     if (this.app.config.theme) {
       this.$vuetify.theme.themes.light = _.extend(this.$vuetify.theme.themes.light, this.app.config.theme)
@@ -230,9 +219,13 @@ export default {
       event: "page-start",
       callback: () => {
         this.started = true;
+
+        
         if (this.app.mode == "development") {
           this.splash({ text: `${this.startMessage} starts in development mode.` })
         }
+
+
       },
       rule: () => true
     })
@@ -252,5 +245,6 @@ export default {
 
 
 }
+
 
 </script>

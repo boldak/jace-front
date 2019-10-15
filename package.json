@@ -1,11 +1,11 @@
 {
-  "name": "jace-front",
+  "name": "front-end",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service build --watch",
+    "dev": "node ./node_modules/@vue/cli-service/bin/vue-cli-service.js build --watch",
     "build": "node ./node_modules/@vue/cli-service/bin/vue-cli-service.js build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint"	
   },
   "dependencies": {
     "@mdi/font": "^3.2.89",
@@ -24,7 +24,6 @@
     "lodash": "^4.17.11",
     "mermaid": "^8.0.0-rc.8",
     "moment": "^2.22.2",
-    "socket.io-client": "^2.3.0",
     "systemjs": "^3.0.2",
     "tiny-cookie": "^2.3.0",
     "tinycolor2": "^1.4.1",
@@ -33,15 +32,12 @@
     "vue-cookie": "^1.1.4",
     "vue-i18n": "^8.4.0",
     "vue-router": "^3.0.2",
-    "vue-socket.io-extended": "^4.0.0",
     "vuedl": "0.0.13",
     "vuedraggable": "^2.17.0",
     "vuetify": "^2.0.11",
     "vuetify-image": "^0.5.0",
     "vuetify-upload-button": "^1.2.1",
-    "vuex": "^3.0.1"
-  },
-  "devDependencies": {
+    "vuex": "^3.0.1",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-service": "^3.11.0",

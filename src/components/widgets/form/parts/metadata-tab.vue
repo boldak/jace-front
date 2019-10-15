@@ -2,54 +2,7 @@
 
   <v-card flat>
     <key-value-editor :object="form.metadata" value="value"></key-value-editor>
-    <!-- <v-toolbar flat color="transparent" dense>
-        
-     <v-dialog v-model="showNewMetadataDialog" max-width="30%">
-       <v-btn slot="activator" fab dark icon absolute bottom left small color="primary" @click="">
-          <v-icon>mdi-plus</v-icon>
-       </v-btn>
-        <v-card>
-          <v-toolbar dark flat color="primary">
-            <v-icon large>mdi-plus</v-icon>
-            <v-toolbar-title>New metadata</v-toolbar-title>
-          </v-toolbar>
-          <v-flex xs12 pl-3 pr-3 justify-center>
-            <v-text-field label="Metadata key" v-model="newMetadataKey" hint="Enter unique metadata key">
-            </v-text-field>
-          </v-flex>
-          <v-flex xs12 pl-3 pr-3 justify-center>
-            <v-text-field label="Metadata Value" v-model="newMetadataValue">
-            </v-text-field>
-          </v-flex>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="cancelNewMetadata">Cancel</v-btn>
-            <v-btn text color="primary" @click="commitNewMetadata">Ok</v-btn>
-          </v-card-actions>
-        </v-card>
-     </v-dialog>  
-      
-      <v-btn fab dark icon absolute bottom right small color="primary" @click="deleteMetadata()" :disabled="selection.length == 0">
-        <v-icon>mdi-trash-can-outline</v-icon>
-      </v-btn>
-
-    </v-toolbar> 
     
-    <v-divider></v-divider> 
-    
-    <v-data-iterator :items="items" :rows-per-page-items="[-1]" column wrap>
-
-      <v-layout row slot="item" slot-scope="props">
-        <v-flex xs1>
-          <v-checkbox secondary hide-details :disabled="props.item.required" v-model="props.item.selected" @change="onSelect()"></v-checkbox>
-        </v-flex>
-        <v-flex xs11>
-          <v-text-field v-model="props.item.value" :disabled="!props.item.editable" :label=" props.item.key" @input="updateMetadata"></v-text-field>
-        </v-flex>
-      </v-layout>  
-
-    </v-data-iterator>  -->
-  
   </v-card>  
 
 </template>
@@ -57,9 +10,9 @@
 <script>
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
-  import moment from "moment"
+  // import moment from "moment"
   import keyValueEditor from "@/components/core/ext/key-value-list.vue"
-
+  import * as _ from "lodash"
   export default  {
       
       mixins:[djvueMixin, listenerMixin],
@@ -141,7 +94,7 @@
       },
 
       watch:{
-        form(value){
+        form(){
           this.prepare()
         }
       },

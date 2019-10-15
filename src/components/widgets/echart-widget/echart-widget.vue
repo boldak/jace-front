@@ -16,7 +16,7 @@ import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import echart from "@/components/core/ext/echart.vue"
 import ChartConfig from "./echart-config-dialog.vue"
-import * as _ from "lodash"
+// import * as _ from "lodash"
 
 
 export default {

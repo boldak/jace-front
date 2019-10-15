@@ -6,7 +6,6 @@
       </v-flex>
       <v-spacer></v-spacer>
       <v-btn text color="primary" @click="uploadCollections()">Upload collections...</v-btn>
-      
     </v-container>
     <v-container v-else pa-0>
       <v-row class="mx-0" v-if="!collections">
@@ -20,10 +19,9 @@
             </h3>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="uploadCollections()">Upload collections...</v-btn>
-      
           </v-row>
           <v-flex xs12 pa-2 style="max-height:10em; overflow:auto; border:1px solid #dedede;">
-            <v-row v-for="c in collections" class="pt-2 mx-0" style="cursor:pointer;" @click="select(c)">
+            <v-row v-for="(c, cIndex) in collections" :key="cIndex" class="pt-2 mx-0" style="cursor:pointer;" @click="select(c)">
               <v-icon class="body-1 pr-2" :class="(selected && c == selected) ? 'primary--text' : 'secondary--text font-weight-light'">
                 mdi-grid-large
               </v-icon>
@@ -42,20 +40,12 @@
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="exportCollection(selected)">Download</v-btn>
             </v-layout>
-            <v-data-table 
-            	:headers="sampleTable.headers" 
-            	:items="sampleTable.rows" dense calculate-widths 
-            	:items-per-page="Number.POSITIVE_INFINITY" 
-            	hide-default-footer 
-            	style="display: inline-grid;"
-            	height="300px"
-            	fixed-header            
-            >
+            <v-data-table :headers="sampleTable.headers" :items="sampleTable.rows" dense calculate-widths :items-per-page="Number.POSITIVE_INFINITY" hide-default-footer style="display: inline-grid;" height="300px" fixed-header>
               <template v-slot:header="props">
-              	<td :colspan="sampleTable.headers.length">
-              		<v-divider></v-divider>
-              	</td>	
-              </template> 
+                <td :colspan="sampleTable.headers.length">
+                  <v-divider></v-divider>
+                </td>
+              </template>
               <template v-slot:body="props">
                 <tbody>
                   <tr v-for="(item, rowIndex) in props.items" :key="rowIndex">
@@ -73,6 +63,7 @@
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import ioMixin from "./ds-io.mixin.js"
 
 export default {
@@ -112,16 +103,16 @@ export default {
       }
     },
 
-       
-    uploadCollections(){
-    	this.selectFile()
-    		.then( file => {
-    			if(!file) return
-    			this.resolveFile(file)	
-    		})
+
+    uploadCollections() {
+      this.selectFile()
+        .then(file => {
+          if (!file) return
+          this.resolveFile(file)
+        })
     },
 
-    resolveFile( file) {
+    resolveFile(file) {
       this.selectFileDialog = false;
       this.sample = null;
       this.collections = null;

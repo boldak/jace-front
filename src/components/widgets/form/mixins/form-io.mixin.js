@@ -1,3 +1,6 @@
+import moment from "moment"
+import * as _ from "lodash"
+
 let _dps = {
 
   createForm: `
@@ -752,7 +755,7 @@ export default {
       //responses.push({date: new Date()})
 
       let defFormat = "YYYY-MM-DD HH:mm";
-      let inputFormat = "DD/MM/YY HH:mm";
+      // let inputFormat = "DD/MM/YY HH:mm";
 
 
       let RStat = responses
@@ -836,7 +839,7 @@ export default {
       
       
       if(sum==0){
-            stats = stats.map(item => 0)
+            stats = stats.map(() => 0)
           }else{
             stats = stats.map(item => item)//sum )
           }

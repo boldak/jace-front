@@ -1,206 +1,195 @@
-export default [
-	{
-		title:"Injection",
-		children:[
-			{
-				title:"javascript",
-				snippet:"\n<?javascript \n?>\n"
-			},
-			{
-				title:"json",
-				snippet:"\n<?json \n?>\n"
-			},
-			{
-				title:"csv",
-				snippet:"\n<?csv \n?>\n"
-			},
-			{
-				title:"xml",
-				snippet:"\n<?xml \n?>\n"
-			},
-			{
-				title:"text",
-				snippet:"\n<?text \n?>\n"
-			},
-			{
-				title:"html",
-				snippet:"\n<?html \n?>\n"
-			}
-		]
-	},
-	{
-		title:"Attributes",
-		children:[
-			{
-				title:"bindable",
-				snippet:"{{variable}}"
-			},
-			{
-				title:"scriptable",
-				snippet:"<? d => d ?>"
-			}
-		]
-	},
-	{
-		title:"Variables",
-		children:[
-			{
-				title:"set",
-				snippet:"\nset(\"variable\")\n"
-			},
-			{
-				title:"get",
-				snippet:"\nget(\"variable\")\n"
-			},
-			{
-				title:"return",
-				snippet:"\nreturn(\"variable\")\n"
-			}
-		]
-	},
-	{
-		title:"Data Definition",
-		children:[
-			{
-				title:"Get collection definition"
-			},
-			{
-				title:"Create collection"
-			},
-			{
-				title:"Drop collection"
-			}
-			,{
-				title:"Alter collection"
-			}
-			,{
-				title:"Create collection"
-			}
-		]
-	},
-	{
-		title:"Data Manipulation",
-		children:[
-			{
-				title:"Select data",
-				snippet:"dml.select(\n    from:'sdi-wbgini',\n    return:'value',\n    where: <? d => d.value.year == '2015' ?>,\n    into: 'gini'\n)"
-			},
-			{
-				title:"Update data"
-			},
-			{
-				title:"Insert data"
-			},
-			{
-				title:"Insert or Update data"
-			},
-			{
-				title:"Delete data"
-			},
-			{
-				title:"Load data"
-			}
-		]
-	},
-	{
-		title:"Data Transformation",
-		children:[
-			{
-				title:"Select"
-			},
-			{
-				title:"Order by"
-			},
-			{
-				title:"Group by"
-			},
-			{
-				title:"Inner join"
-			},
-			{
-				title:"Left join"
-			},
-			{
-				title:"Outer join"
-			},
-			{
-				title:"Map"
-			},
-			{
-				title:"Count by"
-			},
-			{
-				title:"Unique by"
-			},
-			{
-				title:"Limit (take)"
-			}
-		]
-	},
-	{
-		title:"Statistic",
-		children:[
-			{
-				title:"Min",
-				children:[]
-			},
-			{
-				title:"Max",
-				children:[]
-			},
-			{
-				title:"Rank",
-				children:[]
-			},
-			{
-				title:"Median",
-				children:[]
-			},
-			{
-				title:"Average",
-				children:[]
-			},
-			{
-				title:"Entropy",
-				children:[]
-			},
-			{
-				title:"Granulation",
-				children:[]
-			},
-			{
-				title:"Correlation",
-				children:[]
-			},
-			{
-				title:"K-means (clusters)",
-				children:[]
-			},
-			{
-				title:"K-means (centroids)",
-				children:[]
-			},
-			{
-				title:"PCA (eigen values)",
-				children:[]
-			},
-			{
-				title:"PCA (scores)",
-				children:[]
-			},
-			{
-				title:"PCA (loadings)",
-				children:[]
-			}
+export default [{
+    title: "Injection",
+    children: [{
+        title: "javascript",
+        snippet: "\n<?javascript \n?>\n"
+      },
+      {
+        title: "json",
+        snippet: "\n<?json \n?>\n"
+      },
+      {
+        title: "csv",
+        snippet: "\n<?csv \n?>\n"
+      },
+      {
+        title: "xml",
+        snippet: "\n<?xml \n?>\n"
+      },
+      {
+        title: "text",
+        snippet: "\n<?text \n?>\n"
+      },
+      {
+        title: "html",
+        snippet: "\n<?html \n?>\n"
+      }
+    ]
+  },
+  {
+    title: "Attributes",
+    children: [{
+        title: "bindable",
+        snippet: "{{variable}}"
+      },
+      {
+        title: "scriptable",
+        snippet: "<? d => d ?>"
+      }
+    ]
+  },
+  {
+    title: "Variables",
+    children: [{
+        title: "set",
+        snippet: "\nset(\"variable\")\n"
+      },
+      {
+        title: "get",
+        snippet: "\nget(\"variable\")\n"
+      },
+      {
+        title: "return",
+        snippet: "\nreturn(\"variable\")\n"
+      }
+    ]
+  },
+  {
+    title: "Data Definition",
+    children: [{
+        title: "Get collection definition"
+      },
+      {
+        title: "Create collection"
+      },
+      {
+        title: "Drop collection"
+      }, {
+        title: "Alter collection"
+      }, {
+        title: "Create collection"
+      }
+    ]
+  },
+  {
+    title: "Data Manipulation",
+    children: [{
+        title: "Select data",
+        snippet: "dml.select(\n    from:'sdi-wbgini',\n    return:'value',\n    where: <? d => d.value.year == '2015' ?>,\n    into: 'gini'\n)"
+      },
+      {
+        title: "Update data"
+      },
+      {
+        title: "Insert data"
+      },
+      {
+        title: "Insert or Update data"
+      },
+      {
+        title: "Delete data"
+      },
+      {
+        title: "Load data"
+      }
+    ]
+  },
+  {
+    title: "Data Transformation",
+    children: [{
+        title: "Select"
+      },
+      {
+        title: "Order by"
+      },
+      {
+        title: "Group by"
+      },
+      {
+        title: "Inner join"
+      },
+      {
+        title: "Left join"
+      },
+      {
+        title: "Outer join"
+      },
+      {
+        title: "Map"
+      },
+      {
+        title: "Count by"
+      },
+      {
+        title: "Unique by"
+      },
+      {
+        title: "Limit (take)"
+      }
+    ]
+  },
+  {
+    title: "Statistic",
+    children: [{
+        title: "Min",
+        children: []
+      },
+      {
+        title: "Max",
+        children: []
+      },
+      {
+        title: "Rank",
+        children: []
+      },
+      {
+        title: "Median",
+        children: []
+      },
+      {
+        title: "Average",
+        children: []
+      },
+      {
+        title: "Entropy",
+        children: []
+      },
+      {
+        title: "Granulation",
+        children: []
+      },
+      {
+        title: "Correlation",
+        children: []
+      },
+      {
+        title: "K-means (clusters)",
+        children: []
+      },
+      {
+        title: "K-means (centroids)",
+        children: []
+      },
+      {
+        title: "PCA (eigen values)",
+        children: []
+      },
+      {
+        title: "PCA (scores)",
+        children: []
+      },
+      {
+        title: "PCA (loadings)",
+        children: []
+      }
 
-		]
-	},
-	{
-		title:"Widgets",
-		children:[
-			{
-				title:"Table",
-				snippet:`
+    ]
+  },
+  {
+    title: "Widgets",
+    children: [{
+        title: "Table",
+        snippet: `
 					// ==> snippet "Table" 
 					dml.select(from:"wdi-countries", return:"value")
 					set("countries")
@@ -243,10 +232,10 @@ export default [
 					return("result")
 					// <== snippet "Table"
 				`
-			},
-			{
-				title:"Data Selector",
-				snippet:`
+      },
+      {
+        title: "Data Selector",
+        snippet: `
 					// ==> snippet "Data Selector"
 					dml.select(from:"wdi-countries", return:"value")
 					set("countries")
@@ -262,11 +251,11 @@ export default [
 					?>)
 					// <== snippet "Data Selector"
 				`
-			},
-			
-			{
-				title:"Bar Chart",
-				snippet:`
+      },
+
+      {
+        title: "Bar Chart",
+        snippet: `
 					
 					dml.select(
 					    from:"sdi-wbsf", 
@@ -343,25 +332,25 @@ export default [
 					return ("res")
 
 				`
-			},
-			{
-				title:"Line Chart",
-				children:[]
-			},
-			{
-				title:"Scatter Chart",
-				children:[]
-			},
-			{
-				title:"Radar Chart",
-				children:[]
-			},
-			{
-				title:"Geo Chart",
-				children:[]
-			}
+      },
+      {
+        title: "Line Chart",
+        children: []
+      },
+      {
+        title: "Scatter Chart",
+        children: []
+      },
+      {
+        title: "Radar Chart",
+        children: []
+      },
+      {
+        title: "Geo Chart",
+        children: []
+      }
 
-		]
-	}
+    ]
+  }
 
 ]

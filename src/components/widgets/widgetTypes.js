@@ -18,7 +18,7 @@ import dsOntologyWidget from "./ds-ontology/ds-ontology.type.js"
 import dsValueExplorerWidget from "./ds-value-explorer/ds-value-explorer.type.js"
 
 
-import echartWidget from "./echart/echart.type.js"
+// import echartWidget from "./echart/echart.type.js"
 import BarChartWidget from "./chart-bar/bar-chart.type.js"
 
 import WordcloudChartWidget from "./chart-word-cloud/wordcloud-chart.type.js"
@@ -75,7 +75,7 @@ export default {
 	"ds-value-explorer-widget" : dsValueExplorerWidget,
 	
 	
-	"echart-widget" : echartWidget,
+	// "echart-widget" : echartWidget,
 	"bar-chart-widget": BarChartWidget,
 
 	"wordcloud-chart-widget": WordcloudChartWidget,

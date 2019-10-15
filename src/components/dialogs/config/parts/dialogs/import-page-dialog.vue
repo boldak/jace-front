@@ -76,7 +76,7 @@ export default {
 
   data() {
     return {
-      file:null,
+      file: null,
       id: '',
       title: '',
       i18n
@@ -86,7 +86,6 @@ export default {
   methods: {
 
     fileChanged(file) {
-      console.log(file)
       this.file = file
     },
 

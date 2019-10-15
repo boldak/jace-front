@@ -27,19 +27,19 @@
                 <v-container>
                   <v-input label="Min" persistent-hint hint="Min value">
                     <div style="padding: 0 0 0 1em;">
-                      <input type="number" style="border: 1px solid #e0e0e0;" v-model="options.range[0]" :max="options.range[1]" @input="$emit('update:options', options)"></input>
+                      <input type="number" style="border: 1px solid #e0e0e0;" v-model="options.range[0]" :max="options.range[1]" @input="$emit('update:options', options)"/>
                     </div>
                   </v-input>
                   <v-divider></v-divider>
                   <v-input class="mt-2" label="Max" persistent-hint hint="Max value">
                     <div style="padding: 0 0 0 1em;">
-                      <input type="number" style="border: 1px solid #e0e0e0;" v-model="options.range[1]" :min="options.range[0]" @input="$emit('update:options', options)"></input>
+                      <input type="number" style="border: 1px solid #e0e0e0;" v-model="options.range[1]" :min="options.range[0]" @input="$emit('update:options', options)"/>
                     </div>
                   </v-input>
                   <v-divider></v-divider>
                   <v-input class="mt-2" label="Step" persistent-hint hint="step value">
                     <div style="padding: 0 0 0 1em;">
-                      <input type="number" style="border: 1px solid #e0e0e0;" v-model="options.step" :min="0" :max="options.range[1]-options.range[0]" @input="$emit('update:options', options)"></input>
+                      <input type="number" style="border: 1px solid #e0e0e0;" v-model="options.step" :min="0" :max="options.range[1]-options.range[0]" @input="$emit('update:options', options)"/>
                     </div>
                   </v-input>
                   <v-divider></v-divider>
@@ -67,12 +67,10 @@
         </v-card>
       </v-tab-item>
     </v-tabs>
-    <!-- <pre>
-	    	{{JSON.stringify(stat,null,"\t")}}
-	    </pre>	 -->
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -87,7 +85,7 @@ export default {
   methods: {
 
 
-     calculateStat() {
+    calculateStat() {
       let s = this.stat.responses.filter(a => a)
 
 
@@ -100,9 +98,9 @@ export default {
       let left = stats.map(item => item[0])
       let right = stats.map(item => item[1])
 
-      let r = _.union(_.uniq(left),_.uniq(right)).sort((a,b) => a-b).map(item=>({title:item}))
+      let r = _.union(_.uniq(left), _.uniq(right)).sort((a, b) => a - b).map(item => ({ title: item }))
 
-      let result = r.map((n, index) => {
+      let result = r.map( n => {
         let l = _.countBy(left)[n.title]
         let r = _.countBy(right)[n.title]
 
@@ -113,13 +111,13 @@ export default {
         }
       })
 
-      if(result.length == 0) return {}
+      if (result.length == 0) return {}
 
       let statOptions = {
-        
-      	legend: {
-        	data:['Left boundary', 'Right boundary']
-    	},
+
+        legend: {
+          data: ['Left boundary', 'Right boundary']
+        },
         grid: {
           left: '3%',
           right: '4%',
@@ -139,8 +137,8 @@ export default {
         name: 'Left boundary',
         type: 'line',
         step: 'middle',
-        areaStyle:{
-          opacity:0.25
+        areaStyle: {
+          opacity: 0.25
         },
         data: result.map(item => [item.title, item.left]),
         markLine: {
@@ -153,8 +151,8 @@ export default {
         name: 'Right boundary',
         type: 'line',
         step: 'middle',
-        areaStyle:{
-          opacity:0.25
+        areaStyle: {
+          opacity: 0.25
         },
         data: result.map(item => [item.title, item.right]),
         markLine: {

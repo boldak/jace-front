@@ -1,7 +1,7 @@
 <script>
 import getGeoJson from "./maps.js";
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  {merge, extend} from "lodash"
+import  * as _ from "lodash"
 import echarts from "echarts/dist/echarts-en"
 export default {
 
@@ -16,15 +16,6 @@ export default {
 
       if (!this.options) return
       let res = _.extend({}, this.options);
-
-      // if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length > 0 && this.selection.length > 0){
-
-      //    let s = this.selection.filter( d => d.selected)
-      //    res.series[0].data = this.serie.filter( d => _.find(s, e => e.entity.id == d.selector))
-
-      // } else {
-      // res.series[0].data = this.serie
-      // }
 
       res.series.forEach(s => {
         if (s.type == "scatter" && s.coordinateSystem == "geo")
@@ -92,10 +83,7 @@ export default {
         if (s.type == "lines") {
           s.tooltip = {
             trigger: 'item',
-            formatter: d => {
-              console.log(d)
-              return `${d.data.originName}-${d.data.destName} : ${d.data.value}`
-            }
+            formatter: d =>  `${d.data.originName}-${d.data.destName} : ${d.data.value}`
           }
         }
       })

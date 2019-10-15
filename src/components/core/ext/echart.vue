@@ -1,86 +1,85 @@
 <template>
-  <div v-else class="echart" :style="style"></div>
+  <div class="echart" :style="style"></div>
 </template>
 <script>
+import echarts from "echarts/dist/echarts-en"
 
-  import echarts from "echarts/dist/echarts-en"
+import registerWordCloud from "@/modules/echarts-wordcloud"
+registerWordCloud(echarts)
 
-  import registerWordCloud from "@/modules/echarts-wordcloud"
-  registerWordCloud(echarts)
-  
-  export default {
+export default {
 
-   
-    
 
-    name: "echart",
 
-    computed: {
-      style() {
-        return {
-          height: (this.height || 250) + "px"
-        }
+
+  name: "echart",
+
+  computed: {
+    style() {
+      return {
+        height: (this.height || 250) + "px"
       }
-    },
+    }
+  },
 
 
-    props: ["options", "height"],
+  props: ["options", "height"],
 
-    watch: {
-      options: {
-        handler: function(value) {
-         
-          if (value)
-            // this.$nextTick(() => {
-              this.chart.setOption(value, true)  
-            // })
-          this.chart.resize()
-        },
-        deep: true
-      },
+  watch: {
+    options: {
+      handler: function(value) {
 
-      height(value) {
-        // this.$nextTick(() => {
-          this.chart.resize({
-            height: value
-          })
+        if (value)
+          // this.$nextTick(() => {
+          this.chart.setOption(value, true)
         // })
-      }
+        this.chart.resize()
+      },
+      deep: true
     },
 
-    mounted() {
+    height(value) {
+      // this.$nextTick(() => {
+      this.chart.resize({
+        height: value
+      })
+      // })
+    }
+  },
 
-      // console.log("MOUNTED", this.options)
+  mounted() {
 
-      this.chart = echarts.init(this.$el, null, {height:this.height,width:"auto"})
-      this.resizeHandler = () => this.chart.resize();
+    // console.log("MOUNTED", this.options)
 
-      if (window.attachEvent) {
-        window.attachEvent('onresize', this.resizeHandler);
-      } else {
-        window.addEventListener('resize', this.resizeHandler);
-      }
+    this.chart = echarts.init(this.$el, null, { height: this.height, width: "auto" })
+    this.resizeHandler = () => this.chart.resize();
 
-      if (this.options) {
-        this.chart.setOption(this.options)
-      }
+    if (window.attachEvent) {
+      window.attachEvent('onresize', this.resizeHandler);
+    } else {
+      window.addEventListener('resize', this.resizeHandler);
+    }
 
-    },
+    if (this.options) {
+      this.chart.setOption(this.options)
+    }
 
-    beforeDestroy() {
-      if (window.attachEvent) {
-        window.detachEvent('onresize', this.resizeHandler);
-      } else {
-        window.removeEventListener('resize', this.resizeHandler, false);
-      }
-    },
+  },
+
+  beforeDestroy() {
+    if (window.attachEvent) {
+      window.detachEvent('onresize', this.resizeHandler);
+    } else {
+      window.removeEventListener('resize', this.resizeHandler, false);
+    }
+  },
 
 
-    data: () => ({
-      chart: null,
-      resizeHandler: null
-    })
-  }
+  data: () => ({
+    chart: null,
+    resizeHandler: null
+  })
+}
 
 </script>
 <style scoped>

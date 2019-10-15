@@ -44,7 +44,7 @@
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-
+import * as _ from "lodash"
 export default {
 
   name: "ImportAppDialog",

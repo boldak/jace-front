@@ -1,198 +1,83 @@
 <template>
   <v-container pa-0 style="border: 1px solid #dcdcdc;" v-if="!isProductionMode">
-      
-      <v-row class="mx-3">
-        
-        <v-btn icon :disabled="scripts.length==0" @click="showSnippets = !showSnippets">
-          <v-icon  class="primary--text">{{(!showSnippets)?'mdi-arrow-expand-right':'mdi-arrow-collapse-left'}}</v-icon>
-        </v-btn>  
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon @click="createScript()">
-          <v-icon  class="primary--text">mdi-plus</v-icon>
-        </v-btn>  
-
-        <v-btn icon @click="renameScript()" :disabled="scripts.length==0">
-          <v-icon  class="primary--text">mdi-square-edit-outline</v-icon>
-        </v-btn>  
-
-        <v-divider vertical class="mx-3"></v-divider>
-
-        <v-btn icon :loading="process" :disabled="process" @click="showResults = !showResults"> 
-          <v-icon  v-if="success" color="success">mdi-sync</v-icon>
-          <v-icon  v-else class="error white--text" style="border-radius:50%; padding:2px;">mdi-sync-off</v-icon>
-        </v-btn>  
-        
-        <v-btn icon :disabled="scripts.length==0" @click="runScript">
-          <v-icon  class="primary--text">mdi-play</v-icon>
-        </v-btn>  
-
-        <v-btn icon :disabled="scripts.length==0" @click="uploadAndRunScript()">
-          <v-icon  class="primary--text">mdi-animation-play-outline</v-icon>
-        </v-btn>  
-
-        <v-divider vertical class="mx-3"></v-divider>
-        
-        <v-btn icon @click="deleteScript" :disabled="scripts.length==0">
-          <v-icon  class="primary--text">mdi-trash-can-outline</v-icon>
-        </v-btn>  
-
-
-<!-- 
-        <v-menu right>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on" class="mr-3">
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-          </template>
-          
-          <v-list>
-            <v-list-item @click="showSnippets = true" :disabled="scripts.length==0" v-if="!showSnippets">
-              <v-list-item-title>
-                <v-icon>mdi-arrow-expand-right</v-icon> Expand snippets
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="showSnippets = false" :disabled="scripts.length==0" v-if="showSnippets">
-              <v-list-item-title>
-                <v-icon>mdi-arrow-collapse-left</v-icon> Collapse snippets
-              </v-list-item-title>
-            </v-list-item>
-            <v-divider></v-divider>
-            
-            <v-flex>
-              
-                  <v-list-item @click="createScript()">
-                    <v-list-item-title>
-                      <v-icon>mdi-plus</v-icon> Create script...
-                    </v-list-item-title>
-                  </v-list-item>
-              
-            </v-flex>  
-
-            <v-flex>
-              <v-list-item @click="renameScript()" :disabled="scripts.length==0">
-                <v-list-item-title>
-                  <v-icon>mdi-square-edit-outline</v-icon> Rename script...
-                </v-list-item-title>
-              </v-list-item>
-            </v-flex>  
-            
-            
-            <v-list-item @click="runScript" :disabled="scripts.length==0">
-              <v-list-item-title>
-                <v-icon>mdi-play</v-icon> Run script
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-flex :disabled="scripts.length==0">
-            
-            <v-list-item>
-                    <v-list-item-title @click="uploadAndRunScript()">
-                      <v-icon>mdi-animation-play-outline</v-icon> Run script with upload...
-                    </v-list-item-title>
-                  </v-list-item>
-            </v-flex>  
-            
-            <v-divider></v-divider>
-
-
-            <v-list-item @click="deleteScript" :disabled="scripts.length==0">
-              <v-list-item-title>
-                <v-icon>mdi-trash-can-outline</v-icon> Delete script
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
-      </v-row>
-    
-    
+    <v-row class="mx-3">
+      <v-btn icon :disabled="scripts.length==0" @click="showSnippets = !showSnippets">
+        <v-icon class="primary--text">{{(!showSnippets)?'mdi-arrow-expand-right':'mdi-arrow-collapse-left'}}</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="createScript()">
+        <v-icon class="primary--text">mdi-plus</v-icon>
+      </v-btn>
+      <v-btn icon @click="renameScript()" :disabled="scripts.length==0">
+        <v-icon class="primary--text">mdi-square-edit-outline</v-icon>
+      </v-btn>
+      <v-divider vertical class="mx-3"></v-divider>
+      <v-btn icon :loading="process" :disabled="process" @click="showResults = !showResults">
+        <v-icon v-if="success" color="success">mdi-sync</v-icon>
+        <v-icon v-else class="error white--text" style="border-radius:50%; padding:2px;">mdi-sync-off</v-icon>
+      </v-btn>
+      <v-btn icon :disabled="scripts.length==0" @click="runScript">
+        <v-icon class="primary--text">mdi-play</v-icon>
+      </v-btn>
+      <v-btn icon :disabled="scripts.length==0" @click="uploadAndRunScript()">
+        <v-icon class="primary--text">mdi-animation-play-outline</v-icon>
+      </v-btn>
+      <v-divider vertical class="mx-3"></v-divider>
+      <v-btn icon @click="deleteScript" :disabled="scripts.length==0">
+        <v-icon class="primary--text">mdi-trash-can-outline</v-icon>
+      </v-btn>
+    </v-row>
     <v-divider></v-divider>
-    
     <v-col v-if="scripts.length == 0" class="text-center">
       <h3 class="warning--text font-weight-light"> NO DATA PROCESSING SCRIPT AVAILABLE </h3>
     </v-col>
-      
     <v-row v-else>
       <v-expand-x-transition>
-        <v-col cols="3" v-if="showSnippets" class="pa-0 ml-3" >
+        <v-col cols="3" v-if="showSnippets" class="pa-0 ml-3">
           <v-toolbar dark flat color="primary" height=36>
             <v-toolbar-title class="subheading white--text"> Snippets </v-toolbar-title>
           </v-toolbar>
-        
           <snippet-tree :editor="editor" style="height:600px; overflow:auto"></snippet-tree>
-
         </v-col>
       </v-expand-x-transition>
-      
       <v-divider vertical v-if="showSnippets"></v-divider>
       <v-col class="pa-0" :class="(showSnippets) ?'ml-0 mr-3' :'mx-3' ">
-        <v-tabs 
-          v-model="tab"
-          show-arrows
-         
-        >
-          
+        <v-tabs v-model="tab" show-arrows>
           <v-tabs-slider></v-tabs-slider>
-          <v-tab
-            v-for="(item, index) in scripts"
-            :key="index"
-            :href="`#tab-${item.name}`"
-
-          >
+          <v-tab v-for="(item, index) in scripts" :key="index" :href="`#tab-${item.name}`">
             <span class="my-0 py-0 caption font-weight-bold">{{ item.name }}</span>
           </v-tab>
-          
-
           <v-tab-item v-for="(item, index) in scripts" :value="'tab-' + item.name" :key="index">
             <v-card flat>
               <!-- <pre>{{item.script}}</pre> -->
-              <editor 
-                :content="item.script" 
-                lang="dps" 
-                :sync="true" 
-                @change="onUpdateScript"
-                @mount = "setEditor"
-              >
+              <editor :content="item.script" lang="dps" :sync="true" @change="onUpdateScript" @mount="setEditor">
               </editor>
             </v-card>
           </v-tab-item>
         </v-tabs>
-          
       </v-col>
-
     </v-row>
     <v-divider></v-divider>
-    <!-- <v-system-bar status>
-      <v-progress-circular indeterminate color="secondary lighten-4" v-if="process" size=18></v-progress-circular>
-      <v-icon v-else-if="success" color="success" size=18>mdi-sync</v-icon>
-      <v-icon v-else-if="!success" color="error" size=18>mdi-sync-off</v-icon>
-      {{app.config.dpsURL}}
-      <v-spacer></v-spacer>
-      <div class="secondary white--text pr-2 pl-2">{{lang}}</div>
-    </v-system-bar> -->
     <v-divider v-if="showResults && dpsResult && scripts.length > 0"></v-divider>
     <v-col class="mx-0 pa-0" v-if="showResults && dpsResult && scripts.length > 0" style="max-height:35em; overflow:auto;">
       <v-flex v-if="success">
         <highlight :content="result" :lang="lang">
         </highlight>
       </v-flex>
-      <pre class="body-2 error--text pl-2" v-else>{{result.message}}</pre>  
+      <pre class="body-2 error--text pl-2" v-else>{{result.message}}</pre>
     </v-col>
-    
   </v-container>
 </template>
-
 <script>
-
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
-    
+
 let components = {
-       "snippet-tree": () => import("./dps-snippets-tree.vue"),
-        editor: () => import("@/components/core/ext/ace-editor.vue"),
-        highlight: () => import("@/components/core/ext/ace-highlight.vue") 
-    }
+  "snippet-tree": () => import("./dps-snippets-tree.vue"),
+  editor: () => import("@/components/core/ext/ace-editor.vue"),
+  highlight: () => import("@/components/core/ext/ace-highlight.vue")
+}
 
 import createScriptDialog from "./dialogs/create-script.vue"
 import renameScriptDialog from "./dialogs/rename-script.vue"
@@ -210,38 +95,38 @@ export default {
 
   methods: {
 
-    createScript(){
-      this.$dialogManager.showAndWait(createScriptDialog, {width:"30%"})
-        .then( name => {
-            if(name) this.resolve(name)
+    createScript() {
+      this.$dialogManager.showAndWait(createScriptDialog, { width: "30%" })
+        .then(name => {
+          if (name) this.resolve(name)
         })
     },
 
-    renameScript(){
-      this.$dialogManager.showAndWait(renameScriptDialog, {width:"30%"})
-        .then( name => {
-            if(name) this.resolveRename(name)
+    renameScript() {
+      this.$dialogManager.showAndWait(renameScriptDialog, { width: "30%" })
+        .then(name => {
+          if (name) this.resolveRename(name)
         })
     },
 
-    uploadAndRunScript(){
+    uploadAndRunScript() {
       this.selectFile()
-      .then( file => {
-            if(file) this.resolveFile(file)
+        .then(file => {
+          if (file) this.resolveFile(file)
         })
     },
 
-    setEditor(editor){
+    setEditor(editor) {
       this.editor = editor;
     },
 
-    resolveFile(file){
+    resolveFile(file) {
       this.process = true;
       this.dpsResult = null;
-     
+
       this.$dps.run({
           script: this.selected.script,
-          state:{},
+          state: {},
           file
         })
         .then(res => {
@@ -252,7 +137,7 @@ export default {
         .catch(e => {
           this.process = false;
           this.success = false;
-          this.dpsResult = {message: e.toString()}
+          this.dpsResult = { message: e.toString() }
         })
     },
 
@@ -271,7 +156,7 @@ export default {
         .catch(() => {
           this.process = false;
           this.success = false;
-          this.dpsResult= {message: "Data processing server not available."}
+          this.dpsResult = { message: "Data processing server not available." }
         })
     },
 
@@ -283,62 +168,61 @@ export default {
         })
         .then(res => {
           this.process = false;
-          if(res.type != "error"){
+          if (res.type != "error") {
             this.success = true;
             this.dpsResult = res
           } else {
             this.success = false;
             this.dpsResult = res
           }
-          console.log(res)
+          // console.log(res)
         })
         .catch(e => {
           this.process = false;
           this.success = false;
-          this.dpsResult = {message: e.toString()}
-          console.warn(e)
+          this.dpsResult = { message: e.toString() }
+          window.console.warn(e)
         })
     },
 
-    
-    deleteScript(){
+
+    deleteScript() {
       this.$djvue.confirm({
-        type:"warning",
-        text:`Do you want delete script ${this.selected.name}`,
-        rejectText:"Cancel",
-        resolveText:"Delete"
-      })
-      .then(() => {
-        let index = _.findIndex(this.scripts, s => s.name == this.selected.name)
-        let selectedIndex = (this.scripts.length == 1) 
-          ? -1 
-          : (index==(this.scripts.length-1)) 
-              ? this.scripts.length-2
-              : index;
+          type: "warning",
+          text: `Do you want delete script ${this.selected.name}`,
+          rejectText: "Cancel",
+          resolveText: "Delete"
+        })
+        .then(() => {
+          let index = _.findIndex(this.scripts, s => s.name == this.selected.name)
+          let selectedIndex = (this.scripts.length == 1) ?
+            -1 :
+            (index == (this.scripts.length - 1)) ?
+            this.scripts.length - 2 :
+            index;
 
-        this.scripts.splice(index,1)
-        if( this.scripts.length > 0 ){
-          this.selected = this.scripts[selectedIndex]      
-          this.tab = "tab-"+this.selected.name
-        }
+          this.scripts.splice(index, 1)
+          if (this.scripts.length > 0) {
+            this.selected = this.scripts[selectedIndex]
+            this.tab = "tab-" + this.selected.name
+          }
 
-        this.setNeedSave(true)
-      })
+          this.setNeedSave(true)
+        })
     },
 
-    
-    validateScriptName(name){
-      if( !name || name=="" ) return false;
+
+    validateScriptName(name) {
+      if (!name || name == "") return false;
       return _.findIndex(this.scripts, s => s.name == name) == -1
     },
 
-    resolve(name){
-      if(this.validateScriptName(name)){
-        
+    resolve(name) {
+      if (this.validateScriptName(name)) {
+
         this.scripts.push({
           name,
-          script:
-`
+          script: `
 /**
  **
  **     DATA PROCESSING SCRIPT: ${name}
@@ -348,40 +232,40 @@ export default {
 `
         })
         this.selected = _.findIndex(this.scripts, s => s.name == name)
-        this.currentScript = "tab-"+name
+        this.currentScript = "tab-" + name
 
         this.setNeedSave(true)
-        
+
       } else {
         this.$djvue.warning({
-          type:"error",
-          title:"Cannot create dps",
-          text:"Script name is empty or doublicated"
+          type: "error",
+          title: "Cannot create dps",
+          text: "Script name is empty or doublicated"
         })
       }
       this.$nextTick(() => {
-        this.tab = "tab-"+name
+        this.tab = "tab-" + name
       })
-      
+
     },
 
-    resolveRename(name){
-      if(this.validateScriptName(name)){
+    resolveRename(name) {
+      if (this.validateScriptName(name)) {
         this.renameDpsDialog = false
         this.selected.name = name
-        this.currentScript = "tab-"+name
+        this.currentScript = "tab-" + name
         this.newScriptName = null
         this.setNeedSave(true)
-        
+
       } else {
         this.$djvue.warning({
-          type:"error",
-          title:"Cannot rename dps",
-          text:"Script name is empty or doublicates detected."
+          type: "error",
+          title: "Cannot rename dps",
+          text: "Script name is empty or doublicates detected."
         })
       }
-      
-    }        
+
+    }
 
 
 
@@ -416,37 +300,35 @@ export default {
 
     result() {
 
-       let supportedMode = {
-            text:           "text", 
-            string:         "text", 
-            xml:            "xml", 
-            csv:            "csv", 
-            javascript:     "javascript", 
-            json:           "json",
-            object:         "json",
-            "function":     "json", 
-            dps:            "dps",
-            dataset:        "json",
-            error:          "json",
-            table:          "json",
-            help:           "json",
-            html:           "html", 
-            json:           "json", 
-            error:          "json",
-            bar:            "json",
-            hbar:           "json",
-            line:           "json",
-            area:           "json",
-            scatter:        "json",
-            radar:          "json",
-            deps:           "json",
-            pie:            "json"    
-        }
+      let supportedMode = {
+        text: "text",
+        string: "text",
+        xml: "xml",
+        csv: "csv",
+        javascript: "javascript",
+        json: "json",
+        object: "json",
+        "function": "json",
+        dps: "dps",
+        dataset: "json",
+        error: "json",
+        table: "json",
+        help: "json",
+        html: "html",
+        bar: "json",
+        hbar: "json",
+        line: "json",
+        area: "json",
+        scatter: "json",
+        radar: "json",
+        deps: "json",
+        pie: "json"
+      }
 
       let mode = supportedMode[this.dpsResult.type]
       let content;
-      if( mode ){
-        if(mode == "json"){
+      if (mode) {
+        if (mode == "json") {
           content = (this.dpsResult.data) ? JSON.stringify(this.dpsResult.data, null, "\t") : JSON.stringify(this.dpsResult)
         } else {
           // console.log(this.dpsResult)
@@ -457,32 +339,32 @@ export default {
         content = JSON.stringify(this.dpsResult, null, "\t")
       }
 
-      if(this.dpsResult.type=="error"){
+      if (this.dpsResult.type == "error") {
         this.success = false
         content = (this.dpsResult.message) ? this.dpsResult : this.dpsResult.data
       }
 
       this.lang = mode;
       return content
-    }  
+    }
   },
 
   created() {
     // console.log(this.config.scripts)
     this.scripts = this.config.scripts;
-    if (this.scripts.length>0) this.selected = this.scripts[0]
+    if (this.scripts.length > 0) this.selected = this.scripts[0]
     this.checkDpsURL()
   },
 
-  mounted() { 
-    if(this.scripts.length > 0){
-      this.tab = "tab-"+this.scripts[0].name
+  mounted() {
+    if (this.scripts.length > 0) {
+      this.tab = "tab-" + this.scripts[0].name
     }
-    this.$emit("init") 
+    this.$emit("init")
   },
 
   data: () => ({
-    tab:null,
+    tab: null,
     scripts: [],
     selected: null,
     currentScript: null,
@@ -490,17 +372,17 @@ export default {
     success: false,
     showSnippets: false,
     dpsResult: null,
-    newScriptName:null,
-    lang:"json",
-    file:null,
-    editor:null,
-    showResults:false
+    newScriptName: null,
+    lang: "json",
+    file: null,
+    editor: null,
+    showResults: false
   }),
 
-  watch:{
-    tab(value){
-      if(value)
-      this.selected = _.find(this.scripts, s => s.name == value.substring(4))
+  watch: {
+    tab(value) {
+      if (value)
+        this.selected = _.find(this.scripts, s => s.name == value.substring(4))
     }
   }
 
@@ -508,11 +390,11 @@ export default {
 }
 
 </script>
-
 <style>
 .v-tabs-bar {
-    border-radius: inherit;
-    height: 36px;
-    border-bottom: 1px solid #dedede;
+  border-radius: inherit;
+  height: 36px;
+  border-bottom: 1px solid #dedede;
 }
+
 </style>

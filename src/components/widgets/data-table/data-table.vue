@@ -31,6 +31,7 @@
   import listenerMixin from "@/mixins/core/listener.mixin.js";
   import dataTableConfigDialog from "./data-table-config.vue";
   import tinycolor from "tinycolor2"
+  import * as _ from "lodash"
      
  export default  {
     
@@ -104,11 +105,11 @@
     
       },
 
-      onUpdate ({data, options}) {
+      onUpdate ({data}) {
         // console.log("table update", data)
         this.data = data.dataset.source;
         let temp = {
-          headers: data.dataset.dimensions.map( (item, index) => ({
+          headers: data.dataset.dimensions.map( item => ({
               text: item.text || item,
               align: 'center',
               value: item.value || item,
@@ -160,7 +161,6 @@
       },
 
       onClear(){
-        console.log("table clear")
         this.onUpdate({
           data: {
             "dataset": {

@@ -4,27 +4,16 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-        
         <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
-
-        <v-tabs
-          v-model="active"
-        >
+        <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
-          
           <v-tab-item key="response" ripple>
             <v-container pa-2>
-              <v-card 
-                v-if="(!options.nominals || options.nominals.length == 0) && !options.addEnabled" 
-                flat 
-                color="transparent" 
-                class="mt-3"
-              >
+              <v-card v-if="(!options.nominals || options.nominals.length == 0) && !options.addEnabled" flat color="transparent" class="mt-3">
                 <h3 class="headline warning--text font-weight-light">{{translate('Answer_not_configured')}}</h3>
               </v-card>
-              
-              <v-layout v-else align-center justify-end row fill-height v-for="alt in options.nominals" style="padding-bottom: 0.5em;">
+              <v-layout v-else align-center justify-end row fill-height v-for="(alt, altIndex) in options.nominals" :key="altIndex" style="padding-bottom: 0.5em;">
                 <div style="width:2em;margin:auto;">
                   <v-checkbox secondary hide-details v-model="alt.selected" style="padding:0;margin:0;" @change="select()"></v-checkbox>
                 </div>
@@ -36,11 +25,11 @@
                 <v-flex xs1 v-if="options.showUserInfo">
                   <v-layout v-if="alt.user" column>
                     <v-tooltip top>
-                      <template v-slot:activator="{on}">  
+                      <template v-slot:activator="{on}">
                         <v-avatar v-on="on">
                           <dj-img :src="alt.user.photo" :icon="(alt.user.icon)?alt.user.icon : 'mdi-account'" style="margin:auto;"></dj-img>
                         </v-avatar>
-                      </template>  
+                      </template>
                       <span>{{alt.user.name}}</span>
                     </v-tooltip>
                   </v-layout>
@@ -48,42 +37,23 @@
               </v-layout>
             </v-container>
             <v-divider></v-divider>
-            <v-text-field 
-              v-if="options.addEnabled"
-              class="px-2" 
-              v-model="newAltTitle" 
-              :label="translate('Alt_label')"
-              @keyup.enter="addAlternative"
-              :disabled="customAltCount >= options.maxCustomResponses"
-            >
+            <v-text-field v-if="options.addEnabled" class="px-2" v-model="newAltTitle" :label="translate('Alt_label')" @keyup.enter="addAlternative" :disabled="customAltCount >= options.maxCustomResponses">
             </v-text-field>
             <!-- <v-divider v-if="options.addEnabled"></v-divider> -->
           </v-tab-item>
           <v-tab-item key="statistic" ripple v-if="options.showResponsesStat">
-            <v-card 
-              v-if="(!options.nominals || options.nominals.length == 0) && !options.addEnabled" 
-              flat 
-              color="transparent" 
-              class="mt-3"
-            >
+            <v-card v-if="(!options.nominals || options.nominals.length == 0) && !options.addEnabled" flat color="transparent" class="mt-3">
               <h3 class="headline warning--text font-weight-light">{{translate('No_data_available')}}</h3>
             </v-card>
             <echart v-else :options="statOptions" :height="height"></echart>
           </v-tab-item>
-        </v-tabs>  
+        </v-tabs>
       </v-container>
     </v-card>
-    </v-tabs>
-    <!-- <pre>
-	    	{{JSON.stringify(options.nominals,null,"\t")}}
-	    	{{JSON.stringify(answer,null,"\t")}}
-	    </pre>	 -->
   </div>
 </template>
-
-
 <script>
-
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -95,9 +65,9 @@ import qView from "../../question-view.vue";
 export default {
 
   mixins: [djvueMixin, listenerMixin, statMixin, i18nMixin],
-  
+
   components: {
-        "q-view": qView
+    "q-view": qView
   },
 
   props: ["config", "options", "answer", "stat"],
@@ -107,7 +77,7 @@ export default {
     isValid() {
       if (!this.options) return "Not configured"
       if (!this.answer) return "No response data"
-      if(!this.options.required) return true
+      if (!this.options.required) return true
 
       if (this.options.required &&
         (this.answer.data.length >= this.options.rule.min) &&
@@ -134,7 +104,7 @@ export default {
       this.newAltTitle = null
       this.$emit("extend:options", this.options)
       this.select(newAlt.id)
-      this.$nextTick(()=>{this.customAltCount++})
+      this.$nextTick(() => { this.customAltCount++ })
     },
 
     select(nominal) {
@@ -150,7 +120,7 @@ export default {
     },
 
     calculateStat() {
-      if(!this.options.nominals) return {}
+      if (!this.options.nominals) return {}
       // console.log(JSON.stringify(this.stat.responses, null, "\t"))
       let s = this.stat.responses.filter(a => a) // &&  _.find(this.options.nominals, n => n.id == a[0]))
       let stats = []
@@ -166,7 +136,7 @@ export default {
         }
       })
       let statOptions = {
-        color:[this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.primary],
         grid: {
           left: '3%',
           right: '4%',
@@ -186,8 +156,8 @@ export default {
           name: '',
           type: 'bar',
           data: [],
-          itemStyle:{
-            opacity:0.5
+          itemStyle: {
+            opacity: 0.5
           }
         }]
       }
@@ -206,10 +176,10 @@ export default {
   watch: {
     answer(value) {
       value.data = (value) ? value.data.filter(a => _.find(this.options.nominals, alt => alt.id == a)) : []
-      if(this.options && this.options.nominals && this.options.nominals.forEach)
-      this.options.nominals.forEach(n => {
-        n.selected = _.findIndex(value.data, a => a == n.id) >= 0
-      })
+      if (this.options && this.options.nominals && this.options.nominals.forEach)
+        this.options.nominals.forEach(n => {
+          n.selected = _.findIndex(value.data, a => a == n.id) >= 0
+        })
 
     }
   },
@@ -230,7 +200,7 @@ export default {
         "Answer_not_configured": "Structure of answer not configured",
         "No_data_available": "No data available",
         "Alt_label": 'Type your response and press "Enter"',
-        "You_shuld_select_between" : "You shuld select between",
+        "You_shuld_select_between": "You shuld select between",
         "And": "and",
         "Alternatives": "alternatives"
       },
@@ -242,7 +212,7 @@ export default {
         "Answer_not_configured": "Структура відповіді не визначена",
         "No_data_available": "Дані відсутні",
         "Alt_label": 'Надрукуйте Вашу відповідь та натисніть "Enter"',
-        "You_shuld_select_between" : "Ви повинні вибрати від",
+        "You_shuld_select_between": "Ви повинні вибрати від",
         "And": "до",
         "Alternatives": "варіантів"
 

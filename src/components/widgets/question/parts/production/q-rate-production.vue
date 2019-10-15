@@ -4,53 +4,32 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-
         <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
-        
-         <v-tabs v-model="active">
+        <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
-
           <v-tab-item key="response" ripple>
-              <v-row  class="mx-0 px-3 d-flex align-end">
-                <v-rating 
-                  v-model="answer.data[0]" 
-                  :length="options.scale.length" 
-                  :empty-icon="`mdi-${options.icon}-outline`" 
-                  :full-icon="`mdi-${options.icon}`" 
-                  color="accent" 
-                  background-color="secondary lighten-2">
-                    
-                </v-rating>
-                
-                <span v-if="answer.data[0] && (options.showValue || (options.showTitle && !options.scale[answer.data[0]-1].title))"
-                          class=" accent--text caption"
-                      >
-                        {{answer.data[0]}}&nbsp;
-                      </span>
-                <span v-if="answer.data[0] && options.showTitle && options.scale[answer.data[0]-1].title"
-                        class="accent--text caption"
-                      >
-                        ( {{options.scale[answer.data[0]-1].title}} )
-                      </span>
-              </v-row>
-            
+            <v-row class="mx-0 px-3 d-flex align-end">
+              <v-rating v-model="answer.data[0]" :length="options.scale.length" :empty-icon="`mdi-${options.icon}-outline`" :full-icon="`mdi-${options.icon}`" color="accent" background-color="secondary lighten-2">
+              </v-rating>
+              <span v-if="answer.data[0] && (options.showValue || (options.showTitle && !options.scale[answer.data[0]-1].title))" class=" accent--text caption">
+                {{answer.data[0]}}&nbsp;
+              </span>
+              <span v-if="answer.data[0] && options.showTitle && options.scale[answer.data[0]-1].title" class="accent--text caption">
+                ( {{options.scale[answer.data[0]-1].title}} )
+              </span>
+            </v-row>
           </v-tab-item>
-          
           <v-tab-item key="statistic" ripple v-if="options.showResponsesStat">
-            
             <echart :options="statOptions" :height="height"></echart>
           </v-tab-item>
         </v-tabs>
       </v-container>
     </v-card>
-    </v-tabs>
-    <!-- <pre>
-        {{JSON.stringify(stat,null,"\t")}}
-      </pre>   -->
   </div>
 </template>
 <script>
+import * as _ from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -64,8 +43,8 @@ export default {
 
   mixins: [djvueMixin, listenerMixin, statMixin, i18nMixin],
 
-   components: {
-      "q-view": qView
+  components: {
+    "q-view": qView
   },
 
   props: ["config", "options", "answer", "stat"],
@@ -92,7 +71,7 @@ export default {
         stats = stats.concat(v)
       })
 
-      let result = this.options.scale.map((n, index) => {
+      let result = this.options.scale.map(n => {
         let c = _.countBy(stats)[n.value]
         return {
           title: `${n.value} ${(n.title) ? ' ('+n.title+')': ''}`,
@@ -100,7 +79,7 @@ export default {
         }
       })
       let statOptions = {
-        color:[this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.primary],
         grid: {
           left: '3%',
           right: '4%',
@@ -180,4 +159,3 @@ export default {
 }
 
 </script>
-</style>
