@@ -23,10 +23,6 @@ import "katex/dist/katex.min.css"
 Vue.use(socketPlugin, window.devService.config.pubService);
 
 
-<<< 
-  if(jace.mode == "development") $include("./1.js") 
->>>
-window.console.log("JACE",`<<<= JSON.stringify(jace) >>>`)
 
 
 Vue.use(VueClipboard)
