@@ -55,10 +55,16 @@ export default {
             editor: () => import("./parts/resource-manager.vue")
           },
 
+<<< if(jace.availablePublishing) { >>>
+  
           {
             name: 'Publication',
             editor: () => import("@/components/dialogs/config/parts/app-pub.vue")
           },
+
+<<< } >>>
+
+
 
           {
             name: 'Dev Service Settings',

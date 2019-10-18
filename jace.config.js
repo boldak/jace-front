@@ -1,3 +1,5 @@
 module.exports = {
-	mode: "development"//"publishing"//
+	mode: "development",            //"publishing"//,
+	availablePublishing: true
+	
 }

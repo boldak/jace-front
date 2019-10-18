@@ -10,12 +10,15 @@ const lql = p => p == "<<<#"
 const lqc = p => p == "<<<"
 const rqe = p => p == ">>>"
 
+const detectJace = /<<</gim
+
 
 module.exports = (source, options) => {
 
 	// console.log(path.join(path.dirname(options.resourcePath).toString(),"./include.js"))
 	// console.log(path.join(path.dirname(options.resourcePath).toString(),"@/include.js"))
-		
+	
+	// if( !detectJace.test(source) ) return source	
 	
 	let src = []
 	source.split(lq).map( p => p.split(rq)).forEach(p => {
@@ -90,6 +93,10 @@ module.exports = (source, options) => {
 
 
 	})
+
+// console.log("++++++++++++++++++++++++++++++++")
+// console.log(res.join("\n"))
+// console.log("++++++++++++++++++++++++++++++++")
 
 
 let result 

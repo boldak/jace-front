@@ -3,6 +3,12 @@
    
 
     <v-app>
+      <<< if( jace.mode == "development" ) {>>>
+      <div class="caption secondary white--text px-2" style="text-align:right">
+        <span class="font-weight-bold"> JACE DEV SERVICE </span> 
+        <span class="font-weight-light"> {{$resolveUrl('')}} </span>
+      </div>
+      <<< } >>>
       <v-speed-dial v-model="fab" bottom right direction="top" fixed transition="scale-transition">
         <template v-slot:activator>
           <v-btn v-model="fab" :color="(!isNeedSave)?'primary lighten-1':'warning'" dark fab>
@@ -194,10 +200,13 @@ export default {
   created() {
 
 
-
+<<< if(jace.availablePublishing) { >>>
+  
     this.$socket.on("info", (socketID) => {
       this.$socket.emit("init", socketID + " " + window.location.href)
     })
+
+<<< } >>>
 
 
     if (!this.$cookie.get(window.__application_Mode_Key)) {

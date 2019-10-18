@@ -109,7 +109,7 @@ export default {
 
   methods: {
 
-    saveKey(item){
+    saveKey(){
         setTimeout(() => {
         if (this.unique(this.editedItem.key) != true) {
           this.editedItem.key = this.editedItem._key

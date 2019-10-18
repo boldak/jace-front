@@ -77,7 +77,7 @@
               <v-avatar tile size="36">
                <dj-img :src="selected.icon" icon="mdi-application" class="pr-2"></dj-img>
               </v-avatar>
-              <a :href="'./design/'+selected.name" :target="'blank_'+selected.name"> 
+              <a :href="$resolveUrl('design/'+selected.name)" :target="'blank_'+selected.name"> 
                 <span class="headline font-weight-light">{{selected.name}}</span>
               </a>  
             </v-col>

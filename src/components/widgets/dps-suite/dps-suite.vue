@@ -83,6 +83,32 @@ import createScriptDialog from "./dialogs/create-script.vue"
 import renameScriptDialog from "./dialogs/rename-script.vue"
 
 
+let supportedMode = {
+  text: "text",
+  string: "text",
+  xml: "xml",
+  csv: "csv",
+  javascript: "javascript",
+  json: "json",
+  object: "json",
+  "function": "json",
+  dps: "dps",
+  dataset: "json",
+  error: "json",
+  table: "json",
+  help: "json",
+  html: "html",
+  bar: "json",
+  hbar: "json",
+  line: "json",
+  area: "json",
+  scatter: "json",
+  radar: "json",
+  deps: "json",
+  pie: "json"
+}
+
+
 export default {
 
   name: "dps-suite-widget",
@@ -294,63 +320,35 @@ export default {
   props: ["config"],
 
   computed: {
+    
     tabs() {
       return this.scripts.map(s => s.name)
     },
 
+    lang() {
+      return supportedMode[this.dpsResult.type] || "json"
+    },
+
     result() {
 
-      let supportedMode = {
-        text: "text",
-        string: "text",
-        xml: "xml",
-        csv: "csv",
-        javascript: "javascript",
-        json: "json",
-        object: "json",
-        "function": "json",
-        dps: "dps",
-        dataset: "json",
-        error: "json",
-        table: "json",
-        help: "json",
-        html: "html",
-        bar: "json",
-        hbar: "json",
-        line: "json",
-        area: "json",
-        scatter: "json",
-        radar: "json",
-        deps: "json",
-        pie: "json"
-      }
-
-      let mode = supportedMode[this.dpsResult.type]
-      let content;
-      if (mode) {
-        if (mode == "json") {
-          content = (this.dpsResult.data) ? JSON.stringify(this.dpsResult.data, null, "\t") : JSON.stringify(this.dpsResult)
-        } else {
-          // console.log(this.dpsResult)
-          content = (this.dpsResult.data) ? this.dpsResult.data : this.dpsResult
-        }
-      } else {
-        mode = "json"
-        content = JSON.stringify(this.dpsResult, null, "\t")
-      }
+      let mode = supportedMode[this.dpsResult.type] || "json"
+      // this.lang = mode
 
       if (this.dpsResult.type == "error") {
         this.success = false
-        content = (this.dpsResult.message) ? this.dpsResult : this.dpsResult.data
+        return (this.dpsResult.message) ? this.dpsResult : this.dpsResult.data
       }
 
-      this.lang = mode;
-      return content
+      if (mode == "json") {
+        return (this.dpsResult.data) ? JSON.stringify(this.dpsResult.data, null, "\t") : JSON.stringify(this.dpsResult)
+      }
+
+      return (this.dpsResult.data) ? this.dpsResult.data : this.dpsResult
+
     }
   },
 
   created() {
-    // console.log(this.config.scripts)
     this.scripts = this.config.scripts;
     if (this.scripts.length > 0) this.selected = this.scripts[0]
     this.checkDpsURL()
@@ -373,7 +371,6 @@ export default {
     showSnippets: false,
     dpsResult: null,
     newScriptName: null,
-    lang: "json",
     file: null,
     editor: null,
     showResults: false

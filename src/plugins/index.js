@@ -6,7 +6,12 @@ import selectFileDialog from "@/components/dialogs/core/select-file.vue"
 import customDialog from "@/components/dialogs/core/custom-dialog.vue"
 import splashDialog from "@/components/dialogs/core/splash.vue"
 import Vue from "vue"
+
+<<< if(jace.availablePublishing) { >>>
+
 import io from "socket.io-client";
+
+<<< } >>>
 
 import * as Cookie from "tiny-cookie"
 import * as _ from "lodash"
@@ -88,15 +93,22 @@ export var cookiePlugin = {
 export var portalPlugin = {
   install(Vue, options = { baseURL: "/" }) {
     Vue.prototype.$portal = axios.create(options)
+    Vue.prototype.$resolveUrl = (url) => {
+       return `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl : window.location.origin}/`+url 
+    }
   }
 }
 
 
+<<< if(jace.availablePublishing) { >>>
+  
 export var socketPlugin = {
   install(Vue, service) {
     Vue.prototype.$socket = io(service)
   }
 }
+
+<<< } >>>
 
 
 export var httpPlugin = {
