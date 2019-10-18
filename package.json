@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node ./node_modules/@vue/cli-service/bin/vue-cli-service.js build --watch",
-    "build": "node ./node_modules/@vue/cli-service/bin/vue-cli-service.js build",
+    "_build": "node ./node_modules/@vue/cli-service/bin/vue-cli-service.js build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
