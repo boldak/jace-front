@@ -3,7 +3,7 @@ import getGeoJson from "./maps.js"
 import getLocations from "./locations.js"
 // import geo_util from "./utils.js"
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue"
-import * as _ from "lodash"
+import { find, min, max } from "lodash"
 import echarts from "echarts/dist/echarts-en"
 
 export default {
@@ -23,7 +23,7 @@ export default {
       if (this.config.dataSelectEmitters && this.config.dataSelectEmitters.length > 0 && this.selection.length > 0) {
 
         let s = this.selection.filter(d => d.selected)
-        res.series[0].data = this.serie.filter(d => _.find(s, e => e.entity.id == d.selector))
+        res.series[0].data = this.serie.filter(d => find(s, e => e.entity.id == d.selector))
 
       } else {
         res.series[0].data = this.serie
@@ -43,12 +43,12 @@ export default {
       if (res.series[0].data.length > 1) {
         res.geo.boundingCoords = [
           [
-            _.min(res.series[0].data.map(d => d[0])),
-            _.min(res.series[0].data.map(d => d[1]))
+            min(res.series[0].data.map(d => d[0])),
+            min(res.series[0].data.map(d => d[1]))
           ],
           [
-            _.max(res.series[0].data.map(d => d[0])),
-            _.max(res.series[0].data.map(d => d[1]))
+            max(res.series[0].data.map(d => d[0])),
+            max(res.series[0].data.map(d => d[1]))
           ]
         ]
 
@@ -67,12 +67,12 @@ export default {
       if (res.series[0].data.length == 1) {
         res.geo.boundingCoords = [
           [
-            _.min(res.series[0].data.map(d => d[0])) - 1,
-            _.min(res.series[0].data.map(d => d[1])) - 1
+            min(res.series[0].data.map(d => d[0])) - 1,
+            min(res.series[0].data.map(d => d[1])) - 1
           ],
           [
-            _.max(res.series[0].data.map(d => d[0])) + 1,
-            _.max(res.series[0].data.map(d => d[1])) + 1
+            max(res.series[0].data.map(d => d[0])) + 1,
+            max(res.series[0].data.map(d => d[1])) + 1
           ]
         ]
       }
@@ -115,7 +115,7 @@ export default {
       }
 
       this.serie = tempData.serie.map(d => {
-        let f = _.find(locations, l => l.id == d.selector)
+        let f = find(locations, l => l.id == d.selector)
         if (f) {
           d.coordinates = f.coordinates
           return d
@@ -125,8 +125,8 @@ export default {
 
 
       this.valueRange = {
-        min: _.min(this.serie.map(d => d.value)),
-        max: _.max(this.serie.map(d => d.value))
+        min: min(this.serie.map(d => d.value)),
+        max: max(this.serie.map(d => d.value))
       }
 
       tempOptions.visualMap.min = this.valueRange.min - 0.1 * (this.valueRange.max - this.valueRange.max)

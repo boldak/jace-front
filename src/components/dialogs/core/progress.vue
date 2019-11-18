@@ -15,7 +15,7 @@
           </div>
         </div>
       </v-col>
-      <v-row v-else>
+      <v-row v-else class="mx-0 pa-3">
         <v-flex xs1 class="justify-center">
           <v-progress-circular indeterminate size="24" color="secondary lighten-2"></v-progress-circular>
         </v-flex>
@@ -27,7 +27,7 @@
   </v-card>
 </template>
 <script>
-import * as _ from "lodash"
+import { isString } from "lodash"
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import moment from "moment"
 
@@ -61,7 +61,7 @@ export default {
 
       options = options || { text: "wait one moment" }
 
-      options = _.isString(options) ? { text: options } : options
+      options = isString(options) ? { text: options } : options
       this.opts.text = [moment(new Date()).format("HH:mm:ss") + " " + options.text].concat(this.opts.text)
 
       this.opts.title = options.title || this.opts.title || "Progress"

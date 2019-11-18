@@ -66,7 +66,9 @@
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import i18nMixin from "@/mixins/core/i18n.mixin.js"
-import * as _ from "lodash"
+import { find, findIndex } from "lodash"
+
+
 import djList from "@/components/core/ext/dj-list.vue"
 
 let i18n = {
@@ -88,7 +90,7 @@ export default {
   computed: {
 
     pretendents() {
-      return this.users.filter(u => (!_.find(this.app.config.collaborations, c => c.email == u.email) && u.email != this.author.email))
+      return this.users.filter(u => (!find(this.app.config.collaborations, c => c.email == u.email) && u.email != this.author.email))
     }
   },
 
@@ -116,7 +118,7 @@ export default {
     removeCollaboratorGrant() {
 
       this.selection.forEach(u => {
-        let index = _.findIndex(this.app.config.collaborations, c => c.email = u.email)
+        let index = findIndex(this.app.config.collaborations, c => c.email = u.email)
         if (index >= 0) this.app.config.collaborations.splice(index, 1)
       })
 

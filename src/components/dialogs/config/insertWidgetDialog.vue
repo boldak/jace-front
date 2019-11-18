@@ -222,6 +222,7 @@ export default {
             items: [
               "form-widget",
               "form-report-widget",
+              "form-response-widget",
               "question-widget:One of many selection",
               "question-widget:Many of many selection",
               "question-widget:Priority",

@@ -58,6 +58,14 @@
       </div>
       <v-row class="mx-0 caption secondary--text font-weight-light">
         <v-col cols="2" class="pa-0 font-weight-regular">
+          Total questions
+        </v-col>
+        <v-col class="pa-0">
+          {{form.config.questions.length}}
+        </v-col>
+      </v-row>
+      <v-row class="mx-0 caption secondary--text font-weight-light">
+        <v-col cols="2" class="pa-0 font-weight-regular">
           Locale
         </v-col>
         <v-col class="pa-0">
@@ -97,7 +105,8 @@
   </v-card>
 </template>
 <script>
-import * as _ from "lodash"
+import { toPairs } from "lodash"
+
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import moment from "moment"
@@ -108,7 +117,7 @@ export default {
 
   computed: {
     metadataFields() {
-      return _.toPairs(this.form.metadata).map(d => ({ key: d[0], value: d[1].value }))
+      return toPairs(this.form.metadata).map(d => ({ key: d[0], value: d[1].value }))
     }
   },
 

@@ -79,7 +79,7 @@
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import layouts from "@/components/layouts/index.js"
-import * as _ from "lodash"
+import { find, findIndex, toPairs } from "lodash"
 
 
 import newPageDialog from "./dialogs/new-page-dialog.vue"
@@ -141,9 +141,9 @@ export default {
         let value = ((v.startsWith("/")) ? v : "/" + v).trim()
         let key = value.substring(1)
         if (key != "") {
-          return (_.find(this.pages.filter(p => p.id != this.editedItem.id), p => p.path == value)) ? 'Doublicate path!' : true
+          return (find(this.pages.filter(p => p.id != this.editedItem.id), p => p.path == value)) ? 'Doublicate path!' : true
         } else {
-          return (_.find(this.pages.filter(p => !p.id), p => p.path == value)) ? 'Doublicate path!' : true
+          return (find(this.pages.filter(p => !p.id), p => p.path == value)) ? 'Doublicate path!' : true
         }
       }
     }
@@ -154,7 +154,7 @@ export default {
   methods: {
 
     onSaveTitle(item) {
-      let page = _.find(this.app.pages, p => p.id == item.id)
+      let page = find(this.app.pages, p => p.id == item.id)
       if (page) {
         page.title = item.title;
         this.getPages()
@@ -176,7 +176,7 @@ export default {
           let value = this.editedItem.path
           value = ((value.startsWith("/")) ? value : "/" + value).trim()
 
-          let f = _.find(this.app.pages, p => p.id == this.editedItem.id)
+          let f = find(this.app.pages, p => p.id == this.editedItem.id)
           if (f) {
             f.id = value.substring(1)
             f.id = (f.id == "") ? undefined : f.id
@@ -213,7 +213,7 @@ export default {
     },
 
     getLayouts() {
-      this.layouts = _.toPairs(layouts).map(l => ({
+      this.layouts = toPairs(layouts).map(l => ({
         id: l[0],
         name: l[0],
         layoutIcon: `./modules/layouts/icons/${l[0]}.png`,
@@ -223,7 +223,7 @@ export default {
     },
 
     clonePage() {
-      let cloned = _.find(this.app.pages, p => p.id == this.selected[0].id);
+      let cloned = find(this.app.pages, p => p.id == this.selected[0].id);
       let clone = JSON.parse(JSON.stringify(cloned))
       clone.id = ((clone.id) ? clone.id : '') + "clone";
       clone.title = clone.title + " (Clone)"
@@ -234,10 +234,10 @@ export default {
     },
 
     exportPage() {
-      let cloned = _.find(this.app.pages, p => p.id == this.selected[0].id);
+      let cloned = find(this.app.pages, p => p.id == this.selected[0].id);
       let clone = JSON.parse(JSON.stringify(cloned))
       clone.title = clone.title + " (ExportPage)"
-      this.$djvue.saveLocalFile(clone.title + ".json", clone)
+      this.$djvue.saveLocalFile(clone.title + ".json", JSON.stringify(clone, null," "))
     },
 
     
@@ -290,7 +290,7 @@ export default {
           return
         }
 
-        let pageIndex = _.findIndex(this.app.pages, p => p.id == page.id)
+        let pageIndex = findIndex(this.app.pages, p => p.id == page.id)
         if (pageIndex >= 0) {
           this.app.pages.splice(pageIndex, 1)
         }

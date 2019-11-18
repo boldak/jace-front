@@ -1,4 +1,5 @@
-import * as _ from "lodash"
+import { isString, remove } from "lodash"
+
 
 export default {
 
@@ -12,11 +13,11 @@ export default {
 
       child = child || "";
 
-      child = (_.isString(child)) ? child : child.id || child.name
+      child = (isString(child)) ? child : child.id || child.name
 
       if (this._waitList.length == 0) return
 
-      _.remove(this._waitList, (item) => this.isEquals(item, child))
+      remove(this._waitList, (item) => this.isEquals(item, child))
 
       if (this._waitList.length == 0) {
         // console.log("onChildsInitiated")

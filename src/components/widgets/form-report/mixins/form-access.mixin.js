@@ -1,3 +1,6 @@
+import { find } from "lodash"
+
+
 export default {
 
   methods:{
@@ -62,7 +65,7 @@ export default {
 				}
 			}
 
-			let invitedRespondent = _.find(this.form.config.access.users, u => {
+			let invitedRespondent = find(this.form.config.access.users, u => {
 
 				if(u.id && this.app.user.id ) return u.id == this.app.user.id;
 	            if(u.apikey && this.app.user.apikey ) return u.apikey == this.app.user.apikey;

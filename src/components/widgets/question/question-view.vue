@@ -10,16 +10,29 @@
     <v-divider></v-divider>
     <v-row class="caption" color="warning" v-if="validation != true">
       <v-spacer></v-spacer>
-      <div v-if="validation != true">
+      <div>
         <span class="warning--text caption pa-2 font-weight-light font-italic">{{validation}}</span>
       </div>
     </v-row>
   </div>
 </template>
 <script>
+
+import listenerMixin from "@/mixins/core/listener.mixin.js"
+
 export default {
 
-  props: ["title", "note", "validation"]
+  props: ["id", "title", "note", "validation"],
+  mixins:[listenerMixin],
+
+  watch:{
+    validation(value){
+      this.emit("layout-change-state", this.id, value)
+    }
+  },
+  created(){
+    this.emit("layout-change-state", this.id, this.validation)
+  }
 
 }
 

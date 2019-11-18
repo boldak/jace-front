@@ -1,3 +1,7 @@
+import { templateSettings, template } from "lodash"
+import moment from "moment"
+
+
 let _dps = {
 
   createForm: `
@@ -688,7 +692,7 @@ export default {
       }).then( res => this.app.config.dpsURL+res.data.url )
     },
 
-    sendMails(users, template) {
+    sendMails(users, _template) {
         let state = {}
         let script = "";
 
@@ -699,7 +703,7 @@ export default {
         //   })
 
         // set {{}} template delimiters 
-        _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+        templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
         users
           .forEach( (u, index) => {
@@ -709,12 +713,12 @@ export default {
             state[("o"+index)] = {
               to: u.email,
               subject: "DJVUE Forms Service notiification",
-              html: _.template(template)(u.context)
+              html: template(_template)(u.context)
             }
         })
 
         // back to default template delimiters
-        _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
+        templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
         
        
     // TODO Comments 3 lines below for production mode
@@ -771,7 +775,7 @@ export default {
       //responses.push({date: new Date()})
 
       let defFormat = "YYYY-MM-DD HH:mm";
-      let inputFormat = "DD/MM/YY HH:mm";
+      // let inputFormat = "DD/MM/YY HH:mm";
 
 
       let RStat = responses
@@ -855,7 +859,7 @@ export default {
       
       
       if(sum==0){
-            stats = stats.map(item => 0)
+            stats = stats.map(() => 0)
           }else{
             stats = stats.map(item => item)//sum )
           }

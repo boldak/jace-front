@@ -12,7 +12,7 @@
 
  export default {
  	mounted(){
- 		console.log("mount layout")
+ 		window.console.log("mount layout")
  	}
   }
 </script>

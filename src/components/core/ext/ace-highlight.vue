@@ -126,7 +126,7 @@
 <style scoped>
   .editor {
     width: 100%;
-    
-    font-size: 12px;
+    font-size: 14px;
+    border: 1px solid #dedede;
   }
 </style>

@@ -44,7 +44,8 @@
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-import * as _ from "lodash"
+import { find, findIndex } from "lodash"
+
 export default {
 
   name: "ImportAppDialog",
@@ -67,7 +68,7 @@ export default {
     }, 
 
     uniqueAppName(value){
-       return !_.find(this.options.appList, a => a.name == value) || 'Doublicate App name.'
+       return !find(this.options.appList, a => a.name == value) || 'Doublicate App name.'
     },
 
     fileChanged(file) {
@@ -85,7 +86,7 @@ export default {
         return false
       }
 
-      if(_.findIndex(this.options.appList, a => a.name.toUpperCase() == this.name.toUpperCase())>=0){
+      if(findIndex(this.options.appList, a => a.name.toUpperCase() == this.name.toUpperCase())>=0){
         this.$djvue.warning({
           type:"error",
           title:"Cannot import app",

@@ -85,7 +85,8 @@
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import i18nMixin from "@/mixins/core/i18n.mixin.js"
-import * as _ from "lodash"
+import { find } from "lodash"
+
 import djList from "@/components/core/ext/dj-list.vue"
 
 let i18n = {
@@ -195,7 +196,7 @@ export default {
     this.$portal.get('api/app/get-list')
       .then(res => {
         this.apps = res.data
-        this.defaultApp = _.find(this.apps, a => a.name == window.devService.config.defaultApp)
+        this.defaultApp = find(this.apps, a => a.name == window.devService.config.defaultApp)
       })
   }
 }

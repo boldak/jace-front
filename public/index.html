@@ -30,8 +30,9 @@
 <body>
 <div id="app"></div>
 
-
- <script src="modules/ace-builds/src/ace.js"></script>
+  <<< if( jace.mode == "development" || ( jace.types && _.findIndex( jace.types(), w => (w == "ds-explorer-widget") || (w == "dps-highlight-widget") ) > -1 ) ) { >>>
+      
+  <script src="modules/ace-builds/src/ace.js"></script>
   <script src="modules/ace-builds/src/ext-static_highlight.js"></script>
   <script src="modules/ace-builds/src/mode-dps.js"></script>
   <script src="modules/ace-builds/src/mode-csv.js"></script>
@@ -43,6 +44,9 @@
   <script src="modules/ace-builds/src/mode-dot.js"></script>
   <script src="modules/ace-builds/src/mode-markdown.js"></script>
   <script src="modules/ace-builds/src/theme-tomorrow.js"></script>
+
+  <<< } >>>
+
 <script>
   //__appconfig
 </script>  

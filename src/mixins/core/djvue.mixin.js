@@ -1,7 +1,8 @@
 import store from "@/state/index.js"
 import { mapState, mapActions } from "vuex"
 import * as moment from "moment"
-import * as _ from "lodash"
+import { find } from "lodash"
+
 import i18nMixin from "./i18n.mixin"
 
 export default {
@@ -60,9 +61,9 @@ export default {
     },
 
     getPage(name) {
-      let p = _.find(this.app.pages, item => item.id == name)
+      let p = find(this.app.pages, item => item.id == name)
       p = p ||
-        _.find(this.app.pages, item => !item.id) || {
+        find(this.app.pages, item => !item.id) || {
           name: "error",
           title: "Page not found",
           layout: "layout-1",

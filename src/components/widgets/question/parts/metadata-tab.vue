@@ -56,7 +56,8 @@
 <script>
   import djvueMixin from "djvue/mixins/core/djvue.mixin.js";
   import listenerMixin from "djvue/mixins/core/listener.mixin.js";
-
+  import { findIndex, toPairs } from "lodash"
+  
   export default  {
       
       mixins:[djvueMixin, listenerMixin],
@@ -77,7 +78,7 @@
 
         validate(){
           if(!this.newMetadataKey) return false
-          if(_.findIndex(this.items, m => m.key == this.newMetadataKey)>=0) return false
+          if(findIndex(this.items, m => m.key == this.newMetadataKey)>=0) return false
           return true  
         },
         
@@ -109,7 +110,7 @@
 
         prepare(){
           if(!this.form) return
-          this.items = _.toPairs(this.form.metadata)
+          this.items = toPairs(this.form.metadata)
             .map(item => {
               return {
                 key:item[0],
@@ -126,7 +127,7 @@
 
         deleteMetadata(){
           this.selection.forEach( m => {
-            let index = _.findIndex(this.items, i => m.key == i.key)
+            let index = findIndex(this.items, i => m.key == i.key)
             this.items.splice(index,1)
           })
           this.updateMetadata()

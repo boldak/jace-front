@@ -26,9 +26,8 @@
 
 import djvueMixin from "djvue/mixins/core/djvue.mixin.js";
 import listenerMixin from "djvue/mixins/core/listener.mixin.js";
-
 import highlight from 'djvue/components/core/ext/ace-highlight.vue';
-
+import { find } from "lodash"
 
 export default {
 
@@ -53,7 +52,7 @@ export default {
     	let context = {};
     	
     	if(this.select == "Page Config"){
-    		context =  (this.app.currentPage) ? _.find(this.app.pages, p => p.id == this.app.currentPage.id) : {}
+    		context =  (this.app.currentPage) ? find(this.app.pages, p => p.id == this.app.currentPage.id) : {}
     	} else {
     		context =  this.app.config
     	}

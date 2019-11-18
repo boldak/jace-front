@@ -1,4 +1,5 @@
 <template>
+  <<< if( jace.mode == "development") { >>>
   <div class="mx-1 my-0">
     <v-layout column>
       <v-layout v-for="(s,index) in app.currentPage.sections" :key="index" column xs12 mb-3 :style="(!isProductionMode)?'border:2px dashed #dedede;':''">
@@ -34,7 +35,7 @@
           </div>
         </v-layout>
         <v-layout row wrap :class="s.align" fill-height class="px-2">
-          <v-flex v-for="(h, hIndex) in s.holders" :key="hIndex" :class="`xs${h.width}`" pa-1>
+          <v-flex v-for="(h, hIndex) in s.holders" :key="hIndex" :class="`md${h.width} xs12`" pa-1>
             <v-layout row class="pr-3" style="margin-top:-1em;" v-if="!isProductionMode">
               <v-spacer></v-spacer>
               <v-btn small text icon color="primary" class="ma-0" style="min-width: 1em !important;" @click="changeWidth(s,h,-1)" :disabled="collapseWidthDisabled(s,h)">
@@ -50,9 +51,26 @@
       </v-layout>
     </v-layout>
   </div>
+  <<< } else { >>>
+     
+     <div class="mx-1 my-0">
+        <v-layout v-for="(s,index) in app.currentPage.sections" :key="index" column xs12 mb-3>
+          <v-layout row wrap :class="s.align" fill-height class="px-2">
+            <v-flex v-for="(h, hIndex) in s.holders" :key="hIndex" :class="`md${h.width} xs12`" pa-1>
+              <dj-holder :name="h.name" @init="onInitChild"></dj-holder>
+            </v-flex>
+          </v-layout>
+        </v-layout> 
+     </div> 
+
+  <<< } >>>
 </template>
 <script>
-import * as _ from "lodash"
+
+<<< if( jace.mode == "development") { >>>
+  import { find, sum, max } from "lodash"
+<<< } >>>
+
 import layoutMixin from "@/mixins/core/layout.mixin.js"
 
 export default {
@@ -65,6 +83,8 @@ export default {
 
   methods: {
 
+<<< if( jace.mode == "development") { >>>
+    
     deleteSection(index) {
       let section = this.app.currentPage.sections[index];
       section.holders.forEach(h => {
@@ -76,17 +96,6 @@ export default {
         .then(() => {
           this.fullReload()
         })
-    },
-
-    emitResizeEvent() {
-      let resizeEvent = document.createEvent('UIEvents')
-      resizeEvent.initUIEvent('resize', true, false, window, 0)
-      window.dispatchEvent(resizeEvent)
-      this.$nextTick(() => {
-        resizeEvent = document.createEvent('UIEvents')
-        resizeEvent.initUIEvent('resize', true, false, window, 0)
-        window.dispatchEvent(resizeEvent)
-      })
     },
 
     addSection(sectionIndex, columns) {
@@ -115,9 +124,9 @@ export default {
     },
 
     expandWidthDisabled(s, h) {
-      let sum = _.sum(s.holders.map(d => d.width))
-      let max = _.max(s.holders.filter(d => d.name != h.name).map(d => d.width))
-      return (h.width == 12) || ((sum == 12) && (max == 1))
+      let _sum = sum(s.holders.map(d => d.width))
+      let _max = max(s.holders.filter(d => d.name != h.name).map(d => d.width))
+      return (h.width == 12) || ((_sum == 12) && (_max == 1))
     },
 
     collapseWidthDisabled(s, h) {
@@ -127,13 +136,26 @@ export default {
     changeWidth(s, h, value) {
       h.width += value
       if (value > 0) {
-        let sum = _.sum(s.holders.map(d => d.width))
-        let max = _.max(s.holders.filter(d => d.name != h.name).map(d => d.width))
-        let h1 = _.find(s.holders.filter(d => d.name != h.name), d => d.width == max)
-        if (sum > 12) h1.width -= value
+        let _sum = sum(s.holders.map(d => d.width))
+        let _max = max(s.holders.filter(d => d.name != h.name).map(d => d.width))
+        let h1 = find(s.holders.filter(d => d.name != h.name), d => d.width == _max)
+        if (_sum > 12) h1.width -= value
       }
       this.emitResizeEvent()
       this.setNeedSave(true)
+    },
+
+<<< } >>>    
+
+    emitResizeEvent() {
+      let resizeEvent = document.createEvent('UIEvents')
+      resizeEvent.initUIEvent('resize', true, false, window, 0)
+      window.dispatchEvent(resizeEvent)
+      this.$nextTick(() => {
+        resizeEvent = document.createEvent('UIEvents')
+        resizeEvent.initUIEvent('resize', true, false, window, 0)
+        window.dispatchEvent(resizeEvent)
+      })
     },
 
     onBeforeInit() {
@@ -143,19 +165,22 @@ export default {
           h.push(d1.name)
         })
       })
-
       this._waitList = h
-    },
+    }
 
 
   },
 
+ <<< if( jace.mode == "development") { >>>
+
   watch: {
-    "currentPage.sections": {
+    "app.currentPage.sections": {
       handler() { this.setNeedSave(true) },
       deep: true
     }
   },
+
+<<< } >>>  
 
   getPageTemplate() {
 

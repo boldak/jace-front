@@ -1,7 +1,8 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 import initiableMixin from "@/mixins/core/initiable.mixin.js"
-import * as _ from "lodash"
+import { values } from "lodash"
+
 
 export default {
 
@@ -9,6 +10,7 @@ export default {
 
   beforeDestroy() {
     this.emit("page-stop", this, this.app.currentPage)
+    this.off()
   },
 
   data: () => ({
@@ -20,14 +22,14 @@ export default {
 
     getMediators() {
       let pageLevelMediators = []
-      _.values(this.app.currentPage.holders).forEach(h => {
+      values(this.app.currentPage.holders).forEach(h => {
         pageLevelMediators = pageLevelMediators.concat(h.widgets.filter(w => w.type == "mediator-widget"))
       })
 
       pageLevelMediators = pageLevelMediators.map(m => this.$djvue.selectWidgets(this.$root, item => (item.config) && (item.config.id == m.id))[0])
 
       let appLevelMediators = []
-      _.values(this.app.config.skin.holders).forEach(h => {
+      values(this.app.config.skin.holders).forEach(h => {
         appLevelMediators = appLevelMediators.concat(h.widgets.filter(w => w.type == "mediator-widget"))
       })
 
@@ -100,6 +102,7 @@ export default {
   },
 
   created() {
+    // console.log(this)
     this.djId = this.$djvue.randomName()
     this.on({
       event: "layout-page-start",
@@ -111,9 +114,7 @@ export default {
       callback: () => { this.off() },
       rule: () => true
     })
-    // console.log(this.djId,"LAYOUT Subscriptions", this.subscriptions)
-    // console.log(this.djId,"LAYOUT coreEventHandlers", this.coreEventHandlers)
-
+    
   }
 
 }

@@ -49,7 +49,13 @@
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
+
+<<< if( jace.mode == "development") { >>>
+
 import TopBarConfig from "./app-topbar-config.vue"
+
+<<< } >>>
+
 
 export default {
 
@@ -61,11 +67,16 @@ export default {
 
   methods: {
 
+<<< if( jace.mode == "development") { >>>
+
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(TopBarConfig, { width: "90%" }, { config: widgetConfig })
     }
 
+<<< } >>>
+
   },
+
 
   props: ["config"],
 

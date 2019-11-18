@@ -29,10 +29,14 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
+
+<<< if( jace.mode == "development") { >>>  
   import dataTableConfigDialog from "./data-table-config.vue";
+<<< } >>>
+
   import tinycolor from "tinycolor2"
-  import * as _ from "lodash"
-     
+  import { isNumber, isBoolean, find, min, max, values } from "lodash"
+ 
  export default  {
     
     name:"data-table-widget",
@@ -59,8 +63,8 @@
         let value = item[col.value]
         let _class = "text-left" 
         if (col == 0) _class = "text-left"
-        if (_.isNumber(value)) _class =  "text-right"  
-        if( _.isBoolean(value) ) return "text-center"
+        if (isNumber(value)) _class =  "text-right"  
+        if( isBoolean(value) ) return "text-center"
 
         _class = `${_class} ${this.config.options.typography} ${this.config.options.textColor}--text ${this.config.options.textBackground}`
 
@@ -74,13 +78,13 @@
         
         if(!this.config.options.useColors) return ""
         if (!this.colors) return ""   
-        if (!_.isNumber(value)) return "" 
+        if (!isNumber(value)) return "" 
         
        
         
         if (this.config.options.colorMode == "row"){
-          let values = _.values(item).filter(d => _.isNumber(d))
-          let range = [_.min(values),_.max(values)]
+          let _values = values(item).filter(d => isNumber(d))
+          let range = [min(_values),max(_values)]
           return "background:" + tinycolor(
             this.colors[Math.trunc(this.colors.length*(value-range[0])/(range[1]-range[0] + 0.00000000001))]
           ).setAlpha(0.5).toRgbString()
@@ -136,29 +140,31 @@
         if (this.config.options.colorMode == "column"){
           this.ranges = {}
           this.table.headers.forEach( h => {
-              let values = this.table.rows.map( r => r[h.value])
-              if((values.length > 0) && _.isNumber(values[0]))
-              this.ranges[h.value]  = [_.min(values),_.max(values)]
+              let _values = this.table.rows.map( r => r[h.value])
+              if((_values.length > 0) && isNumber(_values[0]))
+              this.ranges[h.value]  = [min(_values),max(_values)]
           })
           return
         }
 
         if (this.config.options.colorMode == "table"){
-          let values = [];
+          let _values = [];
           this.table.headers.forEach( h => {
               let v = this.table.rows.map( r => r[h.value])
-              if((v.length > 0) && _.isNumber(v[0]))
-              values  =values.concat(v)
+              if((v.length > 0) && isNumber(v[0]))
+              _values  =_values.concat(v)
           })
-          this.ranges  = [_.min(values),_.max(values)]
+          this.ranges  = [min(_values),max(_values)]
           return
         }
 
       },
 
+<<< if( jace.mode == "development") { >>>
       onReconfigure (widgetConfig) {
        return this.$dialogManager.showAndWait(dataTableConfigDialog, {width:"90%"},{config:widgetConfig})
       },
+<<< } >>>
 
       onClear(){
         this.onUpdate({
@@ -180,7 +186,7 @@
         let temp = {
           headers: this.table.headers,
           rows: this.data.filter( item => {
-            let d = _.find(data.selection, t => t.entity == item[data.mapper])
+            let d = find(data.selection, t => t.entity == item[data.mapper])
             if(!d) return false;
             return d.selected
           })

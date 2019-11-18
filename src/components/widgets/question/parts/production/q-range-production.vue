@@ -5,11 +5,11 @@
     <v-card flat v-else>
       <v-container pa-2>
       
-        <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
+        <q-view :id="config.id" v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
         
          <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
-          <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
+          <v-tab key="statisti c" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
 
           <v-tab-item key="response" ripple>
             <v-range-slider 
@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { union, uniq, countBy,sum } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js";
@@ -84,11 +84,11 @@ export default {
       let left = stats.map(item => item[0])
       let right = stats.map(item => item[1])
 
-      let r = _.union(_.uniq(left), _.uniq(right)).sort((a, b) => a - b).map(item => ({ title: item }))
+      let r = union(uniq(left), uniq(right)).sort((a, b) => a - b).map(item => ({ title: item }))
 
       let result = r.map( n => {
-        let l = _.countBy(left)[n.title]
-        let r = _.countBy(right)[n.title]
+        let l = countBy(left)[n.title]
+        let r = countBy(right)[n.title]
 
         return {
           title: n.title,
@@ -132,7 +132,7 @@ export default {
         data: result.map(item => [item.title, item.left]),
         markLine: {
           data: [{
-            xAxis: (_.sum(left) / left.length)
+            xAxis: (sum(left) / left.length)
           }]
         }
       })
@@ -146,7 +146,7 @@ export default {
         data: result.map(item => [item.title, item.right]),
         markLine: {
           data: [{
-            xAxis: (_.sum(right) / right.length)
+            xAxis: (sum(right) / right.length)
           }]
         }
       })

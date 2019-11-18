@@ -4,7 +4,7 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-        <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
+        <q-view :id="config.id" v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
         <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
@@ -70,7 +70,7 @@ export default {
       if (!result) return {}
 
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.themes.light.primary],
         grid: {
           left: '3%',
           right: '4%',

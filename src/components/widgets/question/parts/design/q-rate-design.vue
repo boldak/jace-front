@@ -69,7 +69,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { countBy, find } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -83,7 +83,7 @@ export default {
   methods: {
 
     calculateStat() {
-      let s = this.stat.responses.filter(a => a) // &&  _.find(this.options.nominals, n => n.id == a[0]))
+      let s = this.stat.responses.filter(a => a) // &&  find(this.options.nominals, n => n.id == a[0]))
       let stats = [];
 
       s.forEach(v => {
@@ -91,14 +91,14 @@ export default {
       })
 
       let result = this.options.scale.map(n => {
-        let c = _.countBy(stats)[n.value]
+        let c = countBy(stats)[n.value]
         return {
           title: `${n.value} ${(n.title) ? ' ('+n.title+')': ''}`,
           value: ((c) ? c : 0) / ((stats.length == 0) ? 1 : stats.length)
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.themes.light.primary],
         grid: {
           left: '3%',
           right: '4%',
@@ -178,7 +178,7 @@ export default {
       handler(value) {
         if (value && value.scale) {
           this.max = value.scale.length
-          this.icon = _.find(this.icons, i => i.title == value.icon) || this.icons[0]
+          this.icon = find(this.icons, i => i.title == value.icon) || this.icons[0]
         }
       },
       deep: true
@@ -188,7 +188,7 @@ export default {
   mounted() {
     if (this.options && this.options.scale) {
       this.max = this.options.scale.length
-      this.icon = _.find(this.icons, i => i.title == this.options.icon) || this.icons[0]
+      this.icon = find(this.icons, i => i.title == this.options.icon) || this.icons[0]
     }
     this.$emit("init")
   }

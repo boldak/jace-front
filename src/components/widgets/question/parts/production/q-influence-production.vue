@@ -4,7 +4,7 @@
     </div>
     <v-card flat v-else>
       <v-container pa-2>
-        <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
+        <q-view :id="config.id" v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
         <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { find, findIndex, isUndefined, isNumber, zipObject, countBy } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import i18nMixin from "@/mixins/core/widget-i18n.mixin.js";
@@ -134,7 +134,7 @@ export default {
       s.push({
         value: null,
         style: (this.options.undefinedValue) ?
-          this.options.undefinedValue.style : `color:${this.$vuetify.theme.secondary} !important;`,
+          this.options.undefinedValue.style : `color:${this.$vuetify.theme.themes.light.secondary} !important;`,
         title: ""
       })
       return s
@@ -161,16 +161,16 @@ export default {
     getValue(e1, e2) {
       if (!this.answer) return "null"
 
-      let f = _.find(this.answer.data, a => a.e1 == e1.id && a.e2 == e2.id)
+      let f = find(this.answer.data, a => a.e1 == e1.id && a.e2 == e2.id)
 
-      let value = (!_.isUndefined(f)) ? f.value : null;
+      let value = (!isUndefined(f)) ? f.value : null;
 
-      let s = _.find(this.scale, s => s.value == value)
+      let s = find(this.scale, s => s.value == value)
 
       s = (s) ? s : { value: null, title: "" }
 
       let res = (this.options.showValue) ?
-        (_.isNumber(s.value)) ?
+        (isNumber(s.value)) ?
         s.value.toFixed(0) :
         "" :
         ""
@@ -192,26 +192,26 @@ export default {
     },
 
     getStyle(e1, e2) {
-      let f = _.find(this.answer.data, a => a.e1 == e1.id && a.e2 == e2.id)
-      let value = (!_.isUndefined(f)) ? f.value : null;
-      let s = _.find(this.options.scale, s => s.value == value)
+      let f = find(this.answer.data, a => a.e1 == e1.id && a.e2 == e2.id)
+      let value = (!isUndefined(f)) ? f.value : null;
+      let s = find(this.options.scale, s => s.value == value)
       return (s) ?
         (s.style) ?
         s.style :
-        `color:${this.$vuetify.theme.accent} !important;` :
+        `color:${this.$vuetify.theme.themes.light.accent} !important;` :
         (this.options.undefinedValue) ?
         this.options.undefinedValue.style :
-        `color:${this.$vuetify.theme.secondary} !important;`
+        `color:${this.$vuetify.theme.themes.light.secondary} !important;`
     },
 
 
 
     setValue(value, item, col) {
       item[col.value] = value
-      let factor = _.find(this.options.factors, d => d.id == item.id)
-      let effect = _.find(this.options.effects, d => d.id == col.id)
+      let factor = find(this.options.factors, d => d.id == item.id)
+      let effect = find(this.options.effects, d => d.id == col.id)
 
-      let index = _.findIndex(this.answer.data, a => a.e1 == factor.id && a.e2 == effect.id)
+      let index = findIndex(this.answer.data, a => a.e1 == factor.id && a.e2 == effect.id)
       if (index >= 0) {
         this.answer.data.splice(index, 1, { e1: factor.id, e2: effect.id, value: value })
       } else {
@@ -224,7 +224,7 @@ export default {
     },
 
     getChartOptions(factor, effect) {
-      let f = _.find(this.statOptions, s => s.factor.id == factor.id && s.effect.id == effect.id)
+      let f = find(this.statOptions, s => s.factor.id == factor.id && s.effect.id == effect.id)
       if (f) return f.chartOptions
       return null
     },
@@ -249,7 +249,7 @@ export default {
             factor: f,
             effect: e,
             values: stats
-              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && _.find(this.options.scale, v => v.value == s.value))
+              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && find(this.options.scale, v => v.value == s.value))
               .map(s => s.value)
           })
         })
@@ -258,7 +258,7 @@ export default {
       r = r.filter(s => s.values.length > 0)
 
       r.forEach(s => {
-        let c = _.countBy(s.values);
+        let c = countBy(s.values);
         s.data = this.options.scale.map(v => ({
           title: v.value,
           value: (c[v.value]) ? c[v.value] : 0
@@ -288,7 +288,7 @@ export default {
 
       r.forEach(s => {
         s.chartOptions = {
-          color: [this.$vuetify.theme.primary],
+          color: [this.$vuetify.theme.themes.light.primary],
           angleAxis: {
             type: 'category',
             data: this.options.scale.map(d => d.value),
@@ -296,7 +296,7 @@ export default {
               margin: 2,
               fontSize: 8,
               fontWeight: "bold",
-              color: this.$vuetify.theme.secondary
+              color: this.$vuetify.theme.themes.light.secondary
             }
           },
           radiusAxis: {
@@ -377,7 +377,7 @@ export default {
         this.items = this.options.factors.map(f => {
           let keys = ["id", "$factor"].concat(this.options.effects.map(e => e.title))
           let values = [f.id, f.title].concat(this.options.effects.map(e => this.getValue(f, e)))
-          return _.zipObject(keys, values)
+          return zipObject(keys, values)
         })
         // console.log("items", this.items)  
       },

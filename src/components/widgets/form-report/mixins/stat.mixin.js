@@ -1,3 +1,7 @@
+import moment from "moment"
+import { find, countBy, orderBy, uniq, union, sum, sumBy } from "lodash"
+
+
 let round = (date, start, level, value) => {
   let defFormat = "YYYY-MM-DD HH:mm";
 
@@ -18,7 +22,7 @@ let round = (date, start, level, value) => {
 let eventDynamic = (timeline) => {
 
   let defFormat = "YYYY-MM-DD HH:mm";
-  let inputFormat = "DD/MM/YY HH:mm";
+  // let inputFormat = "DD/MM/YY HH:mm";
 
 
   let RStat = timeline
@@ -132,9 +136,9 @@ export default {
 
       if (!question.options.nominals) return {}
 
-      let stats = stat.responses.filter(a => a && _.find(question.options.nominals, n => n.id == a[0]))
+      let stats = stat.responses.filter(a => a && find(question.options.nominals, n => n.id == a[0]))
       let result = question.options.nominals.map(n => {
-        let c = _.countBy(stats, s => s[0])[n.id]
+        let c = countBy(stats, s => s[0])[n.id]
         return {
           id: n.id,
           title: n.title,
@@ -142,7 +146,7 @@ export default {
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [ this.$vuetify.theme.themes.light.primary ],
         grid: {
           left: '3%',
           right: '4%',
@@ -184,7 +188,7 @@ export default {
         stats = stats.concat(item)
       })
       let result = question.options.nominals.map(n => {
-        let c = _.countBy(stats)[n.id]
+        let c = countBy(stats)[n.id]
         return {
           id: n.id,
           title: n.title,
@@ -192,7 +196,7 @@ export default {
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [ this.$vuetify.theme.themes.light.primary ],
         grid: {
           left: '3%',
           right: '4%',
@@ -233,15 +237,15 @@ export default {
         stats = stats.concat(v)
       })
 
-      let result = question.options.scale.map((n, index) => {
-        let c = _.countBy(stats)[n.value]
+      let result = question.options.scale.map( n => {
+        let c = countBy(stats)[n.value]
         return {
           title: `${n.value} ${(n.title) ? ' ('+n.title+')': ''}`,
           value: ((c) ? c : 0) / ((stats.length == 0) ? 1 : stats.length)
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [ this.$vuetify.theme.themes.light.primary ],
         grid: {
           left: '3%',
           right: '4%',
@@ -287,11 +291,11 @@ export default {
       let left = stats.map(item => item[0])
       let right = stats.map(item => item[1])
 
-      let r = _.union(_.uniq(left), _.uniq(right)).sort((a, b) => a - b).map(item => ({ title: item }))
+      let r = union(uniq(left), uniq(right)).sort((a, b) => a - b).map(item => ({ title: item }))
 
-      let result = r.map((n, index) => {
-        let l = _.countBy(left)[n.title]
-        let r = _.countBy(right)[n.title]
+      let result = r.map( n => {
+        let l = countBy(left)[n.title]
+        let r = countBy(right)[n.title]
 
         return {
           title: n.title,
@@ -332,7 +336,7 @@ export default {
         data: result.map(item => [item.title, item.left]),
         markLine: {
           data: [{
-            xAxis: (_.sum(left) / left.length)
+            xAxis: (sum(left) / left.length)
           }]
         }
       })
@@ -346,7 +350,7 @@ export default {
         data: result.map(item => [item.title, item.right]),
         markLine: {
           data: [{
-            xAxis: (_.sum(right) / right.length)
+            xAxis: (sum(right) / right.length)
           }]
         }
       })
@@ -369,7 +373,7 @@ export default {
       if (!result) return {}
 
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [ this.$vuetify.theme.themes.light.primary ],
         grid: {
           left: '3%',
           right: '4%',
@@ -422,7 +426,7 @@ export default {
             e1: f,
             e2: e,
             values: stats
-              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && _.find(question.options.scale, v => v.value == s.value))
+              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && find(question.options.scale, v => v.value == s.value))
               .map(s => s.value)
           })
         })
@@ -431,7 +435,7 @@ export default {
       r = r.filter(s => s.values.length > 0)
 
       r.forEach(s => {
-        let c = _.countBy(s.values);
+        let c = countBy(s.values);
         s.data = question.options.scale.map(v => ({
           title: v.value,
           value: (c[v.value]) ? c[v.value] : 0
@@ -440,7 +444,7 @@ export default {
 
       r.forEach(s => {
         s.chartOptions = {
-          color: [this.$vuetify.theme.primary],
+          color: [ this.$vuetify.theme.themes.light.primary ],
 
           angleAxis: {
             type: 'category',
@@ -449,7 +453,7 @@ export default {
               margin: 2,
               fontSize: 8,
               fontWeight: "bold",
-              color: this.$vuetify.theme.secondary
+              color:  this.$vuetify.theme.themes.light.secondary
             }
           },
           radiusAxis: {
@@ -496,7 +500,7 @@ export default {
             factor: f,
             effect: e,
             values: stats
-              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && _.find(question.options.scale, v => v.value == s.value))
+              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && find(question.options.scale, v => v.value == s.value))
               .map(s => s.value)
           })
         })
@@ -505,7 +509,7 @@ export default {
       r = r.filter(s => s.values.length > 0)
 
       r.forEach(s => {
-        let c = _.countBy(s.values);
+        let c = countBy(s.values);
         s.data = question.options.scale.map(v => ({
           title: v.value,
           value: (c[v.value]) ? c[v.value] : 0
@@ -515,7 +519,7 @@ export default {
 
       r.forEach(s => {
         s.chartOptions = {
-          color: [this.$vuetify.theme.primary],
+          color: [ this.$vuetify.theme.themes.light.primary ],
           angleAxis: {
             type: 'category',
             data: question.options.scale.map(d => d.value),
@@ -523,7 +527,7 @@ export default {
               margin: 2,
               fontSize: 8,
               fontWeight: "bold",
-              color: this.$vuetify.theme.secondary
+              color:  this.$vuetify.theme.themes.light.secondary
             }
           },
           radiusAxis: {
@@ -567,7 +571,7 @@ export default {
           priority: (idx + 1),
           value: data.filter(d => (d.priority == (idx + 1))).length / data.length
         }))
-        n.priority = _.sumBy(n.data, item => item.priority * item.value)
+        n.priority = sumBy(n.data, item => item.priority * item.value)
         return n
       })
 
@@ -579,7 +583,7 @@ export default {
         return item
       })
 
-      res = _.orderBy(res, 'priority')
+      res = orderBy(res, 'priority')
       res.reverse()
 
 
@@ -645,8 +649,9 @@ export default {
         "Priority": this.priorityStat
       }
 
-      let s = _.find(stat.questions, s => s.id == question.id)
-
+      let s = find(stat.questions, s => s.id == question.id)
+      // console.log(question)
+      if (!question.options) return {}
       if (s && question.options.type && statMap[question.options.type]) return statMap[question.options.type](question, s)
       return {}
     }

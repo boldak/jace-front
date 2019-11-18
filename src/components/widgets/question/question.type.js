@@ -1,5 +1,6 @@
 import snippets from "./snippets.js"
-import * as _ from "lodash"
+import { toPairs } from "lodash"
+
 
 export default {
   name: "question",
@@ -16,13 +17,13 @@ export default {
 
     let widgets = [];
 
-    _.toPairs(this.app.config.skin.holders)
+    toPairs(this.app.config.skin.holders)
       .map(h => h[1].widgets)
       .forEach(w => {
         widgets = widgets.concat(w)
       })
 
-    _.toPairs(this.app.currentPage.holders)
+    toPairs(this.app.currentPage.holders)
       .map(h => h[1].widgets)
       .forEach(w => {
         widgets = widgets.concat(w)

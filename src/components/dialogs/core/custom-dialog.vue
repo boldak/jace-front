@@ -98,7 +98,7 @@
   </v-card>
 </template>
 <script>
-import * as _ from "lodash"
+import { isUndefined, isArray, includes, extend, find, keys, zipObject } from "lodash"
 import moment from "moment"
 export default {
 
@@ -111,7 +111,7 @@ export default {
     opts: null,
     messages: [],
     rules: {
-      required: value => (!_.isUndefined(value) && (value !== null) && (value !== "")) || "Required.",
+      required: value => (!isUndefined(value) && (value !== null) && (value !== "")) || "Required.",
       valid_email: value => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return pattern.test(value) || 'Invalid e-mail.'
@@ -160,19 +160,19 @@ export default {
   methods: {
 
     defaultFilter(item, queryText) {
-      return _.includes(item.toLowerCase(), queryText.toLowerCase())
+      return includes(item.toLowerCase(), queryText.toLowerCase())
     },
 
     customFilter(itemText) {
-      return (item, queryText) => _.includes(item[itemText].toLowerCase(), queryText.toLowerCase())
+      return (item, queryText) => includes(item[itemText].toLowerCase(), queryText.toLowerCase())
     },
 
     isShowed(field) {
       // console.log(field)
       let deps = field.show || []
-      deps = _.isArray[deps] ? deps : [deps]
+      deps = isArray[deps] ? deps : [deps]
       deps = deps.map(d => {
-        let f = _.find(this.opts, f => f.id == d)
+        let f = find(this.opts, f => f.id == d)
         return (f) ? f.value : true
       })
       // console.log(deps.reduce( (r,d) => d && r, true))
@@ -186,7 +186,7 @@ export default {
 
       if (!options || !options.field) return []
 
-      _.keys(options.field).forEach(o => {
+      keys(options.field).forEach(o => {
 
         options.field[o]._rid = this.randomName
 
@@ -236,7 +236,7 @@ export default {
 
         let range = options.field[o].range || []
         if (options.field[o].type == "range") {
-          range = (options.field[o].type == "range" && options.field[o].range && _.isArray(options.field[o].range) && options.field[o].range.length == 2) ?
+          range = (options.field[o].type == "range" && options.field[o].range && isArray(options.field[o].range) && options.field[o].range.length == 2) ?
             options.field[o].range : [0, 1]
         }
 
@@ -250,7 +250,7 @@ export default {
           label: options.field[o].label || o,
           // items: options.field[o].items || [],
           range,
-          step: (options.field[o].range && _.isArray(options.field[o].range) && options.field[o].range.length == 2 && !_.isUndefined(options.field[o].step)) ?
+          step: (options.field[o].range && isArray(options.field[o].range) && options.field[o].range.length == 2 && !isUndefined(options.field[o].step)) ?
             options.field[o].step : 0.1,
           showChars: false,
           disabled: options.field[o].disabled || false,
@@ -274,7 +274,7 @@ export default {
 
     getOptions(options) {
 
-      return _.zipObject(options.map(d => d.id), options)
+      return zipObject(options.map(d => d.id), options)
     },
 
 
@@ -289,7 +289,7 @@ export default {
   },
 
   created() {
-    this.opts = this.normalizeOptions(_.extend(this.options))
+    this.opts = this.normalizeOptions(extend(this.options))
   }
 
 }

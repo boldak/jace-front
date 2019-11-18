@@ -4,7 +4,7 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-        <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
+        <q-view :id="config.id" v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
         <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { countBy } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -64,7 +64,7 @@ export default {
   methods: {
 
     calculateStat() {
-      let s = this.stat.responses.filter(a => a) // &&  _.find(this.options.nominals, n => n.id == a[0]))
+      let s = this.stat.responses.filter(a => a) // &&  find(this.options.nominals, n => n.id == a[0]))
       let stats = [];
 
       s.forEach(v => {
@@ -72,14 +72,14 @@ export default {
       })
 
       let result = this.options.scale.map(n => {
-        let c = _.countBy(stats)[n.value]
+        let c = countBy(stats)[n.value]
         return {
           title: `${n.value} ${(n.title) ? ' ('+n.title+')': ''}`,
           value: ((c) ? c : 0) / ((stats.length == 0) ? 1 : stats.length)
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.themes.light.primary],
         grid: {
           left: '3%',
           right: '4%',

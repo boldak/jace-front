@@ -144,7 +144,7 @@
 </template> -->
 
 <script>
-import * as _ from "lodash"
+import { find }  from "lodash"
 
 // import components from "./parts"
 
@@ -172,7 +172,7 @@ export default {
   computed:{
       selected () {
         let vm = this
-        return _.find(vm.editorMap, item => item.id == vm.active[0])
+        return find(vm.editorMap, item => item.id == vm.active[0])
       }
     },
 
@@ -194,7 +194,7 @@ export default {
     methods:{
 
       getEditor(id){
-        let f = _.find(this.editorMap, item => item.id == id)
+        let f = find(this.editorMap, item => item.id == id)
         return (f) ? f.editor : null 
       },
       

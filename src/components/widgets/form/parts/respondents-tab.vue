@@ -74,14 +74,14 @@ import formIoMixin from "../mixins/form-io.mixin.js";
 import editor from '@/components/core/ext/ace-editor.vue';
 import moment from "moment"
 import djList from "@/components/core/ext/dj-list.vue"
-import * as _ from "lodash"
+import { find, findIndex, template, templateSettings, differenceWith, intersectionWith } from "lodash"
 
-let compile = (template, context) => {
-  _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+let compile = (_template, context) => {
+  templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
-  let result = _.template(template)(context)
+  let result = template(_template)(context)
 
-  _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
+  templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
 
   return result
 
@@ -106,7 +106,7 @@ export default {
     },
 
     user_email_list() {
-      return _.differenceWith(this.userlist, this.form.config.access.users, (a, b) => a.email == b.email).map(u => u.email)
+      return differenceWith(this.userlist, this.form.config.access.users, (a, b) => a.email == b.email).map(u => u.email)
     },
 
     // selection(){
@@ -168,7 +168,7 @@ export default {
     },
 
     isUniqueEmail(value) {
-      let index = _.findIndex(this.form.config.access.users, u => u.email == value)
+      let index = findIndex(this.form.config.access.users, u => u.email == value)
       if (index == -1) return true
       return false //"Email doublicate detected"  
     },
@@ -192,7 +192,7 @@ export default {
     },
 
     addNewEmail(email) {
-      let newUser = _.find(this.userlist, u => u.email == email)
+      let newUser = find(this.userlist, u => u.email == email)
       let needSearchProfile = false;
       if (!newUser) {
         newUser = {
@@ -210,7 +210,7 @@ export default {
         this.findUserProfile(newUser.email).then(res => {
           // console.log("FIND PROFILE", res)
           if (res.type == "none") {
-            let index = _.findIndex(this.form.config.access.users, u => u.email == newUser.email)
+            let index = findIndex(this.form.config.access.users, u => u.email == newUser.email)
             if (index >= 0) {
               let u = this.form.config.access.users.splice(index, 1)[0]
               // console.log(u)
@@ -219,7 +219,7 @@ export default {
               this.form.config.access.users.push(u)
             }
           } else {
-            let index = _.findIndex(this.form.config.access.users, u => u.email == newUser.email)
+            let index = findIndex(this.form.config.access.users, u => u.email == newUser.email)
             if (index >= 0) {
               let u = this.form.config.access.users.splice(index, 1)[0]
               // console.log(u)
@@ -245,13 +245,13 @@ export default {
 
     deleteUsers(selection) {
       this.form.config.access.users =
-        _.differenceWith(this.form.config.access.users, selection, (a, b) => a.email == b.email)
+        differenceWith(this.form.config.access.users, selection, (a, b) => a.email == b.email)
       // this.selection = []  
       this.$emit("update", this.form.config.access)
     },
 
     selectUser(user) {
-      let index = _.findIndex(this.form.config.access.users, u => u.email == user.email)
+      let index = findIndex(this.form.config.access.users, u => u.email == user.email)
       this.form.config.access.users.splice(index, 1, user)
     },
 
@@ -264,7 +264,7 @@ export default {
     // },
 
     onSelect(selection) {
-      this.selection = _.intersectionWith(this.form.config.access.users, selection, (a, b) => a.email == b.email)
+      this.selection = intersectionWith(this.form.config.access.users, selection, (a, b) => a.email == b.email)
     },
 
     onUpdate(items) {

@@ -69,7 +69,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { isNull, isUndefined, isArray, uniq } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import draggable from "vuedraggable";
 
@@ -177,7 +177,7 @@ export default {
 
     setValue(item, value) {
 
-      if (_.isNull(value) || _.isUndefined(value)) return
+      if (isNull(value) || isUndefined(value)) return
 
       value = value.trim()
 
@@ -218,7 +218,7 @@ export default {
         .filter(d => d)
       res = res.concat(this.items_.map(d => d.$$dj_edited))
       let length1 = res.length
-      res = _.uniq(res)
+      res = uniq(res)
       let length2 = res.length
 
       let delta = length1 - length2
@@ -288,16 +288,16 @@ export default {
     this.$$dj_rules = []
     if (this.$$dj_required) this.$$dj_rules.push(this.requiredCallback)
     if (this.$$dj_unique) this.$$dj_rules.push(this.uniqueCallback)
-    if (this.rules && _.isArray(this.rules)) this.$$dj_rules = this.$$dj_rules.concat(this.rules)
+    if (this.rules && isArray(this.rules)) this.$$dj_rules = this.$$dj_rules.concat(this.rules)
 
     this.$$dj_newItem_rules = []
     if (this.$$dj_unique) this.$$dj_newItem_rules.push(this.uniqueNewItemCallback)
-    if (this.rules && _.isArray(this.rules)) this.$$dj_newItem_rules = this.$$dj_newItem_rules.concat(this.rules)
+    if (this.rules && isArray(this.rules)) this.$$dj_newItem_rules = this.$$dj_newItem_rules.concat(this.rules)
 
     this.$$dj_saveItem_rules = []
     if (this.$$dj_required) this.$$dj_saveItem_rules.push(this.requiredCallback)
     if (this.$$dj_unique) this.$$dj_saveItem_rules.push(this.uniqueSaveItemCallback)
-    if (this.rules && _.isArray(this.rules)) this.$$dj_saveItem_rules = this.$$dj_saveItem_rules.concat(this.rules)
+    if (this.rules && isArray(this.rules)) this.$$dj_saveItem_rules = this.$$dj_saveItem_rules.concat(this.rules)
 
     this.$on("updateValue", (source) => {
       setTimeout(() => {

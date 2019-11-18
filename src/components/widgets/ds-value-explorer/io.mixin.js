@@ -114,7 +114,7 @@ export default {
 		},
 
 		getTree(concept, concepts, collections, filter){
-
+			// console.log(filter)
 			return this.$dps.run({
 				script:`
 					<?javascript

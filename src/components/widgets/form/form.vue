@@ -14,17 +14,22 @@
       </v-layout>
       <v-divider></v-divider>
       <v-layout align-center justify-end row>
-        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">DJVUE FORMS SERVICE 2018-2019</p>
+        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2019</p>
       </v-layout>
     </v-container>
     <v-container v-if="isProductionMode && form && access.available == true">
-      <v-layout align-center justify-end row class="mx-0 my-2">
-        <p v-if="!form.config.access.enabled" class="subheading warning--text">FORM IS CLOSED</p>
-        <v-btn v-else text outlined color="primary" @click="submitForm()" :disabled="!needUpdateAnswer">Submit form</v-btn>
+      <v-layout v-if="!form.config.access.enabled" align-center justify-end row class="mx-0 my-2">
+        <p class="subheading warning--text">FORM IS CLOSED</p>
+      </v-layout>
+      <!-- <v-layout v-else align-center justify-start row class="mx-0 my-2">
+          <response v-if="needUpdateAnswer" :form="form" :answer="answer"></response>
+      </v-layout> -->
+      <v-layout v-if="form.config.access.enabled" align-center justify-end row class="mx-0 my-2">
+          <v-btn text outlined color="primary" @click="submitForm()" :disabled="!needUpdateAnswer">Submit form</v-btn>  
       </v-layout>
       <v-divider></v-divider>
       <v-layout align-center justify-end row>
-        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">DJVUE FORMS SERVICE 2018-2019</p>
+        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2019</p>
       </v-layout>
     </v-container>
     <div v-if="!isProductionMode">
@@ -81,7 +86,9 @@ import formIoMixin from "./mixins/form-io.mixin.js"
 import formAccessMixin from "./mixins/form-access.mixin.js"
 import components from "./parts/index.js"
 import moment from "moment"
-import * as _ from "lodash"
+import { findIndex, isNumber, isUndefined, toPairs, max } from "lodash"
+
+
 
 export default {
 
@@ -151,25 +158,25 @@ export default {
 
       let widgets = [];
 
-      _.toPairs(this.app.config.skin.holders)
+      toPairs(this.app.config.skin.holders)
         .map(h => h[1].widgets)
         .forEach(w => {
           widgets = widgets.concat(w)
         })
 
-      _.toPairs(this.app.currentPage.holders)
+      toPairs(this.app.currentPage.holders)
         .map(h => h[1].widgets)
         .forEach(w => {
           widgets = widgets.concat(w)
         })
 
-      let forms = widgets.filter(w => w.type == "question-widget")
+      let forms = widgets.filter(w => w.type == "question-widget" || w.type == "form-response-widget")
 
       if (forms.length > 0) {
         this.$djvue.warning({
           type: "error",
           title: "Cannot delete form",
-          text: "One or many questions detected on page. Delete all questions before."
+          text: "One or many questions or response reports detected on page. Delete all questions and reports before."
         })
         return false;
       }
@@ -258,7 +265,7 @@ export default {
 
           let d = this.getResponseDynamic(this.stat)
 
-          let maxResponses = _.max(d.map(r => r.value))
+          let maxResponses = max(d.map(r => r.value))
           this.chartOptions = {
             redraw: false,
 
@@ -268,7 +275,7 @@ export default {
                 let x = d.data[0];
                 let y = d.data[1];
 
-                x = (_.isNumber(x)) ? x.toFixed(2) : x;
+                x = (isNumber(x)) ? x.toFixed(2) : x;
                 // y = (_.isNumber(y)) ? y.toFixed(2) : y;
                 y = Math.round(y * maxResponses) + " resp."
                 return x + ", " + y
@@ -285,7 +292,7 @@ export default {
               }
             }],
 
-            color: [this.$vuetify.theme.primary],
+            color: [this.$vuetify.theme.themes.light.primary],
 
             singleAxis: [{
               left: 150,
@@ -406,6 +413,8 @@ export default {
 
       this.form = form
 
+      this.emit("form-update", form )
+
       // if(form.config.access.enabled){
       //   form.config.access.enabled = false;
       //   this.updateFormAccess(form.config.access)
@@ -438,6 +447,7 @@ export default {
             this.answer = res;
 
             this.emit("question-set-answers", this.answer.data)
+            this.emit("answer-update", this.answer.data)
           })
         if (!this.isProductionMode) {
           this.loadStatistic()
@@ -470,7 +480,7 @@ export default {
     },
 
     isProductionMode(value) {
-      if (!_.isUndefined(value) && value != null)
+      if (!isUndefined(value) && value != null)
         this.initiateForm(this.form)
       // if( value == false){
       //   if(!this.chartOptions) {
@@ -514,16 +524,38 @@ export default {
 
 
     this.on({
+      event: "form-response",
+      callback: () => {
+        this.emit("form-update", this.form)
+        this.emit("answer-update", this.answer)
+      },
+      rule: () => true
+    })
+
+
+    this.on({
       event: "form-insert-question",
       callback: (question) => {
+        // console.log("INSERT",question)
         if (!this.form) return
         this.form.config.questions = this.form.config.questions || []
-        this.form.config.questions.push(question)
-        this.loading = true
-        this.updateForm(this.form).then(() => {
+        let index = findIndex(this.form.config.questions, q => q.id == question.id)
+        // console.log(index)
+        if( index < 0 ){
+          this.form.config.questions.push(question)
+          this.loading = true
+          this.updateForm(this.form).then(() => {
+            this.loading = false
+            this.emit("question-set-options", this.form.config.questions)
+            this.emit("form-update", this.form)
+          })
+        } else {
           this.loading = false
-          this.emit("question-set-options", this.form.config.questions)
-        })
+          this.$nextTick(() => {
+            this.emit("question-set-options", this.form.config.questions)
+            this.emit("form-update", this.form)
+          })
+        }
       },
       rule: () => true
     })
@@ -531,12 +563,15 @@ export default {
     this.on({
       event: "form-delete-question",
       callback: (questionId) => {
-        let index = _.findIndex(this.form.config.questions, q => q.id == questionId)
+        // console.log("DELETE",questionId)
+        
+        let index = findIndex(this.form.config.questions, q => q.id == questionId)
         if (index >= 0) {
           this.form.config.questions.splice(index, 1)
         }
         this.loading = true
         this.updateForm(this.form).then(() => {
+          this.emit("form-update", this.form)
           this.loading = false
         })
       },
@@ -546,13 +581,14 @@ export default {
     this.on({
       event: "form-update-answer",
       callback: (answer) => {
-        let index = _.findIndex(this.answer.data, a => a.id == answer.id)
+        let index = findIndex(this.answer.data, a => a.id == answer.id)
         if (index >= 0) {
           this.answer.data.splice(index, 1, answer)
         } else {
           this.answer.data.push(answer)
         }
         this.needUpdateAnswer = true;
+        this.emit("answer-update", this.answer)
         this.setNeedSave(true)
 
       },

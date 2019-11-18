@@ -1,5 +1,5 @@
-import * as _ from "lodash"
-
+import { toPairs } from "lodash"
+let _ = { toPairs }
 export default {
   name: "form-widget",
 

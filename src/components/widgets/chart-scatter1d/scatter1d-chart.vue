@@ -1,7 +1,7 @@
 
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import * as _ from "lodash"
+import { isNumber } from "lodash"
 
 export default {
 
@@ -69,8 +69,8 @@ export default {
           let x = d.data[0];
           let y = d.data[1];
 
-          x = (_.isNumber(x)) ? x.toFixed(2) : x;
-          y = (_.isNumber(y)) ? y.toFixed(2) : y;
+          x = (isNumber(x)) ? x.toFixed(2) : x;
+          y = (isNumber(y)) ? y.toFixed(2) : y;
 
           return x+", "+y
         }

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import * as _ from "lodash"
+import { isString } from "lodash"
 
 export default {
 
@@ -28,7 +28,7 @@ export default {
 
   created(){
     this.opts = this.options || {text:"Wait one moment."}
-    this.opts = _.isString(this.opts) ? {text:this.opts} : this.opts
+    this.opts = isString(this.opts) ? {text:this.opts} : this.opts
     this.opts.timeout = this.options.timeout || 3000
     setTimeout(() => { this.resolve() }, this.options.timeout) 
   }

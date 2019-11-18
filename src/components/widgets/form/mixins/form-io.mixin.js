@@ -1,5 +1,6 @@
 import moment from "moment"
-import * as _ from "lodash"
+import { template, templateSettings } from "lodash"
+
 
 let _dps = {
 
@@ -672,7 +673,7 @@ export default {
       }).then( res => this.app.config.dpsURL+res.data.url )
     },
 
-    sendMails(users, template) {
+    sendMails(users, _template) {
         let state = {}
         let script = "";
 
@@ -683,7 +684,7 @@ export default {
         //   })
 
         // set {{}} template delimiters 
-        _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+        templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
         users
           .forEach( (u, index) => {
@@ -693,12 +694,12 @@ export default {
             state[("o"+index)] = {
               to: u.email,
               subject: "DJVUE Forms Service notiification",
-              html: _.template(template)(u.context)
+              html: template(_template)(u.context)
             }
         })
 
         // back to default template delimiters
-        _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
+        templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
         
        
     // TODO Comments 3 lines below for production mode

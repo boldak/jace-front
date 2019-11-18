@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { sumBy, orderBy } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -91,7 +91,7 @@ export default {
           priority: (idx + 1),
           value: data.filter(d => (d.priority == (idx + 1))).length / data.length
         }))
-        n.priority = _.sumBy(n.data, item => item.priority * item.value)
+        n.priority = sumBy(n.data, item => item.priority * item.value)
         return n
       })
       res = res.map(item => {
@@ -101,7 +101,7 @@ export default {
         })
         return item
       })
-      res = _.orderBy(res, 'priority')
+      res = orderBy(res, 'priority')
       res.reverse()
       let statOptions = {
         legend: {

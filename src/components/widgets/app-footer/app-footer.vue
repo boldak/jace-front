@@ -44,8 +44,11 @@
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
-import FooterConfig from "./app-footer-config.vue";
 import moment from "moment"
+
+<<< if( jace.mode == "development") { >>>
+import FooterConfig from "./app-footer-config.vue";
+<<< } >>>
 
 export default {
 
@@ -57,9 +60,14 @@ export default {
 
   methods: {
 
+  <<< if( jace.mode == "development") { >>>
+  
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(FooterConfig, { width: "90%" }, { config: widgetConfig })
     }
+  
+  <<< } >>>
+    
   },
 
   props: ["config"],

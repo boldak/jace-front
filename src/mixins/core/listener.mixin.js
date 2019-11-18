@@ -1,4 +1,4 @@
-import * as _ from "lodash"
+import { isObject, isString, isFunction, remove, find} from "lodash"
 
 export default {
   data: () => ({
@@ -46,7 +46,7 @@ export default {
       this.subscriptions[event] = this.subscriptions[event] || [];
       if (!callback) return;
 
-      let _rule = _.find(this.subscriptions[event], item => ((item.rule == rule) && (item.callback == callback)));
+      let _rule = find(this.subscriptions[event], item => ((item.rule == rule) && (item.callback == callback)));
       if (!_rule) this.subscriptions[event].push({ rule: rule, callback: callback })
 
     },
@@ -56,7 +56,7 @@ export default {
       let event, rule, callback;
 
       if (args.length > 0) {
-        if (_.isObject(args[0])) {
+        if (isObject(args[0])) {
           event = args[0].event
           rule = args[0].rule
           callback = args[0].callback
@@ -88,14 +88,14 @@ export default {
 
       if (this.subscriptions[event] && rule) {
         // off listeners with this event and rule
-        _.remove(this.subscriptions[event], item => item.rule == rule)
+        remove(this.subscriptions[event], item => item.rule == rule)
         if (this.subscriptions[event].length == 0) this._unregisterEvent(event)
         return
       }
 
       if (this.subscriptions[event] && !rule && callback) {
         // off listeners with this event and callback
-        _.remove(this.subscriptions[event], item => item.callback == callback)
+        remove(this.subscriptions[event], item => item.callback == callback)
         if (this.subscriptions[event].length == 0) this._unregisterEvent(event)
         return
       }
@@ -109,10 +109,10 @@ export default {
 
       if (this.subscriptions[event].length == 0) return
 
-      let rule = _.find(this.subscriptions[event], item => {
+      let rule = find(this.subscriptions[event], item => {
         if (!item.rule) return true;
-        if (_.isString(item.rule)) return item.rule == emitter.config.id
-        if (_.isFunction(item.rule)) return item.rule(emitter)
+        if (isString(item.rule)) return item.rule == emitter.config.id
+        if (isFunction(item.rule)) return item.rule(emitter)
         return false
       })
 

@@ -1,7 +1,3 @@
-// import en from 'vuetify/es5/locale/en'
-// import uk from 'vuetify/es5/locale/uk'
-// import * as _ from "lodash"
-
 
 export default {
 

@@ -15,9 +15,10 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import echart from "@/components/core/ext/echart.vue"
-import ChartConfig from "./echart-config-dialog.vue"
-// import * as _ from "lodash"
 
+<<< if( jace.mode == "development") { >>>
+  import ChartConfig from "./echart-config-dialog.vue"
+<<< } >>>
 
 export default {
 
@@ -31,9 +32,13 @@ export default {
 
   methods: {
 
+<<< if( jace.mode == "development") { >>>
+
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(ChartConfig, { width: "90%" }, { config: widgetConfig })
     }
+    
+<<< } >>>    
 
   },
 

@@ -62,6 +62,7 @@
 <script>
   import djvueMixin from "djvue/mixins/core/djvue.mixin.js";
   import listenerMixin from "djvue/mixins/core/listener.mixin.js";
+  import { find } from "lodash"
 
   export default  {
       
@@ -82,12 +83,12 @@
       },
 
       created(){
-          this.selection = _.find(this.accessModes, m => m.key == this.form.config.access.type)  
+          this.selection = find(this.accessModes, m => m.key == this.form.config.access.type)  
       },
 
       watch:{
         form(value){
-          this.selection = _.find(this.accessModes, m => m.key == value.config.access.type)  
+          this.selection = find(this.accessModes, m => m.key == value.config.access.type)  
         }
       },
 

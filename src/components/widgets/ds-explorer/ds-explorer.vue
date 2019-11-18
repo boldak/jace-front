@@ -29,7 +29,7 @@
           </v-tab-item>
           <v-tab-item key="datapoints">
             <v-container v-if="datapoints">
-              <v-row  v-for="dp in datapoints" :key="dp" class="pt-2 mx-2" @click="selectDatapoint(dp)" style="cursor:pointer;">
+              <v-row  v-for="(dp, indexDp) in datapoints" :key="indexDp" class="pt-2 mx-2" @click="selectDatapoint(dp)" style="cursor:pointer;">
                 <v-icon :class="(selectedDp && dp.concept == selectedDp.concept)?'primary--text':'secondary--text font-weight-light'" class="subtitle-2  pr-2">
                   mdi-grid-large
                 </v-icon>
@@ -41,7 +41,7 @@
           </v-tab-item>
           <v-tab-item key="entities">
             <v-container v-if="entities">
-              <v-row v-for="e in entities" :key="e" pt-2 @click="selectEntity(e)" class="pt-2 mx-2" style="cursor:pointer;">
+              <v-row v-for="(e, indexE) in entities" :key="indexE" pt-2 @click="selectEntity(e)" class="pt-2 mx-2" style="cursor:pointer;">
                 <v-icon :class="(selectedEntity && e.concept == selectedEntity.concept)?'primary--text':'secondary--text font-weight-light'" class="subtitle-2 pr-2">
                   mdi-ballot-outline
                 </v-icon>
@@ -96,7 +96,7 @@
               <span class="font-weight-medium pb-0">
                 Arguments:
               </span>
-              <p v-for="a in selected.args" :key="a" class="mb-0 pl-2">
+              <p v-for="(a, indexA) in selected.args" :key="indexA" class="mb-0 pl-2">
                 <a @click="navigate({tab:0,indicator:a})">
                   <v-icon style="border:1px solid" class="body-2 primary--text ml-2 mr-1">mdi-call-made</v-icon>
                   {{a.name}}
@@ -108,14 +108,14 @@
                 Datapoints
               </h2>
               <v-divider></v-divider>
-              <v-layout column v-for="dp in selected.datapoints" :key="dp" pt-2>
+              <v-layout column v-for="(dp, indexDp) in selected.datapoints" :key="indexDp" pt-2>
                 <h3 class="primary--text body-2">
                   <a @click="navigate({tab:1,datapoint:dp})">
                     <v-icon style="border:1px solid" class="body-2 primary--text ml-2 mr-1">mdi-call-made</v-icon>
                     {{dp.name}}
                   </a>
                 </h3>
-                <div class="subtitle-2 pl-3" v-for="f in dp.attr" :key="f">
+                <div class="subtitle-2 pl-3" v-for="(f, indexF) in dp.attr" :key="indexF">
                   <span>
                     <span class="font-weight-medium">
                       <v-icon class="subheading pr-1">{{fieldTypeIcon(f.type)}}</v-icon>
@@ -144,7 +144,7 @@
             </v-row>
             <h3 class="primary--text subheading font-weight-light">{{dpInfo.name}} ( {{dpInfo.count}} items )</h3>
             <v-divider></v-divider>
-            <div class="subtitle-2" v-for="f in dpInfo.attr" :key="f">
+            <div class="subtitle-2" v-for="(f, indexF) in dpInfo.attr" :key="indexF">
               <span>
                 <span class="font-weight-medium">
                   <v-icon class="subheading pr-1">{{fieldTypeIcon(f.type)}}</v-icon>
@@ -202,7 +202,7 @@
             </v-row>
             <h3 class="primary--text subheading font-weight-light">{{entityInfo.name}} ( {{entityInfo.count}} items )</h3>
             <v-divider></v-divider>
-            <div class="subtitle-2" v-for="f in entityInfo.attr" :key="f">
+            <div class="subtitle-2" v-for="(f, indexF) in entityInfo.attr" :key="indexF">
               <span>
                 <span class="font-weight-medium">
                   <v-icon class="subheading pr-1">{{fieldTypeIcon(f.type)}}</v-icon>
@@ -261,13 +261,18 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import ioMixin from "./io.mixin.js";
-import dsExplorerConfig from "./ds-explorer-config.vue"
+
+<<< if( jace.mode == "development") { >>>
+  import dsExplorerConfig from "./ds-explorer-config.vue"
+<<< } >>>
+
 import highlight from '@/components/core/ext/ace-highlight.vue';
-import * as _ from "lodash"
+import { find } from "lodash"
+
 
 
 let getTopicNode = (items, path) => {
-  let r = _.find(items, n => n.name == path[0])
+  let r = find(items, n => n.name == path[0])
   if (path.length == 1) {
     return r
   } else {
@@ -277,7 +282,7 @@ let getTopicNode = (items, path) => {
 }
 
 let getOpenPath = (items, path) => {
-  let r = _.find(items, n => n.name == path[0])
+  let r = find(items, n => n.name == path[0])
   if (path.length == 1) {
     return [r.key]
   } else {
@@ -501,9 +506,11 @@ collection.limit(5)`
         })
     },
 
+<<< if( jace.mode == "development") { >>>
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(dsExplorerConfig, { width: "80%" }, { config: widgetConfig })
     }
+<<< } >>>    
 
   },
 

@@ -2,7 +2,17 @@ import Vue from '@/plugins/vue'
 import vuetify from "@/plugins/vuetify"
 import VueRouter from "vue-router"
 import VueClipboard from "vue-clipboard2"
-import { portalPlugin, httpPlugin, djvuePlugin, cookiePlugin, eventhubPlugin, dpsPlugin, socketPlugin } from "@/plugins"
+import { 
+  portalPlugin, 
+  httpPlugin, 
+  djvuePlugin, 
+  cookiePlugin, 
+  eventhubPlugin, 
+  dpsPlugin, 
+  <<< if(jace.availablePublishing) { >>>
+  socketPlugin 
+  <<< } >>>
+} from "@/plugins"
 
 
 import App from '@/App.vue'
@@ -13,20 +23,16 @@ import store from "@/state/index.js"
 import "@/modules/google-fonts/roboto.css"
 import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/dist/vuetify.min.css"
-import "katex/dist/katex.min.css"
+// import "katex/dist/katex.min.css"
 
 
 
 // import VueSocketIoExt from "vue-socket.io-extended";
 // import io from "socket.io-client";
 
+<<< if(jace.availablePublishing) { >>>
 Vue.use(socketPlugin, window.devService.config.pubService);
-
-
-<<< 
-  if(jace.mode == "development") $include("./1.js") 
->>>
-window.console.log("JACE",`<<<= JSON.stringify(jace) >>>`)
+<<< } >>>
 
 
 Vue.use(VueClipboard)

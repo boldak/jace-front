@@ -9,7 +9,7 @@
 </template>
 <script>
 import Vue from "vue"
-import * as _ from "lodash"
+import { findIndex, extend, clone } from "lodash"
 export default {
 
   data() {
@@ -41,7 +41,7 @@ export default {
     resolver(id, resolve) {
 
       return result => {
-        let index = _.findIndex(this.items, item => item.id == id)
+        let index = findIndex(this.items, item => item.id == id)
         if (index < 0) {
           resolve()
           return
@@ -64,7 +64,7 @@ export default {
           resolve: this.resolver(id, resolve),
           component: dialog,
           options: options,
-          props: _.extend(_.clone(this.defaultProps), props, options),
+          props: extend(clone(this.defaultProps), props, options),
           isActive: true
         }
 

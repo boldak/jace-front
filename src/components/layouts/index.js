@@ -34,6 +34,8 @@ l_1_3_1.getPageTemplate = () => ({
 })
 
 import flex from "./flex/flex.vue"
+import carousel from "./carousel/carousel.vue"
+import slider from "./slider/slider.vue"
 
 
 // let flex = () => import("./flex/flex.vue")
@@ -60,5 +62,7 @@ export default {
       'layout-1-2' : l_1_2,
       'layout-1' : l_1,
       'layout-1-3-1':l_1_3_1,
-      flex
+      flex,
+      carousel,
+      slider
 }

@@ -6,10 +6,15 @@ import selectFileDialog from "@/components/dialogs/core/select-file.vue"
 import customDialog from "@/components/dialogs/core/custom-dialog.vue"
 import splashDialog from "@/components/dialogs/core/splash.vue"
 import Vue from "vue"
+
+<<< if(jace.availablePublishing) { >>>
+
 import io from "socket.io-client";
 
+<<< } >>>
+
 import * as Cookie from "tiny-cookie"
-import * as _ from "lodash"
+import { isInteger, isObject, isString, extend, keys } from "lodash"
 
 // import store from "@/state/index.js"
 
@@ -61,7 +66,7 @@ export var cookiePlugin = {
   },
   set: function(name, value, daysOrOptions) {
     var opts = daysOrOptions;
-    if (Number.isInteger(daysOrOptions)) {
+    if (isInteger(daysOrOptions)) {
       opts = { expires: daysOrOptions };
     }
     return Cookie.set(name, value, opts);
@@ -88,15 +93,22 @@ export var cookiePlugin = {
 export var portalPlugin = {
   install(Vue, options = { baseURL: "/" }) {
     Vue.prototype.$portal = axios.create(options)
+    Vue.prototype.$resolveUrl = (url) => {
+       return `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl : window.location.origin}/`+url 
+    }
   }
 }
 
 
+<<< if(jace.availablePublishing) { >>>
+  
 export var socketPlugin = {
   install(Vue, service) {
     Vue.prototype.$socket = io(service)
   }
 }
+
+<<< } >>>
 
 
 export var httpPlugin = {
@@ -171,10 +183,10 @@ var findChild = (component, filter, res) => {
 
 var toTree = (object) =>
 
-  _.keys(object).map(key => {
+  keys(object).map(key => {
     return {
-      name: (_.isObject(object[key])) ? key : `${key}: ${object[key]}`,
-      children: (!_.isObject(object[key])) ? undefined : toTree(object[key])
+      name: (isObject(object[key])) ? key : `${key}: ${object[key]}`,
+      children: (!isObject(object[key])) ? undefined : toTree(object[key])
     }
   })
 
@@ -247,7 +259,7 @@ export var djvuePlugin = {
       toTree,
 
       extend: (object, extention) => {
-        return _.extend(object, JSON.parse(JSON.stringify(extention)))
+        return extend(object, JSON.parse(JSON.stringify(extention)))
       },
 
 
@@ -274,7 +286,7 @@ export var djvuePlugin = {
           Vue.prototype.$eventHub.emit("progress-dialog-cancel", { dialogID: result.dialogID })
         }
         result.set = (options) => {
-          Vue.prototype.$eventHub.emit("progress-dialog-set", _.extend(options, { dialogID: result.dialogID }))
+          Vue.prototype.$eventHub.emit("progress-dialog-set", extend(options, { dialogID: result.dialogID }))
         }
         return result
       },
@@ -313,7 +325,7 @@ export var djvuePlugin = {
 
       selectFile(options) {
         options = options || {}
-        options = (_.isString(options)) ? { title: options } : {}
+        options = (isString(options)) ? { title: options } : {}
         options.title = options.title || "Upload File";
 
         return new Promise((resolve, reject) => {
@@ -350,7 +362,8 @@ export var djvuePlugin = {
        
         if (!object) return;
 
-          const url = window.URL.createObjectURL(new Blob([object]));
+           const url = window.URL.createObjectURL(new Blob([object]));
+           // console.log(url)
            const link = document.createElement('a');
            link.href = url;
            link.setAttribute('download', fileName); //or any other extension
@@ -382,7 +395,7 @@ export var djvuePlugin = {
 
     }
 
-    Vue.prototype = _.extend(Vue.prototype, Vue.prototype.$djvue)
+    Vue.prototype = extend(Vue.prototype, Vue.prototype.$djvue)
 
   }
 }

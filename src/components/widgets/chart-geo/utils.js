@@ -1,4 +1,5 @@
-import * as _ from "lodash"
+import { isArray, flattenDeep, min, max, reduce } from "lodash"
+
 
 
 let unionRect = (b1,b2) => {
@@ -23,8 +24,8 @@ let unionRect = (b1,b2) => {
 }
 
 let getBounds = geodata => {
-	if(!_.isArray(geodata)) geodata = [geodata]
-	let b =   _.reduce(geodata, ( total, d ) => {
+	if(!isArray(geodata)) geodata = [geodata]
+	let b =   reduce(geodata, ( total, d ) => {
 				return {
 						properties:{
 							bounds: unionRect( total.properties.bounds, d.properties.bounds )
@@ -35,14 +36,14 @@ let getBounds = geodata => {
 }
 
 let getBoundary = d => {
-	let coordinates = _.flattenDeep(d.geometry.coordinates)
+	let coordinates = flattenDeep(d.geometry.coordinates)
 	let coordinatesX = coordinates.filter( (d,index) => index % 2 == 0)
 	let coordinatesY = coordinates.filter( (d,index) => index % 2 == 1)
 	return {
-		left: _.min(coordinatesX),
-		right: _.max(coordinatesX),
-		top: _.min(coordinatesY),
-		bottom: _.max(coordinatesY)
+		left: min(coordinatesX),
+		right: max(coordinatesX),
+		top: min(coordinatesY),
+		bottom: max(coordinatesY)
 	}
 }
 

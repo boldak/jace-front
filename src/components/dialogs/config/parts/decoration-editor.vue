@@ -27,6 +27,20 @@ export default {
   },
   components: {
     "palette-picker": palettePicker
+  },
+
+  created(){
+    this.config.palette = this.config.palette || 
+    {
+     "id": "YlGn_3",
+     "color": [
+      "#f7fcb9",
+      "#addd8e",
+      "#31a354"
+     ],
+     "isReverse": false
+    }
+    // console.log(this.config)
   }
 
 }

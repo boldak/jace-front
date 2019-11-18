@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { orderBy} from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import draggable from "vuedraggable";
 
@@ -77,18 +77,19 @@ export default {
   watch: {
     list(value) {
       if (!value) return
-      this.items = _.orderBy(JSON.parse(JSON.stringify(value)), "priority")
+      this.items = orderBy(JSON.parse(JSON.stringify(value)), "priority")
     }
   },
 
 
   created() {
-    if (this.list) this.items = _.orderBy(JSON.parse(JSON.stringify(this.list)), "priority")
+    if (this.list) this.items = orderBy(JSON.parse(JSON.stringify(this.list)), "priority")
     this.title = this.$djvue.randomName()
   }
 }
 
 </script>
+
 <style scoped>
 .drag {
   opacity: 0.3;
@@ -97,9 +98,8 @@ export default {
 .flip-list-move {
   transition: transform 0.5s;
 }
-
 .no-move {
-  transition: transform 0s;
+transition: transform 0s;
 }
 
 .ghost {

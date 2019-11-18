@@ -1,7 +1,7 @@
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import initiableMixin from "@/mixins/core/initiable.mixin.js"
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-import * as _ from "lodash"
+import { set, isArray } from "lodash"
 
 export default {
 
@@ -32,6 +32,9 @@ export default {
 
     isSameWidget(widget) { return this.config.id == widget.config.id },
 
+
+<<< if( jace.mode == "development") { >>>
+    
     _reconfigure(widget) {
 
       if (this.$refs.instance.onReconfigure) {
@@ -53,6 +56,18 @@ export default {
       }
 
     },
+
+     _delete() {
+      let rule = (this.$refs.instance && this.$refs.instance.isDeleteAvailable) ? this.$refs.instance.isDeleteAvailable : (() => true)
+      if (rule.apply(this.$refs.instance)) {
+        if (this.$refs.instance && this.$refs.instance.onDelete) this.$refs.instance.onDelete()
+        this._removeSubscriptions()
+        return true
+      }
+      return false
+    },
+
+<<< } >>>
 
 
     _updateConfig() {
@@ -166,22 +181,17 @@ export default {
     },
 
     setOption(path, value) {
-      _.set(this.options, path, value)
+      set(this.options, path, value)
     },
 
-    _delete() {
-      let rule = (this.$refs.instance && this.$refs.instance.isDeleteAvailable) ? this.$refs.instance.isDeleteAvailable : (() => true)
-      if (rule.apply(this.$refs.instance)) {
-        if (this.$refs.instance && this.$refs.instance.onDelete) this.$refs.instance.onDelete()
-        this._removeSubscriptions()
-        return true
-      }
-      return false
-    },
+   
 
     _removeSubscriptions() { this.off() },
 
     _initSubscriptions() {
+
+
+<<< if( jace.mode == "development") { >>>
 
       this.on({
         event: "app-config-save",
@@ -192,15 +202,18 @@ export default {
       })
 
       this.on({
-        event: "widget-update",
-        callback: this._updateConfig,
-        rule: () => true
-      })
-
-      this.on({
         event: "widget-reconfigure",
         callback: this._reconfigure,
         rule: this.isSameWidget
+      })
+
+<<< } >>>
+
+
+      this.on({
+        event: "widget-update",
+        callback: this._updateConfig,
+        rule: () => true
       })
 
       this.on({
@@ -222,7 +235,7 @@ export default {
       })
 
       this.dataSelectEmitters = this.config.dataSelectEmitters || [];
-      this.dataSelectEmitters = (_.isArray(this.dataSelectEmitters)) ? this.dataSelectEmitters : [this.dataSelectEmitters];
+      this.dataSelectEmitters = (isArray(this.dataSelectEmitters)) ? this.dataSelectEmitters : [this.dataSelectEmitters];
       this.dataSelectEmitters.forEach(emitter => {
         this.on({
           event: "data-select",

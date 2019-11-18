@@ -15,11 +15,15 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
-  import ioMixin from "./io.mixin.js";
-  import DsOntologyConfigDialog from "./ds-ontology-config.vue";
   import echart from "@/components/core/ext/echart.vue"
 
+  import ioMixin from "./io.mixin.js";
 
+<<< if( jace.mode == "development") { >>>
+
+  import DsOntologyConfigDialog from "./ds-ontology-config.vue";
+ 
+<<< } >>>
    
    
  export default  {
@@ -52,9 +56,13 @@
         this.options = tempOptions;
       },
 
+  <<< if( jace.mode == "development") { >>>    
+     
      onReconfigure (widgetConfig) {
        return this.$dialogManager.showAndWait(DsOntologyConfigDialog, {width:"80%"}, {config:widgetConfig})
       },
+
+  <<< } >>>    
 
       // onError (error) {
       //   this.template = `<div style="color:red; font-weight:bold;">${error.toString()}</div>`;

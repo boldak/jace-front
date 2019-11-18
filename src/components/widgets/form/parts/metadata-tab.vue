@@ -12,7 +12,9 @@
   import listenerMixin from "@/mixins/core/listener.mixin.js";
   // import moment from "moment"
   import keyValueEditor from "@/components/core/ext/key-value-list.vue"
-  import * as _ from "lodash"
+  import { findIndex, toPairs } from "lodash"
+
+
   export default  {
       
       mixins:[djvueMixin, listenerMixin],
@@ -36,7 +38,7 @@
 
         validate(){
           if(!this.newMetadataKey) return false
-          if(_.findIndex(this.items, m => m.key == this.newMetadataKey)>=0) return false
+          if(findIndex(this.items, m => m.key == this.newMetadataKey)>=0) return false
           return true  
         },
         
@@ -68,7 +70,7 @@
 
         prepare(){
           if(!this.form) return
-          this.items = _.toPairs(this.form.metadata)
+          this.items = toPairs(this.form.metadata)
             .map(item => {
               return {
                 key:item[0],
@@ -85,7 +87,7 @@
 
         deleteMetadata(){
           this.selection.forEach( m => {
-            let index = _.findIndex(this.items, i => m.key == i.key)
+            let index = findIndex(this.items, i => m.key == i.key)
             this.items.splice(index,1)
           })
           this.updateMetadata()

@@ -1,6 +1,7 @@
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  * as _ from "lodash"
+import  { extend } from "lodash"
+
 export default {
 
     extends: echartWidget,
@@ -44,7 +45,7 @@ export default {
        
         tempOptions.series = tempData.series;
         this.series = tempData.series;
-        this.options = _.extend(tempOptions, tempData);
+        this.options = extend(tempOptions, tempData);
 
       },
 

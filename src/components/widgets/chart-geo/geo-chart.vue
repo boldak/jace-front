@@ -2,7 +2,7 @@
 import getGeoJson from "./maps.js"
 import geo_util from "./utils.js"
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue"
-import * as _ from "lodash"
+import { isNull, min, max, find } from "lodash"
 import echarts from "echarts/dist/echarts-en"
 
 export default {
@@ -22,22 +22,22 @@ export default {
       if (this.config.dataSelectEmitters && this.config.dataSelectEmitters.length > 0 && this.selection.length > 0) {
 
         let s = this.selection.filter(d => d.selected)
-        res.series[0].data = this.serie.filter(d => _.find(s, e => e.entity.id == d.selector))
+        res.series[0].data = this.serie.filter(d => find(s, e => e.entity.id == d.selector))
 
       } else {
         res.series[0].data = this.serie
       }
 
       let selection = res.series[0].data.map(d => {
-        let f = _.find(this.features, g => {
-          return (g.id == d.selector) || _.find(g.properties.geocode, c => c == d.selector)
+        let f = find(this.features, g => {
+          return (g.id == d.selector) || find(g.properties.geocode, c => c == d.selector)
         })
 
         if (!f) return null
         
         d.selector = f.id
         return f
-      }).filter(d => !_.isNull(d))
+      }).filter(d => !isNull(d))
 
 
 
@@ -98,8 +98,8 @@ export default {
 
 
       tempOptions.series[0].data = tempData.serie;
-      tempOptions.visualMap.min = _.min(tempData.serie.map(d => d.value))
-      tempOptions.visualMap.max = _.max(tempData.serie.map(d => d.value))
+      tempOptions.visualMap.min = min(tempData.serie.map(d => d.value))
+      tempOptions.visualMap.max = max(tempData.serie.map(d => d.value))
       tempOptions.visualMap.inRange.color = this.config.options.color;
       tempOptions.visualMap.precision = 3
       this.serie = tempData.serie;

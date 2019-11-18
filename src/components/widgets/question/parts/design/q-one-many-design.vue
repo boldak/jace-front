@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { find, countBy } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -91,9 +91,9 @@ export default {
 
     calculateStat() {
       if (!this.options.nominals) return {}
-      let stats = this.stat.responses.filter(a => a && _.find(this.options.nominals, n => n.id == a[0]))
+      let stats = this.stat.responses.filter(a => a && find(this.options.nominals, n => n.id == a[0]))
       let result = this.options.nominals.map(n => {
-        let c = _.countBy(stats, s => s[0])[n.id]
+        let c = countBy(stats, s => s[0])[n.id]
         return {
           id: n.id,
           title: n.title,
@@ -101,7 +101,7 @@ export default {
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.themes.light.primary],
         grid: {
           left: '3%',
           right: '4%',

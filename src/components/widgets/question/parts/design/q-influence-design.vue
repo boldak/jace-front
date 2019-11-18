@@ -116,7 +116,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { find, countBy } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import palettePicker from "@/components/core/ext/palette-picker.vue"
@@ -142,16 +142,16 @@ export default {
       if (!this.options.scale || !this.options.palette.color) return
       if (this.options.scale.length > 0 && this.options.palette.color.length > 0) {
         this.options.scale.forEach(v => {
-          v.color = colorUtility.color(this.options.scale, v.value, this.options.palette, this.$vuetify.theme)
-          v.background = colorUtility.background(this.options.scale, v.value, this.options.palette, this.$vuetify.theme)
-          v.style = `color: ${colorUtility.color(this.options.scale, v.value, this.options.palette, this.$vuetify.theme)} !important;` +
-            `background: ${colorUtility.background(this.options.scale, v.value, this.options.palette, this.$vuetify.theme)} !important;`
+          v.color = colorUtility.color(this.options.scale, v.value, this.options.palette, this.$vuetify.theme.themes.light)
+          v.background = colorUtility.background(this.options.scale, v.value, this.options.palette, this.$vuetify.theme.themes.light)
+          v.style = `color: ${colorUtility.color(this.options.scale, v.value, this.options.palette, this.$vuetify.theme.themes.light)} !important;` +
+            `background: ${colorUtility.background(this.options.scale, v.value, this.options.palette, this.$vuetify.theme.themes.light)} !important;`
         })
       }
 
       this.options.undefinedValue = {
-        style: `color: ${colorUtility.color(this.options.scale, null, this.options.palette, this.$vuetify.theme)} !important;` +
-          `background: ${colorUtility.background(this.options.scale, null, this.options.palette, this.$vuetify.theme)} !important;`
+        style: `color: ${colorUtility.color(this.options.scale, null, this.options.palette, this.$vuetify.theme.themes.light)} !important;` +
+          `background: ${colorUtility.background(this.options.scale, null, this.options.palette, this.$vuetify.theme.themes.light)} !important;`
       }
     },
 
@@ -186,6 +186,10 @@ export default {
       this.$emit("update:options", this.options)
     },
 
+    onSetOptions(){
+      // console.log("onSetOptions")
+      this.generateScaleStyle()
+    },
 
     generateScale(value) {
       if (value != this.options.scale.length) {
@@ -201,7 +205,7 @@ export default {
     },
 
     getChartOptions(factor, effect) {
-      let f = _.find(this.statOptions, s => s.factor.id == factor.id && s.effect.id == effect.id)
+      let f = find(this.statOptions, s => s.factor.id == factor.id && s.effect.id == effect.id)
       if (f) return f.chartOptions
       return null
     },
@@ -224,7 +228,7 @@ export default {
             factor: f,
             effect: e,
             values: stats
-              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && _.find(this.options.scale, v => v.value == s.value))
+              .filter(s => s.e1 == f.id && s.e2 == e.id && s.value && find(this.options.scale, v => v.value == s.value))
               .map(s => s.value)
           })
         })
@@ -233,7 +237,7 @@ export default {
       r = r.filter(s => s.values.length > 0)
 
       r.forEach(s => {
-        let c = _.countBy(s.values);
+        let c = countBy(s.values);
         s.data = this.options.scale.map(v => ({
           title: v.value,
           value: (c[v.value]) ? c[v.value] : 0
@@ -263,7 +267,7 @@ export default {
 
       r.forEach(s => {
         s.chartOptions = {
-          color: [this.$vuetify.theme.primary],
+          color: [this.$vuetify.theme.themes.light.primary],
           angleAxis: {
             type: 'category',
             data: this.options.scale.map(d => d.value),
@@ -271,7 +275,7 @@ export default {
               margin: 2,
               fontSize: 8,
               fontWeight: "bold",
-              color: this.$vuetify.theme.secondary
+              color: this.$vuetify.theme.themes.light.secondary
             }
           },
           radiusAxis: {

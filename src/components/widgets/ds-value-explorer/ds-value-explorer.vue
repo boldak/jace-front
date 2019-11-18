@@ -42,9 +42,15 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import ioMixin from "./io.mixin.js";
-import DsValueExplorerConfigDialog from "./ds-value-explorer-config.vue";
+
+<<< if( jace.mode == "development") { >>>
+
+  import DsValueExplorerConfigDialog from "./ds-value-explorer-config.vue";
+
+<<< } >>>
+
 import echart from "@/components/core/ext/echart.vue"
-import * as _ from "lodash"
+import { find, includes } from "lodash"
 
 export default {
 
@@ -121,7 +127,7 @@ export default {
   methods: {
 
     getName(code) {
-      let f = _.find(this.country_selection, c => c.id == code)
+      let f = find(this.countries, c => c.id == code)
       return (f) ? f.name : f
     },
 
@@ -144,12 +150,16 @@ export default {
 
 
     filter(item, queryText) {
-      return _.includes(item.name.toLowerCase(), queryText.toLowerCase())
+      return includes(((item.name) ? item.name.toLowerCase() : ""), ((queryText) ? queryText.toLowerCase() : ""))
     },
+
+<<< if( jace.mode == "development") { >>>
 
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(DsValueExplorerConfigDialog, { width: "80%" }, { config: widgetConfig })
     },
+    
+<<< } >>>    
 
     // onError (error) {
     //   this.template = `<div style="color:red; font-weight:bold;">${error.toString()}</div>`;
@@ -174,19 +184,21 @@ export default {
         !this.config.metadata.collections
       ) return
 
-
+      this.msg = this.progress({text:`Loading tree for ${this.indicator_select}...`}) 
+      // console.log(this.country_selection)  
       this.getTree(
         this.indicator_select,
         this.config.metadata.concepts,
         this.config.metadata.collections,
         this.country_selection.map(c => {
           let filter = {}
-          filter[this.config.metadata.mapper.id] = c.id
+          filter[this.config.metadata.mapper.id] = find(this.countries, d => d.name == c).id
           filter.year = this.year_select
           return filter
         })
 
       ).then(res => {
+        this.msg.cancel()
         this.updateOptions({ data: res, options: this.config.options })
       })
 
@@ -208,7 +220,7 @@ export default {
               ).then(res => {
                 this.error2 = false
                 this.countries = res;
-                if (!this.config.dataSelectEmitters || this.config.dataSelectEmitters.length == 0) this.country_selection = [res[0]]
+                if (!this.config.dataSelectEmitters || this.config.dataSelectEmitters.length == 0) this.country_selection = [res[0].name]
               })
               .catch(() => {
                 this.error2 = true
@@ -296,7 +308,8 @@ export default {
     indicators: null,
     countries: null,
     years: null,
-    indicator_filter: ''
+    indicator_filter: '',
+    completed: false
 
   })
 

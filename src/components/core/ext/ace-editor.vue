@@ -1,6 +1,7 @@
 <template>
   <div class="editor"></div>
 </template>
+
 <script>
 let range;
 

@@ -1,6 +1,7 @@
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  * as _ from "lodash"
+import  { min, max, find } from "lodash"
+
 export default {
 
     extends: echartWidget,
@@ -17,7 +18,7 @@ export default {
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){
             
             let s = this.selection.filter( d => d.selected)
-            res.series = this.series.filter( d => _.find(s, e => e.entity.id == d.selector))
+            res.series = this.series.filter( d => find(s, e => e.entity.id == d.selector))
             
          }
          res.legend.data = res.series.map( d => d.name)
@@ -51,13 +52,13 @@ export default {
           values = values.concat(s.data.map( d => d[2]))
         })
 
-        let max = _.max(values)
-        let min = _.min(values)
+        let _max = max(values)
+        let _min = min(values)
 
 
         let height = this.config.options.widget.height || 250
 
-        this.zoom = (height*0.2-5)/(max-min)
+        this.zoom = (height*0.2-5)/(_max-_min)
        
         tempOptions.series = tempData.series;
         this.series = tempData.series;

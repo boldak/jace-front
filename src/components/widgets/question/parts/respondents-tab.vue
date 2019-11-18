@@ -140,14 +140,14 @@
   import listenerMixin from "djvue/mixins/core/listener.mixin.js";
   import formIoMixin from "../mixins/form-io.mixin.js";
   import editor from 'djvue/components/core/ext/ace-editor.vue';
+  import { find, findIndex, differenceWith, template, templateSettings } from "lodash"
+  
+  let compile = (_template,context) => {
+     templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
+    let result = template(_template)(context)
 
-  let compile = (template,context) => {
-     _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
-
-    let result = _.template(template)(context)
-
-    _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
+    templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
 
     return result
     
@@ -165,7 +165,7 @@
       
       computed:{
         user_email_list(){
-         return _.differenceWith(this.userlist, this.form.config.access.users, (a,b) => a.email == b.email).map(u => u.email)
+         return differenceWith(this.userlist, this.form.config.access.users, (a,b) => a.email == b.email).map(u => u.email)
         },
 
         selection(){
@@ -214,7 +214,7 @@
         },
 
         addNewEmail(){
-            let newUser = _.find(this.userlist, u => u.email == this.newEmail)
+            let newUser = find(this.userlist, u => u.email == this.newEmail)
             let needSearchProfile = false;
             if(!newUser){
               newUser = {
@@ -232,10 +232,10 @@
               this.findUserProfile(newUser.email).then(res => {
                 // console.log("FIND PROFILE", res)
                 if(res.type="none"){
-                  let index = _.findIndex(this.form.config.access.users, u => u.email == newUser.email)
+                  let index = findIndex(this.form.config.access.users, u => u.email == newUser.email)
                   if(index >= 0){
                     let u = this.form.config.access.users.splice(index,1)[0]
-                    console.log(u)
+                    // console.log(u)
                     u.photo = "./"
                     u.icon = "mdi-account-question-outline"
                     this.form.config.access.users.push(u)
@@ -256,13 +256,13 @@
 
         deleteUsers(){
           this.form.config.access.users = 
-            _.differenceWith(this.form.config.access.users, this.selection, (a,b) => a.email == b.email)
+            differenceWith(this.form.config.access.users, this.selection, (a,b) => a.email == b.email)
           this.selection = []  
           this.$emit("update", this.form.config.access)
         },
 
         selectUser(user){
-          let index = _.findIndex(this.form.config.access.users, u => u.email == user.email)
+          let index = findIndex(this.form.config.access.users, u => u.email == user.email)
           this.form.config.access.users.splice(index,1,user)
         },
 
@@ -290,7 +290,7 @@
 
       watch:{
         form(value){
-          this.selection = _.find(this.accessModes, m => m.key == value.config.access.type)  
+          this.selection = find(this.accessModes, m => m.key == value.config.access.type)  
         }
       },
 

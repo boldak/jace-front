@@ -4,7 +4,7 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-        <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
+        <q-view v-if="isValid" :id="config.id" :title="options.title" :note="options.note" :validation="isValid"></q-view>
         <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { find, findIndex, countBy } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -75,6 +75,7 @@ export default {
   computed: {
 
     isValid() {
+
       if (!this.options) return "Not configured"
       if (!this.answer) return "No response data"
       if (!this.options.required) return true
@@ -110,7 +111,7 @@ export default {
     select(nominal) {
       // console.log(JSON.stringify(nominal))
       if (nominal) {
-        let f = _.find(this.options.nominals, n => n.id == nominal)
+        let f = find(this.options.nominals, n => n.id == nominal)
         f.selected = !f.selected
       }
 
@@ -122,13 +123,13 @@ export default {
     calculateStat() {
       if (!this.options.nominals) return {}
       // console.log(JSON.stringify(this.stat.responses, null, "\t"))
-      let s = this.stat.responses.filter(a => a) // &&  _.find(this.options.nominals, n => n.id == a[0]))
+      let s = this.stat.responses.filter(a => a) // &&  find(this.options.nominals, n => n.id == a[0]))
       let stats = []
       s.forEach(item => {
         stats = stats.concat(item)
       })
       let result = this.options.nominals.map(n => {
-        let c = _.countBy(stats)[n.id]
+        let c = countBy(stats)[n.id]
         return {
           id: n.id,
           title: n.title,
@@ -136,7 +137,7 @@ export default {
         }
       })
       let statOptions = {
-        color: [this.$vuetify.theme.primary],
+        color: [this.$vuetify.theme.themes.light.primary],
         grid: {
           left: '3%',
           right: '4%',
@@ -175,10 +176,10 @@ export default {
 
   watch: {
     answer(value) {
-      value.data = (value) ? value.data.filter(a => _.find(this.options.nominals, alt => alt.id == a)) : []
+      value.data = (value) ? value.data.filter(a => find(this.options.nominals, alt => alt.id == a)) : []
       if (this.options && this.options.nominals && this.options.nominals.forEach)
         this.options.nominals.forEach(n => {
-          n.selected = _.findIndex(value.data, a => a == n.id) >= 0
+          n.selected = findIndex(value.data, a => a == n.id) >= 0
         })
 
     }

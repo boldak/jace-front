@@ -1,5 +1,6 @@
 import tinycolor from "./tinycolor.js"
-import * as _ from "lodash"
+import { isUndefined } from "lodash"
+
 
 let ColorUtility = class {
   constructor() {}
@@ -13,7 +14,7 @@ let ColorUtility = class {
     if( palette.isReverse) p.reverse()
     
 
-    if (scale.length == 0 || p.length == 0 || value == null || _.isUndefined(value)) {
+    if (scale.length == 0 || p.length == 0 || value == null || isUndefined(value)) {
       c = tinycolor("#dedede").toHexString() //tinycolor(theme.themes.light.secondary).lighten(30).toHexString()
     } else {
       let index = Math.round((value - 1) * (p.length-1) / (scale.length-1))

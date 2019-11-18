@@ -37,7 +37,8 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import moment from "moment"
-import * as _ from "lodash"
+import { find } from "lodash"
+
 export default {
 
   mixins: [djvueMixin, listenerMixin],
@@ -57,12 +58,12 @@ export default {
   },
 
   created() {
-    this.selection = _.find(this.accessModes, m => m.key == this.form.config.access.type)
+    this.selection = find(this.accessModes, m => m.key == this.form.config.access.type)
   },
 
   watch: {
     form(value) {
-      this.selection = _.find(this.accessModes, m => m.key == value.config.access.type)
+      this.selection = find(this.accessModes, m => m.key == value.config.access.type)
     }
   },
 

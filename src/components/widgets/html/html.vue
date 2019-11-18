@@ -8,18 +8,23 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
+
+<<< if( jace.mode == "development") { >>>  
   import HtmlConfig from "./html-config.vue";
+<<< } >>>  
   
   import _katex from "katex"
+  import "katex/dist/katex.min.css"
   import asciimath2latex from "asciimath-to-latex" 
-  import * as _ from "lodash"
+  import { template, templateSettings } from "lodash"
   
-  let compile = (template,context) => {
-     _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
-    let result = _.template(template)(context)
+  let compile = (_template,context) => {
+     templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
-    _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
+    let result = template(_template)(context)
+
+    templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
 
     return result
     
@@ -69,9 +74,11 @@
        this.template = data;
       },
 
+<<< if( jace.mode == "development") { >>>
       onReconfigure (widgetConfig) {
        return this.$dialogManager.showAndWait(HtmlConfig,{width:"90%"}, {config:widgetConfig})  
       },
+<<< } >>>      
 
       onClear(){
         this.onUpdate({

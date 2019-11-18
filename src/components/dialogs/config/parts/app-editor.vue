@@ -83,7 +83,8 @@ import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import i18nMixin from "@/mixins/core/i18n.mixin.js"
 import themePeaker from "@/components/core/ext/theme-peaker.vue"
 
-import * as _ from "lodash"
+import { union, remove } from "lodash"
+
 
 let i18n = {
   en: {
@@ -163,9 +164,9 @@ export default {
         .get('api/app/get-list')
         .then(response => {
           response.data.forEach(app => {
-            this.availableKeywords = _.union(this.availableKeywords, app.keywords)
+            this.availableKeywords = union(this.availableKeywords, app.keywords)
           })
-          _.remove(this.availableKeywords, k => k == "");
+          remove(this.availableKeywords, k => k == "");
         })
       this.checkDpsURL()
     },

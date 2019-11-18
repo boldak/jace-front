@@ -1,7 +1,7 @@
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
+import { find } from "lodash"
 
-import * as _ from "lodash"
 export default {
 
     extends: echartWidget,
@@ -19,7 +19,7 @@ export default {
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){
             
             let s = this.selection.filter( d => d.selected)
-            res.series = this.series.filter( d => _.find(s, e => e.entity.id == d.selector))
+            res.series = this.series.filter( d => find(s, e => e.entity.id == d.selector))
         
          }
          // res.legend.data = res.series.map( d => d.name)

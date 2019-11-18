@@ -4,7 +4,7 @@
     </div>
     <v-card flat color="transparent" v-else>
       <v-container pa-2>
-        <q-view v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
+        <q-view :id="config.id" v-if="isValid" :title="options.title" :note="options.note" :validation="isValid"></q-view>
         <v-tabs v-model="active">
           <v-tab key="response" ripple>{{translate('Your_Response')}}</v-tab>
           <v-tab key="statistic" ripple v-if="options.showResponsesStat">{{translate('Report')}}</v-tab>
@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { sumBy, orderBy, find } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import statMixin from "../mixins/statistic.mixin.js"
@@ -83,7 +83,7 @@ export default {
           priority: (idx + 1),
           value: data.filter(d => (d.priority == (idx + 1))).length / data.length
         }))
-        n.priority = _.sumBy(n.data, item => item.priority * item.value)
+        n.priority = sumBy(n.data, item => item.priority * item.value)
         return n
       })
 
@@ -95,7 +95,7 @@ export default {
         return item
       })
 
-      res = _.orderBy(res, 'priority')
+      res = orderBy(res, 'priority')
       res.reverse()
 
 
@@ -145,14 +145,14 @@ export default {
 
       if (value) {
         let d = this.options.nominals.map(n => {
-          let f = _.find(value.data, v => v.id == n.id)
+          let f = find(value.data, v => v.id == n.id)
           n.priority = (f) ? f.priority : null
           return n
         })
 
         let nua = false
 
-        d = _.orderBy(d, "priority").map((d, index) => {
+        d = orderBy(d, "priority").map((d, index) => {
           let oldPriority = d.priority;
           d.priority = (d.priority) ? index + 1 : null
           nua |= d.priority != oldPriority

@@ -1,4 +1,6 @@
 <template>
+  <<< if (jace.mode == "development") { >>>
+  
   <div pa-2 mt-2 class="holder" :class="{producttion:isProductionMode, accepted:isAcceptWidget}">
     <!-- <div class="holder-title">
       <h4 v-if="!isProductionMode"> Widget Holder: {{name}}</h4>
@@ -25,16 +27,33 @@
     </v-layout>
    
   </div>
+  
+  <<< } else { >>>
+  
+    <div pa-2 mt-2 class="holder producttion">
+    
+      <v-layout column wrap>
+        <dj-widget :config="widget" :holder="name" v-for="widget in widgets" :key="widget.id" @init="onInitChild"></dj-widget>
+      </v-layout>
+    
+    </div>
+  
+  <<< } >>>
+
 </template>
 <script>
 // import Vue from "vue"
-import draggable from "vuedraggable";
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 import initiableMixin from "@/mixins/core/initiable.mixin.js"
-import * as _ from "lodash"
+
 // import * as Cookie from "tiny-cookie"
-import insertWidgetDialog from "@/components/dialogs/config/insertWidgetDialog.vue"
+
+<<< if( jace.mode == "development" ) { >>>
+  import { find, findIndex, cloneDeep, isArray } from "lodash"
+  import draggable from "vuedraggable";
+  import insertWidgetDialog from "@/components/dialogs/config/insertWidgetDialog.vue"
+<<< } >>>
 
 import Widget from "@/components/core//widget.vue"
 
@@ -57,8 +76,10 @@ export default {
   mixins: [djvueMixin, listenerMixin, initiableMixin],
 
   components: {
-    "dj-widget": Widget,
-    draggable
+    "dj-widget": Widget
+<<< if( jace.mode == "development" ) { >>>
+    ,draggable
+<<< } >>>  
   },
 
   data() {
@@ -70,6 +91,8 @@ export default {
   props: ["name", "type"],
 
   computed: {
+
+<<< if( jace.mode == "development" ) { >>>
 
     isEmpty() { return this.widgets.length == 0 },
 
@@ -84,6 +107,7 @@ export default {
         handle: ".handle"
       };
     },
+<<< } >>>    
 
     widgets: {
       get() {
@@ -127,6 +151,8 @@ export default {
       this.$emit("init", this.name)
     },
 
+<<< if( jace.mode == "development" ) { >>>
+
     insert() {
 
       this.$dialogManager.showAndWait(insertWidgetDialog,{width:"80%"})
@@ -148,7 +174,7 @@ export default {
 
 
     isHoldWidget(widget) {
-      return !!_.find(this.widgets, w =>  widget.config && w.id == widget.config.id)
+      return !!find(this.widgets, w =>  widget.config && w.id == widget.config.id)
     },
 
     onStartDrag() {
@@ -167,6 +193,8 @@ export default {
       return true
     }
 
+<<< } >>>    
+
   },
 
   beforeDestroy() { this.off() },
@@ -178,6 +206,7 @@ export default {
     //   this.$dialog.component('insertWidgetDialog', insertWidgetDialog)
     // }
     
+<<< if( jace.mode == "development" ) { >>>
 
     this.on({
       event: "holder-accept",
@@ -188,9 +217,9 @@ export default {
       event: "widget-clone",
       callback: (cloned) => {
 
-        let widgetIndex = _.findIndex(this.widgets, w => w.id == cloned.config.id);
+        let widgetIndex = findIndex(this.widgets, w => w.id == cloned.config.id);
         // console.log("ORIGINAL", cloned, cloned.config)
-        let newWidget = _.cloneDeep(this.widgets[widgetIndex])
+        let newWidget = cloneDeep(this.widgets[widgetIndex])
         newWidget.id = this.$djvue.randomName();
         newWidget.name += "_clone_" + newWidget.id;
         // console.log("CLONE", newWidget)
@@ -204,7 +233,7 @@ export default {
       event: "widget-delete",
       callback: (deleted) => {
         if( deleted._delete() ){
-          let widgetIndex = _.findIndex(this.widgets, w => w.id == deleted.config.id);
+          let widgetIndex = findIndex(this.widgets, w => w.id == deleted.config.id);
           if (widgetIndex > -1) this.widgets.splice(widgetIndex, 1)
           this.setNeedSave(true)  
         }
@@ -216,7 +245,7 @@ export default {
       event: "holder-import-widgets",
       callback: (emitter, widgets) => {
        
-        widgets = ( _.isArray(widgets) ) ? widgets : [widgets]
+        widgets = ( isArray(widgets) ) ? widgets : [widgets]
         this.widgets = this.widgets.concat(widgets)
         this.setNeedSave(true)  
      
@@ -233,7 +262,7 @@ export default {
 
         // console.log("accept holder-update-widget-config", context.newConfig)
 
-        let widgetIndex = _.findIndex(this.widgets, w => w.id == context.widget.config.id);
+        let widgetIndex = findIndex(this.widgets, w => w.id == context.widget.config.id);
         let newWidgets = JSON.parse(JSON.stringify(this.widgets));
         newWidgets[widgetIndex] = context.newConfig;
         this.widgets = newWidgets;
@@ -242,8 +271,12 @@ export default {
       },
       rule: this.isHoldWidget
     })
+    
+<<< } >>>    
 
   },
+
+<<< if( jace.mode == "development" ) { >>>
 
   watch: {
 
@@ -258,6 +291,8 @@ export default {
     }
 
   }
+
+<<< } >>>  
 
 }
 

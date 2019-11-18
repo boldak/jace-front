@@ -1,5 +1,6 @@
-<template>
 
+<template>
+<<< if (jace.mode == "development") { >>>
   <v-card flat color="transparent">
     <v-card-title class="py-0" v-if="user.isLoggedIn">
       <span class="font-weight-light body-2">{{portalURL}}</span>
@@ -77,7 +78,7 @@
               <v-avatar tile size="36">
                <dj-img :src="selected.icon" icon="mdi-application" class="pr-2"></dj-img>
               </v-avatar>
-              <a :href="'./design/'+selected.name" :target="'blank_'+selected.name"> 
+              <a :href="$resolveUrl('design/'+selected.name)" :target="'blank_'+selected.name"> 
                 <span class="headline font-weight-light">{{selected.name}}</span>
               </a>  
             </v-col>
@@ -124,16 +125,32 @@
     </v-row>
     <v-divider></v-divider>
   </v-card>    
+<<< } else { >>>
+	<div class="warning--text title pa-5" style="text-align: center; border:1px solid">
+		JACE WARNING: App List Widget is not available in your publication!
+		<div class="caption">
+			You can use this widget on JACE DEV SERVICE at <a :href="$resolveUrl('')" target="blank"> {{$resolveUrl('')}} </a> only.
+		</div>
+	</div>
+<<< } >>>		
 
 </template>
 <script>
-import * as _ from "lodash"
+
+
+
+
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
-import moment from "moment"
-import NewAppDialog from "./new-app-dialog.vue";
-import ImportAppDialog from "./import-app-dialog.vue";
 
+<<< if (jace.mode == "development") { >>>
+  
+  import { find, union, remove } from "lodash"
+  import moment from "moment"
+	import NewAppDialog from "./new-app-dialog.vue";
+	import ImportAppDialog from "./import-app-dialog.vue";
+
+<<< } >>>
 
 export default {
 
@@ -143,7 +160,12 @@ export default {
 
   mixins: [djvueMixin, listenerMixin],
 
+
+<<< if (jace.mode == "development") { >>>
+  
   methods: {
+
+
 
     importApp() {
       this.$dialogManager.showAndWait(ImportAppDialog, { width: "30%" }, { appList: this.appList })
@@ -162,7 +184,7 @@ export default {
             .then(() => {
               this.loadAppList()
                 .then(() => {
-                  this.selected = _.find(this.appList, a => a.name = res.name)
+                  this.selected = find(this.appList, a => a.name = res.name)
                 })
 
             })
@@ -208,7 +230,7 @@ export default {
               })
               this.loadAppList()
                 .then(() => {
-                  this.selected = _.find(this.appList, a => a.name = res.name)
+                  this.selected = find(this.appList, a => a.name = res.name)
                 })
 
             })
@@ -240,9 +262,9 @@ export default {
     _makeKeywords(data) {
       let keywords = [];
       data.forEach(app => {
-        keywords = _.union(keywords, app.keywords)
+        keywords = union(keywords, app.keywords)
       })
-      _.remove(keywords, k => k == "");
+      remove(keywords, k => k == "");
 
       this.keywords = keywords
     },
@@ -290,6 +312,8 @@ export default {
     this.loadAppList()
   },
 
+<<< } >>>
+
   mounted() {
     this.$emit("init")
   },
@@ -307,3 +331,4 @@ export default {
 }
 
 </script>
+

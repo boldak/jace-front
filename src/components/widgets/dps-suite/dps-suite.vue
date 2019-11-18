@@ -1,4 +1,6 @@
 <template>
+  <<< if( jace.mode == "development") { >>>
+  
   <v-container pa-0 style="border: 1px solid #dcdcdc;" v-if="!isProductionMode">
     <v-row class="mx-3">
       <v-btn icon :disabled="scripts.length==0" @click="showSnippets = !showSnippets">
@@ -67,11 +69,18 @@
       <pre class="body-2 error--text pl-2" v-else>{{result.message}}</pre>
     </v-col>
   </v-container>
+  <<< } else { >>>
+    <div></div>
+  <<< } >>>
 </template>
 <script>
-import * as _ from "lodash"
+
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
+
+<<< if( jace.mode == "development") { >>>
+
+import { findIndex, find } from "lodash"
 
 let components = {
   "snippet-tree": () => import("./dps-snippets-tree.vue"),
@@ -83,6 +92,34 @@ import createScriptDialog from "./dialogs/create-script.vue"
 import renameScriptDialog from "./dialogs/rename-script.vue"
 
 
+
+let supportedMode = {
+  text: "text",
+  string: "text",
+  xml: "xml",
+  csv: "csv",
+  javascript: "javascript",
+  json: "json",
+  object: "json",
+  "function": "json",
+  dps: "dps",
+  dataset: "json",
+  error: "json",
+  table: "json",
+  help: "json",
+  html: "html",
+  bar: "json",
+  hbar: "json",
+  line: "json",
+  area: "json",
+  scatter: "json",
+  radar: "json",
+  deps: "json",
+  pie: "json"
+}
+
+<<< } >>>
+
 export default {
 
   name: "dps-suite-widget",
@@ -91,6 +128,7 @@ export default {
 
   mixins: [djvueMixin, listenerMixin],
 
+<<< if( jace.mode == "development") { >>>
   components,
 
   methods: {
@@ -194,7 +232,7 @@ export default {
           resolveText: "Delete"
         })
         .then(() => {
-          let index = _.findIndex(this.scripts, s => s.name == this.selected.name)
+          let index = findIndex(this.scripts, s => s.name == this.selected.name)
           let selectedIndex = (this.scripts.length == 1) ?
             -1 :
             (index == (this.scripts.length - 1)) ?
@@ -214,7 +252,7 @@ export default {
 
     validateScriptName(name) {
       if (!name || name == "") return false;
-      return _.findIndex(this.scripts, s => s.name == name) == -1
+      return findIndex(this.scripts, s => s.name == name) == -1
     },
 
     resolve(name) {
@@ -231,7 +269,7 @@ export default {
  **/
 `
         })
-        this.selected = _.findIndex(this.scripts, s => s.name == name)
+        this.selected = findIndex(this.scripts, s => s.name == name)
         this.currentScript = "tab-" + name
 
         this.setNeedSave(true)
@@ -290,71 +328,36 @@ export default {
 
   },
 
-
-  props: ["config"],
-
   computed: {
+    
     tabs() {
       return this.scripts.map(s => s.name)
     },
 
+    lang() {
+      return supportedMode[this.dpsResult.type] || "json"
+    },
+
     result() {
 
-      let supportedMode = {
-        text: "text",
-        string: "text",
-        xml: "xml",
-        csv: "csv",
-        javascript: "javascript",
-        json: "json",
-        object: "json",
-        "function": "json",
-        dps: "dps",
-        dataset: "json",
-        error: "json",
-        table: "json",
-        help: "json",
-        html: "html",
-        bar: "json",
-        hbar: "json",
-        line: "json",
-        area: "json",
-        scatter: "json",
-        radar: "json",
-        deps: "json",
-        pie: "json"
-      }
-
-      let mode = supportedMode[this.dpsResult.type]
-      let content;
-      if (mode) {
-        if (mode == "json") {
-          content = (this.dpsResult.data) ? JSON.stringify(this.dpsResult.data, null, "\t") : JSON.stringify(this.dpsResult)
-        } else {
-          // console.log(this.dpsResult)
-          content = (this.dpsResult.data) ? this.dpsResult.data : this.dpsResult
-        }
-      } else {
-        mode = "json"
-        content = JSON.stringify(this.dpsResult, null, "\t")
-      }
+      let mode = supportedMode[this.dpsResult.type] || "json"
+      // this.lang = mode
 
       if (this.dpsResult.type == "error") {
-        this.success = false
-        content = (this.dpsResult.message) ? this.dpsResult : this.dpsResult.data
+        // this.success = false
+        return (this.dpsResult.message) ? this.dpsResult : this.dpsResult.data
       }
 
-      this.lang = mode;
-      return content
+      if (mode == "json") {
+        return (this.dpsResult.data) ? JSON.stringify(this.dpsResult.data, null, "\t") : JSON.stringify(this.dpsResult)
+      }
+
+      return (this.dpsResult.data) ? this.dpsResult.data : this.dpsResult
+
     }
   },
 
-  created() {
-    // console.log(this.config.scripts)
-    this.scripts = this.config.scripts;
-    if (this.scripts.length > 0) this.selected = this.scripts[0]
-    this.checkDpsURL()
-  },
+  
 
   mounted() {
     if (this.scripts.length > 0) {
@@ -373,7 +376,6 @@ export default {
     showSnippets: false,
     dpsResult: null,
     newScriptName: null,
-    lang: "json",
     file: null,
     editor: null,
     showResults: false
@@ -382,9 +384,30 @@ export default {
   watch: {
     tab(value) {
       if (value)
-        this.selected = _.find(this.scripts, s => s.name == value.substring(4))
+        this.selected = find(this.scripts, s => s.name == value.substring(4))
     }
-  }
+  },
+
+  created() {
+    this.scripts = this.config.scripts;
+    if (this.scripts.length > 0) this.selected = this.scripts[0]
+    this.checkDpsURL()
+  },
+
+<<< } else { >>>
+  mounted() {
+   this.$emit("init")
+  },
+  created() {
+    this.scripts = this.config.scripts;
+  },
+<<< } >>>  
+
+ 
+  
+  props: ["config"]
+
+  
 
 
 }

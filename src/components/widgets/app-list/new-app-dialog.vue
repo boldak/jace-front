@@ -111,7 +111,7 @@
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import themePeaker from "@/components/core/ext/theme-peaker.vue"
-import * as _ from "lodash"
+import { find, union, remove } from "lodash"
 
 export default {
 
@@ -157,7 +157,7 @@ export default {
     }, 
 
     uniqueAppName(value){
-       return !_.find(this.options.appList, a => a.name == value) || 'Doublicate App name.'
+       return !find(this.options.appList, a => a.name == value) || 'Doublicate App name.'
     },
     
     onSetTheme(theme) {
@@ -203,9 +203,9 @@ export default {
         .get('api/app/get-list')
         .then(response => {
           response.data.forEach(app => {
-            this.availableKeywords = _.union(this.availableKeywords, app.keywords)
+            this.availableKeywords = union(this.availableKeywords, app.keywords)
           })
-          _.remove(this.availableKeywords, k => k == "");
+          remove(this.availableKeywords, k => k == "");
         })
     },
 

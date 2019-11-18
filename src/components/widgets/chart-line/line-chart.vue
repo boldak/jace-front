@@ -1,7 +1,8 @@
 
 <script>
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  * as _ from "lodash"
+import  { extend, find } from "lodash"
+
 export default {
 
     extends: echartWidget,
@@ -13,12 +14,12 @@ export default {
     computed:{
       chartOptions(){
          if(!this.options) return 
-         let res = _.extend({}, this.options);
+         let res = extend({}, this.options);
          
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){
             
             let s = this.selection.filter( d => d.selected)
-            res.series = this.series.filter( d => _.find(s, e => e.entity.id == d.selector))
+            res.series = this.series.filter( d => find(s, e => e.entity.id == d.selector))
            
 
          }

@@ -63,7 +63,8 @@
   </div>
 </template>
 <script>
-import * as _ from "lodash"
+import { isString } from "lodash"
+let _ = { isString }
 import ioMixin from "./ds-io.mixin.js"
 
 export default {

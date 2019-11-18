@@ -1,16 +1,14 @@
 <template>
   <div class="mb-1" :style="(display) ? 'border:1px solid #dedede;  background:white;' : '' ">
-    <component v-if="config && !disabled" :is="config.question.type[(production) ? 'production' : 'design']" :config="config" :options="options" :answer="answer" :stat="stat" @init="onInitChild" @update:options="onOptionsUpdate" @update:answer="onAnswerUpdate" @extend:options="onOptionsExtend"></component>
-    <div v-else class="pa-3 warning--text font-weight-light subheading">
-      Cannot display question. Swith to design mode and fix form.
-    </div>
+    <component ref="content" v-show="config && !disabled" :is="config.question.type[(production) ? 'production' : 'design']" :config="config" :options="options" :answer="answer" :stat="stat" @init="onInitChild" @update:options="onOptionsUpdate" @update:answer="onAnswerUpdate" @extend:options="onOptionsExtend"></component>
   </div>
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import components from "./parts/index.js"
-import * as _ from "lodash"
+import { find, isFunction } from "lodash"
+
 export default {
 
   name: "question-widget",
@@ -75,8 +73,12 @@ export default {
       event: "question-set-options",
       callback: (questions) => {
         // console.log("SET OPTIONS", this.config.id)
-        let founded = _.find(questions, q => q.id == this.config.id)
+        let founded = find(questions, q => q.id == this.config.id)
         this.options = (founded) ? founded.options : this.config.question.options
+        if(this.$refs.content)
+          if(this.$refs.content.onSetOptions) this.$nextTick( () => {
+            if (this.$refs.content && isFunction(this.$refs.content.onSetOptions)) this.$refs.content.onSetOptions(this.options)
+          })  
         // console.log(this.options)
       },
       rule: () => true
@@ -86,7 +88,7 @@ export default {
       event: "question-set-stat",
       callback: (stat) => {
         // console.log("SET STAT")
-        let founded = _.find(stat.questions, q => q.id == this.config.id)
+        let founded = find(stat.questions, q => q.id == this.config.id)
         // if (!this.stat){
         this.stat = (founded) ? JSON.parse(JSON.stringify(founded)) : null
         // console.log("SET STAT",this.config.id, this.stat)  
@@ -100,7 +102,7 @@ export default {
 
       callback: (answers) => {
         // console.log("set answer", this.config.id, answers.map(a=>a.id))
-        let founded = _.find(answers, a => a.id == this.config.id)
+        let founded = find(answers, a => a.id == this.config.id)
         // console.log("Founded", JSON.stringify(founded,null,"\t"))
         this.answer = (founded) ?
           founded : {

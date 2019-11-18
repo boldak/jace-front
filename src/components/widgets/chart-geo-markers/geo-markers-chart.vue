@@ -1,7 +1,9 @@
 <script>
 import getGeoJson from "./maps.js";
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
-import  * as _ from "lodash"
+import  { extend, flattenDeep, min, max } from "lodash"
+
+
 import echarts from "echarts/dist/echarts-en"
 export default {
 
@@ -15,14 +17,14 @@ export default {
     chartOptions() {
 
       if (!this.options) return
-      let res = _.extend({}, this.options);
+      let res = extend({}, this.options);
 
       res.series.forEach(s => {
         if (s.type == "scatter" && s.coordinateSystem == "geo")
           s.label.normal.formatter = d => `${d.data[3]} ${(Number.isNaN(d.data[2])) ? '' : ': '+d.data[2]}`
       })
 
-      let boundedPoints = _.flattenDeep(res.series
+      let boundedPoints = flattenDeep(res.series
         .filter(s => s.type == "scatter" && s.coordinateSystem == "geo")
         .map(s => s.data.map(p => ({ x: p[0], y: p[1] })))
       )
@@ -30,12 +32,12 @@ export default {
       if (boundedPoints.length > 1) {
         res.geo.boundingCoords = [
           [
-            _.min(boundedPoints.map(d => d.x)),
-            _.min(boundedPoints.map(d => d.y))
+            min(boundedPoints.map(d => d.x)),
+            min(boundedPoints.map(d => d.y))
           ],
           [
-            _.max(boundedPoints.map(d => d.x)),
-            _.max(boundedPoints.map(d => d.y))
+            max(boundedPoints.map(d => d.x)),
+            max(boundedPoints.map(d => d.y))
 
           ]
         ]
@@ -55,12 +57,12 @@ export default {
       if (boundedPoints.length == 1) {
         res.geo.boundingCoords = [
           [
-            _.min(boundedPoints.map(d => d.x)) - 1,
-            _.min(boundedPoints.map(d => d.y)) - 1
+            min(boundedPoints.map(d => d.x)) - 1,
+            min(boundedPoints.map(d => d.y)) - 1
           ],
           [
-            _.max(boundedPoints.map(d => d.x)) + 1,
-            _.max(boundedPoints.map(d => d.y)) + 1
+            max(boundedPoints.map(d => d.x)) + 1,
+            max(boundedPoints.map(d => d.y)) + 1
           ]
         ]
       }
@@ -74,7 +76,7 @@ export default {
           }
           if (s.symbolSizeRange)
             s.symbolSize = data => {
-              let v = (_.max(s.symbolSizeRange) - _.min(s.symbolSizeRange)) * (data[2] - this.valueRange.min) / (this.valueRange.max - this.valueRange.min + 0.0000000001) + _.min(s.symbolSizeRange)
+              let v = (max(s.symbolSizeRange) - min(s.symbolSizeRange)) * (data[2] - this.valueRange.min) / (this.valueRange.max - this.valueRange.min + 0.0000000001) + min(s.symbolSizeRange)
               return v
             }
         } else {
@@ -126,7 +128,7 @@ export default {
 
       // data = data || []
 
-      const tempOptions = _.extend(_.extend({}, options), data);
+      const tempOptions = extend(extend({}, options), data);
 
       let map = getGeoJson(this.config.options.map.scope, this.config.options.map.locale);
 
@@ -137,13 +139,13 @@ export default {
       let series = tempOptions.series
         .filter(s => s.type == "scatter" && s.coordinateSystem == "geo")
         .map(s => ({
-          min: _.min(s.data.map(v => v[2])),
-          max: _.max(s.data.map(v => v[2])),
+          min: min(s.data.map(v => v[2])),
+          max: max(s.data.map(v => v[2])),
         }))
 
       this.valueRange = {
-        min: _.min(series.map(s => s.min)),
-        max: _.max(series.map(s => s.max))
+        min: min(series.map(s => s.min)),
+        max: max(series.map(s => s.max))
       }
 
       if (tempOptions.colorScale) {
@@ -155,7 +157,7 @@ export default {
         tempOptions.visualMap = undefined
       }
 
-      this.options = _.extend({}, tempOptions);
+      this.options = extend({}, tempOptions);
       // console.log("options",this.options)
 
 

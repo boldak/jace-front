@@ -8,7 +8,8 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import DataSelectorConfigDialog from "./data-selector-config.vue";
-import * as _ from "lodash"
+import { isArray, sortBy, includes, findIndex } from "lodash"
+
 export default {
 
   props: ["config"],
@@ -47,7 +48,7 @@ export default {
     },
 
     filter(item, queryText) {
-      return _.includes(item.title.toLowerCase(), queryText.toLowerCase())
+      return includes(item.title.toLowerCase(), queryText.toLowerCase())
     },
 
     text(item) {
@@ -68,12 +69,12 @@ export default {
       if (!value) return
       // if (value.length == 0) return
       let res = {
-        selection: _.sortBy(
+        selection: sortBy(
           this.items.map(item => {
-            item.index = _.findIndex((_.isArray(value) ? value : [value]), t => t == item)
+            item.index = findIndex((isArray(value) ? value : [value]), t => t == item)
             return {
               entity: item,
-              selected: (_.findIndex((_.isArray(value) ? value : [value]), t => t == item) >= 0)
+              selected: (findIndex((isArray(value) ? value : [value]), t => t == item) >= 0)
             }
           }),
           d => d.entity.index

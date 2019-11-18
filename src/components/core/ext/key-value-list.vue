@@ -43,7 +43,7 @@
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-import * as _ from "lodash"
+import { extend, toPairs } from "lodash"
 
 export default {
 
@@ -81,18 +81,18 @@ export default {
       setTimeout(() => {
 
         if (this.unique(this.key_) != true || this.required(this.key_) != true) return
-        let updated = _.extend({}, this.object[this.editedItem.key])
+        let updated = extend({}, this.object[this.editedItem.key])
         updated[this.value] = this.value_
         delete this.object[this.editedItem.key]
         this.object[this.key_] = updated
-        this.items = _.toPairs(this.object).map(d => ({ key: d[0], value: d[1][this.value] }))
+        this.items = toPairs(this.object).map(d => ({ key: d[0], value: d[1][this.value] }))
 
       }, 0)
     }
 
   },
   created() {
-    this.items = _.toPairs(this.object).map(d => ({ key: d[0], value: ((this.value) ? d[1][this.value] : d[1]) }))
+    this.items = toPairs(this.object).map(d => ({ key: d[0], value: ((this.value) ? d[1][this.value] : d[1]) }))
   }
 
 }

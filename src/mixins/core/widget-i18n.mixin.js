@@ -1,4 +1,4 @@
-import * as _ from "lodash"
+import { mapKeys } from "lodash"
 
 export default {
   methods: {
@@ -12,8 +12,8 @@ export default {
       this.$i18n_id = this.$djvue.randomName()
 
       let messages = {
-        en: _.mapKeys(this.i18n.en, (value, key) => `${this.id}_${key}`),
-        uk: _.mapKeys(this.i18n.uk, (value, key) => `${this.id}_${key}`)
+        en: mapKeys(this.i18n.en, (value, key) => `${this.id}_${key}`),
+        uk: mapKeys(this.i18n.uk, (value, key) => `${this.id}_${key}`)
       };
 
       this.$i18n.mergeLocaleMessage("en", messages.en);

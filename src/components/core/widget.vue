@@ -1,4 +1,5 @@
 <template>
+  <<< if( jace.mode == "development") { >>>
   <v-card :class="{widget:!isProductionMode}" ma-1 flat style="background:transparent;">
     <v-toolbar dark flat height="32px" :color="(!data.message)?'primary darken-1':'error'" v-if="!isProductionMode">
       <v-tooltip top>
@@ -40,14 +41,40 @@
           
       </component>
   </v-card>
+  <<< } else { >>>
+  <v-card  ma-1 flat style="background:transparent;">
+      <component  
+        v-if="config.type" 
+        :style="'width:100%;'+((hidden)?'display:none;' : '')" 
+        :is="config.type" 
+        ref="instance" 
+        :config="config" 
+        @init="onInit">
+      </component>
+  </v-card>
+  <<< } >>>
 </template>
 <script>
 
 // import requiredWidgets from "@/components/core/widget-loader.js"
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import widgetMixin from "@/mixins/core/widget.mixin.js";
-import components from "@/components/widgets"
-import * as _ from "lodash"
+
+<<< if(jace.mode == "development") { >>>
+  import components from "@/components/widgets"
+<<< } >>>
+
+import { find } from "lodash"
+
+
+<<< 
+  if(jace.mode == "publication"){
+      let components = require(jace.resolve("../widgets/widgets.js"))
+      jace.insert(
+        "let components = { \n" + jace.types().map( w => `"${w}" : () => import("${components[w]}")`).join(",\n")+"\n}\n"
+      )  
+  }
+>>>
 // let components = requiredWidgets();
 
 // console.log(components)
@@ -72,12 +99,13 @@ export default {
 
   computed: {
     globalConfig() {
-     return _.find(this.app.currentPage.holders[this.holder].widgets, (item) => item.id == this.config.id)
+     return find(this.app.currentPage.holders[this.holder].widgets, (item) => item.id == this.config.id)
     }
   },
 
   methods: {
 
+    <<< if (jace.mode == "development") {>>>
     configure() {
       this.$eventHub.emit("widget-reconfigure", this)
     },
@@ -89,6 +117,7 @@ export default {
     deleteWidget() {
       this.$eventHub.emit("widget-delete", this)
     },
+    <<< } >>>
 
     onInit(){
       this._updateConfig();

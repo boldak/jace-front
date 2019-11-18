@@ -1,4 +1,6 @@
 <template>
+  <<< if( jace.mode == "development") { >>>
+
    <v-container fluid class="pa-1" v-show="!isProductionMode">
 
     <v-layout wrap v-if="!isProductionMode">
@@ -21,20 +23,28 @@
         </v-btn>  
      </v-layout>  
    
-  </v-container>  
+  </v-container>
+
+  <<<  } else { >>>
+    <div></div>
+  <<< } >>>
 </template>
 
 <script>
 
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
+
+<<< if( jace.mode == "development") { >>>  
+  
   import editor from '@/components/core/ext/ace-editor.vue';
+
+<<< } >>>
 
   import * as _ from "lodash"
   import moment from "moment"
   // import * as Cookie from "tiny-cookie"
 
-  var  components = {editor};
   
   class MediatorError extends Error {
     constructor(message) {
@@ -49,7 +59,11 @@
 
     icon: "mdi-language-javascript",
 
-    components,
+<<< if( jace.mode == "development") { >>>  
+
+    components:{editor},
+
+<<< } >>>
 
     mixins:[djvueMixin, listenerMixin],
 

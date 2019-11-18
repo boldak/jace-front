@@ -61,7 +61,9 @@
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-import * as _ from "lodash"
+
+import { toPairs, union, find } from "lodash"
+
 
 let i18n = {
   en: {
@@ -109,7 +111,7 @@ export default {
 
   methods: {
 
-    saveKey(item){
+    saveKey(){
         setTimeout(() => {
         if (this.unique(this.editedItem.key) != true) {
           this.editedItem.key = this.editedItem._key
@@ -153,17 +155,17 @@ export default {
     },
 
     i18n2Translations(i18n) {
-      let en = _.toPairs(i18n.en).map(l => ({ key: l[0], en: l[1] })) //.filter( t => !t.key.startsWith(this.$i18n_id))
-      let uk = _.toPairs(i18n.uk).map(l => ({ key: l[0], uk: l[1] })) //.filter( t => !t.key.startsWith(this.$i18n_id))
+      let en = toPairs(i18n.en).map(l => ({ key: l[0], en: l[1] })) //.filter( t => !t.key.startsWith(this.$i18n_id))
+      let uk = toPairs(i18n.uk).map(l => ({ key: l[0], uk: l[1] })) //.filter( t => !t.key.startsWith(this.$i18n_id))
 
-      let res = _.union(
+      let res = union(
         en.map(r => r.key),
         uk.map(r => r.key)
       )
 
       res = res.map(item => {
-        let e = _.find(en, r => r.key == item)
-        let u = _.find(uk, r => r.key == item)
+        let e = find(en, r => r.key == item)
+        let u = find(uk, r => r.key == item)
         return {
           id: this.$djvue.randomName(),
           key: item,

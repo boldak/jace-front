@@ -1,84 +1,87 @@
 <template>
   <div class="app" v-show="started">
-   
-
     <v-app>
-      <v-speed-dial v-model="fab" bottom right direction="top" fixed transition="scale-transition">
-        <template v-slot:activator>
-          <v-btn v-model="fab" :color="(!isNeedSave)?'primary lighten-1':'warning'" dark fab>
-            <v-icon v-if="fab">mdi-close</v-icon>
-            <v-icon v-else>mdi-menu</v-icon>
-          </v-btn>
-        </template>
-        <v-tooltip left>
-          <template v-slot:activator="{ on }">
-            <v-btn fab dark small v-on="on" color="primary" @click="switchMode()">
-              <v-icon :class="(isProductionMode) ? 'mdi-flip-h':''">mdi-exit-to-app</v-icon>
-            </v-btn>
-          </template>
-          <span>Switch to {{ (isProductionMode) ? 'DESIGN' : "PRODUCTION"}} mode</span>
-        </v-tooltip>
-        <v-tooltip left>
-          <template v-slot:activator="{ on }">
-            <v-btn fab dark small color="primary" v-on="on" v-if="!isProductionMode" @click="openSettingsDialog()">
-              <v-icon>mdi-settings</v-icon>
-            </v-btn>
-          </template>
-          <span>App Settings...</span>
-        </v-tooltip>
-        <v-tooltip left>
-          <template v-slot:activator="{ on }">
-            <v-btn fab dark small v-if="isNeedSave" color="warning" v-on="on" @click="saveAppConfig()">
-              <v-icon>mdi-content-save-outline</v-icon>
-            </v-btn>
-          </template>
-          <span>Save App is required</span>
-        </v-tooltip>
-        <v-menu open-on-hover left offset-y top>
-          <template v-slot:activator="{ on: menu }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: tooltip }">
-                <v-btn fab dark small v-if="!isProductionMode" color="primary" v-on="{ ...tooltip, ...menu }">
-                  <v-icon>mdi-view-grid</v-icon>
+      <<< if( jace.mode=="development" ) {>>>
+        <div class="caption secondary white--text px-2" style="text-align:right">
+          <span class="font-weight-bold"> JACE DEV SERVICE </span>
+          <span class="font-weight-light"> {{$resolveUrl('')}} </span>
+        </div>
+        <<< }>>>
+
+         <<< if( jace.mode=="development" ) {>>>
+          <v-speed-dial v-if="availableDesignMode" v-model="fab" bottom right direction="top" fixed transition="scale-transition">
+            <template v-slot:activator>
+              <v-btn v-model="fab" :color="(!isNeedSave)?'primary lighten-1':'warning'" dark fab>
+                <v-icon v-if="fab">mdi-close</v-icon>
+                <v-icon v-else>mdi-menu</v-icon>
+              </v-btn>
+            </template>
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn fab dark small v-on="on" color="primary" @click="switchMode()">
+                  <v-icon :class="(isProductionMode) ? 'mdi-flip-h':''">mdi-exit-to-app</v-icon>
                 </v-btn>
               </template>
-              <span>Goto Page...</span>
+              <span>Switch to {{ (isProductionMode) ? 'DESIGN' : "PRODUCTION"}} mode</span>
             </v-tooltip>
-          </template>
-          <v-subheader class="primary white--text ma-0 py-2">PAGES</v-subheader>
-          <v-list dence>
-            <v-list-item-content>
-              <v-list-item v-for="(item, index) in app.pages" :key="index" @click="gotoPage(item)" style="min-height:0 !important">
-                <v-list-item-title class="subtitle-2 py-1" :class="(isCurrentPage(item))?'primary--text':'font-weight-light'"> {{item.title}}</v-list-item-title>
-              </v-list-item>
-            </v-list-item-content>
-          </v-list>
-        </v-menu>
-      </v-speed-dial>
-
-      <v-content>
-        <div>
-          <holder name="AppHeader" type="skin"></holder>
-          <router-view></router-view>
-          <holder name="AppFooter" type="skin"></holder>
-        </div>
-      </v-content>
-      <dialog-manager></dialog-manager>
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn fab dark small color="primary" v-on="on" v-if="!isProductionMode" @click="openSettingsDialog()">
+                  <v-icon>mdi-settings</v-icon>
+                </v-btn>
+              </template>
+              <span>App Settings...</span>
+            </v-tooltip>
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn fab dark small v-if="isNeedSave" color="warning" v-on="on" @click="saveAppConfig()">
+                  <v-icon>mdi-content-save-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>Save App is required</span>
+            </v-tooltip>
+            <v-menu open-on-hover left offset-y top>
+              <template v-slot:activator="{ on: menu }">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on: tooltip }">
+                    <v-btn fab dark small v-if="!isProductionMode" color="primary" v-on="{ ...tooltip, ...menu }">
+                      <v-icon>mdi-view-grid</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Goto Page...</span>
+                </v-tooltip>
+              </template>
+              <v-subheader class="primary white--text ma-0 py-2">PAGES</v-subheader>
+              <v-list dence>
+                <v-list-item-content>
+                  <v-list-item v-for="(item, index) in app.pages" :key="index" @click="gotoPage(item)" style="min-height:0 !important">
+                    <v-list-item-title class="subtitle-2 py-1" :class="(isCurrentPage(item))?'primary--text':'font-weight-light'"> {{item.title}}</v-list-item-title>
+                  </v-list-item>
+                </v-list-item-content>
+              </v-list>
+            </v-menu>
+          </v-speed-dial>
+        <<< } >>>  
+          <v-content>
+            <div>
+              <holder name="AppHeader" type="skin"></holder>
+              <router-view></router-view>
+              <holder name="AppFooter" type="skin"></holder>
+            </div>
+          </v-content>
+          <dialog-manager></dialog-manager>
     </v-app>
   </div>
 </template>
-
 <script>
-
-
-
-
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 import holder from "@/components/core/holder.vue"
 import dialogManager from "@/components/core/ext/dialog-manager"
-import settingsDialog from "@/components/dialogs/config/settings-dialog.vue"
-import * as _ from "lodash"
+ <<< if( jace.mode=="development" ) {>>>
+  import settingsDialog from "@/components/dialogs/config/settings-dialog.vue"
+ <<< } >>> 
+// import * as _ from "lodash"
 
 let components = {
   holder,
@@ -108,6 +111,10 @@ export default {
   computed: {
     startMessage() {
       return `${this.app.title}/${ (this.app.currentPage) ? this.app.currentPage.title : "" }`
+    },
+
+    availableDesignMode(){
+      return (this.user.isAdmin || this.user.isCollaborator || this.user.isOwner) && this.user.isLoggedIn
     }
   },
 
@@ -126,55 +133,56 @@ export default {
       this.$djvue.login()
     },
 
+     <<< if( jace.mode=="development" ) {>>>
+    openSettingsDialog() {
+      this.$dialogManager.showAndWait(settingsDialog, { width: "90%" })
+        .then(() => {
+          this.setNeedSave(true)
+        })
+    },
+    <<< } >>>
 
-        openSettingsDialog() {
-          this.$dialogManager.showAndWait(settingsDialog, { width: "90%" })
-            .then(() => {
-              this.setNeedSave(true)
-            })
-        },
+    getPageInfo(page) {
+      if (!page) return {}
+      if (!this.app.currentPage) return {}
 
-        getPageInfo(page) {
-          if (!page) return {}
-          if (!this.app.currentPage) return {}
+      return {
+        title: page.title,
+        path: (page.id) ? '/' + page.id : '/',
+        current: page.id == this.app.currentPage.id
+      }
+    },
 
-          return {
-            title: page.title,
-            path: (page.id) ? '/' + page.id : '/',
-            current: page.id == this.app.currentPage.id
-          }
-        },
-
-        loadAppList() {
-          this.$portal
-            .get('api/app/get-list')
-            .then(() => {})
-        },
+    loadAppList() {
+      this.$portal
+        .get('api/app/get-list')
+        .then(() => {})
+    },
 
 
-        switchMode() {
+    switchMode() {
 
-          this.started = false
-          if (this.app.mode == 'production') {
-            this.setMode('development')
-            // eslint-disable-next-line
-            this.$cookie.set(window.__application_Mode_Key, "development")
-            if (this.startedMode && this.startedMode == "production") {
-              this.fullReload();
-            } else {
-              
-              this.emit("layout-page-start", this)
-            }
-          } else {
-            this.setMode('production')
-            // eslint-disable-next-line
-            this.$cookie.set(window.__application_Mode_Key, "production")
-            
-            this.emit("layout-page-start", this)
+      this.started = false
+      if (this.app.mode == 'production') {
+        this.setMode('development')
+        // eslint-disable-next-line
+        this.$cookie.set(window.__application_Mode_Key, "development")
+        if (this.startedMode && this.startedMode == "production") {
+          this.fullReload();
+        } else {
 
-          }
+          this.emit("layout-page-start", this)
+        }
+      } else {
+        this.setMode('production')
+        // eslint-disable-next-line
+        this.$cookie.set(window.__application_Mode_Key, "production")
 
-        },
+        this.emit("layout-page-start", this)
+
+      }
+
+    },
 
 
 
@@ -195,12 +203,18 @@ export default {
 
 
 
-    this.$socket.on("info", (socketID) => {
-      this.$socket.emit("init", socketID + " " + window.location.href)
-    })
+    <<< if (jace.availablePublishing) { >>>
+
+      this.$socket.on("info", (socketID) => {
+          this.$socket.emit("init", socketID + " " + window.location.href)
+        })
+
+    <<< } >>>
 
 
-    if (!this.$cookie.get(window.__application_Mode_Key)) {
+
+
+    if ( !this.$cookie.get(window.__application_Mode_Key) || !this.availableDesignMode ){
       this.$cookie.set(window.__application_Mode_Key, "production")
     } else {
       this.setMode(this.$cookie.get(window.__application_Mode_Key))
@@ -208,10 +222,15 @@ export default {
 
     this.startedMode = (this.isProductionMode) ? "production" : "development"
     window.console.log(`DjVue App starts on ${this.startedMode} mode`)
-   
+
 
     if (this.app.config.theme) {
-      this.$vuetify.theme.themes.light = _.extend(this.$vuetify.theme.themes.light, this.app.config.theme)
+      this.$vuetify.theme.themes.light = {
+       ...this.$vuetify.theme.themes.light,
+       ...this.app.config.theme 
+      }
+      
+      // _.extend(this.$vuetify.theme.themes.light, this.app.config.theme)
     }
 
 
@@ -220,7 +239,7 @@ export default {
       callback: () => {
         this.started = true;
 
-        
+
         if (this.app.mode == "development") {
           this.splash({ text: `${this.startMessage} starts in development mode.` })
         }
@@ -245,6 +264,5 @@ export default {
 
 
 }
-
 
 </script>
