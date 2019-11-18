@@ -2,42 +2,37 @@ const RuleSet = require('webpack/lib/RuleSet')
 const jaceCompile = require("./jace-compiler")
 
 class JaceLoaderPlugin {
+  
   constructor (options) {
     this.options = options
   }
 
   apply (compiler) {
 
+  compiler.plugin('compilation', (compilation) => {
+    compilation.plugin(
+      'html-webpack-plugin-before-html-processing',
+        data => {
+          data.html = jaceCompile(data.html, this.options)
+          return data  
+        }
+      )
+  })
 
-    compiler.plugin('compilation', (compilation) => {
-      compilation.plugin(
-        'html-webpack-plugin-before-html-processing',
-          data => {
-            data.html = jaceCompile(data.html, this.options)
-            return data  
-          }
-        )
-    })
-
-
-	
-    // use webpack's RuleSet utility to normalize user rules
-    const rawRules = compiler.options.module.rules
-    const { rules } = new RuleSet(rawRules)
+  // use webpack's RuleSet utility to normalize user rules
+  const rawRules = compiler.options.module.rules
+  const { rules } = new RuleSet(rawRules)
   
-	rules.forEach( rule => {
-      if(rule.use && rule.use.find(u => (u.loader === 'cache-loader' || u.loader === 'babel-loader' || u.loader === 'eslint-loader'))){
-          rule.use.push({  
-            loader: require.resolve('./parser'),
-            options: this.options
-          })
-      }
-    })
+	rules.forEach(rule => {
+    if (rule.use && rule.use.find(u => (u.loader === 'cache-loader' || u.loader === 'babel-loader' || u.loader === 'eslint-loader'))) {
+      rule.use.push({
+        loader: require.resolve('./parser'),
+        options: this.options
+      })
+    }
+  })
 
-
-    compiler.options.module.rules = rules
-    
-
+  compiler.options.module.rules = rules
 
   }
 }
