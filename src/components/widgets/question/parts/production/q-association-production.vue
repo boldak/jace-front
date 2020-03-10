@@ -143,6 +143,10 @@ export default {
   },
 
   methods: {
+    
+    // onSlideStart(wrapper){
+    //   this.$forceUpdate()
+    // },
 
     onSetValue(event, e1, e2) {
       this.selection = { e1, e2 }

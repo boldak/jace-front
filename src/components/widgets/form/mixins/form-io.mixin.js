@@ -727,7 +727,7 @@ export default {
             }
           }).then( res => {
             if(res.type == "error") {
-              reject()
+              reject(res.data)
             } else {
               resolve(res.data)
             }  

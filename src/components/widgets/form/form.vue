@@ -86,7 +86,7 @@ import formIoMixin from "./mixins/form-io.mixin.js"
 import formAccessMixin from "./mixins/form-access.mixin.js"
 import components from "./parts/index.js"
 import moment from "moment"
-import { findIndex, isNumber, isUndefined, toPairs, max } from "lodash"
+import { findIndex, isNumber, isUndefined, toPairs, max, flattenDeep } from "lodash"
 
 
 
@@ -124,13 +124,31 @@ export default {
 
       this.loadForm(this.config.form)
         .then(this.initiateForm)
+        .catch( e => {
+          console.error(e.toString())
+        })
+    },
+
+    onLayoutStart(){
+      this.loadForm(this.config.form)
+        .then((form) => {
+          this.initiateForm(form)
+        })
+        .catch( e => {
+          console.error(e.toString())
+        })
+
     },
 
     onSaveAppConfig() {
       this.loading = true
-      this.updateForm(this.form).then(() => {
-        this.loading = false
-      })
+      this.updateForm(this.form)
+        .then(() => {
+          this.loading = false
+        })
+        .catch( e => {
+          console.error(e.toString())
+        })
     },
 
     submitForm() {
@@ -144,12 +162,18 @@ export default {
                 this.setNeedSave(false);
               })
           })
+          .catch( e => {
+            console.error(e.toString())
+          })
       } else {
         this.updateAnswer(this.answer)
           .then(() => {
             this.needExtendForm = false;
             this.needUpdateAnswer = false;
             this.setNeedSave(false);
+          })
+          .catch( e => {
+            console.error(e.toString())
           })
       }
     },
@@ -209,7 +233,7 @@ export default {
 
       this.updateForm(this.form).then(() => {
         this.loading = false
-        this.setNeedSave(false)
+        this.setNeedSave(true)
       })
     },
 
@@ -327,16 +351,64 @@ export default {
               }
             }]
           }
-
+          return true
           
         })
-        .catch(() => {
+        .catch((e) => {
           this.chartOptions = {}
+          console.error("Cannot load statistic ", e)
         })
 
     },
 
     initiateForm(form) {
+
+      if(!form) {
+        if (!this.isProductionMode) {
+          this.$djvue.warning({
+            type: "warning",
+            title: "Form is imported from another JACE service",
+            text: `The form for this application will be created`
+          })
+          .then( () => {
+            
+            this.p = this.progress({
+                text:"", 
+                maxStage:5, 
+                title:"Recreate Form"
+            })
+
+            this.createFormRequest()
+              .then(res => {
+                this.p.set({text:"Scan widgets in current page"})
+                this.config.form = res.id
+                res.config.questions = flattenDeep(toPairs(this.app.currentPage.holders).map( d => d[1].widgets))
+                    .filter( d => d.type == "question-widget")
+                    .map( d => ({
+                      id:d.id,
+                      options: d.question.options
+                    }))
+                this.p.set({text:"Syncronize Form with JACE service"})
+                this.updateForm(res).then(() => {
+                  this.p.set({text:"Initiate Form on current page"})
+                  this.initiateForm(res)
+                  this.p.set({text:"Form ready for use"})
+                  setTimeout(() => {
+                    this.p.cancel()
+                    this.setNeedSave(true)
+                  }, 800)
+                })   
+              })
+            return
+          })
+        } else {
+          this.$djvue.warning({
+            type: "error",
+            title: "Application is corrupted"
+          })
+        }
+        return          
+      }
 
       if (!form.metadata.app_url.value.startsWith(window.location.origin + window.location.pathname)) {
 
@@ -445,7 +517,6 @@ export default {
           .then(res => {
 
             this.answer = res;
-
             this.emit("question-set-answers", this.answer.data)
             this.emit("answer-update", this.answer.data)
           })
@@ -495,8 +566,6 @@ export default {
 
   created() {
 
-    // console.log("QUERY STRING", this.getQueryString())
-
     if (!this.config.form) {
       this.createFormRequest()
         .then(res => {
@@ -526,6 +595,7 @@ export default {
     this.on({
       event: "form-response",
       callback: () => {
+        if(!this.answer) return
         this.emit("form-update", this.form)
         this.emit("answer-update", this.answer)
       },
@@ -581,6 +651,8 @@ export default {
     this.on({
       event: "form-update-answer",
       callback: (answer) => {
+        // console.log("UPDATE",this._uid, this.answer, answer)
+        if(!this.answer) return
         let index = findIndex(this.answer.data, a => a.id == answer.id)
         if (index >= 0) {
           this.answer.data.splice(index, 1, answer)
@@ -598,6 +670,7 @@ export default {
     this.on({
       event: "form-extend",
       callback: () => {
+        if(!this.answer) return
         this.needExtendForm = true;
         this.needUpdateAnswer = true;
         this.setNeedSave(true)
@@ -609,6 +682,7 @@ export default {
       event: "form-get-stat",
       callback: () => {
         // console.log("getStatEvent")
+        if(!this.answer) return
         if (!this.stat) {
           this.loadStatistic()
         } else {
@@ -632,7 +706,8 @@ export default {
     needExtendForm: false,
     needUpdateAnswer: false,
     stat: null,
-    chartOptions: null
+    chartOptions: null,
+    p: null
   })
 
 }

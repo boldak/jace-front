@@ -88,15 +88,17 @@
           try {
             this._runScript()
             resolve()
-          } catch(e) {
-            reject(e)
+          } catch (e) {
+            reject(`Mediator ${this.config.id} : ${e.toString()}`)
           }
         })
       },
 
       _runScript () {
 
-        window.console.log(`Run script ${this.config.id}`,this)
+        window.console.log(`Run script ${this.config.id}
+${this.config.data.script}
+`)
 
         this.api = {
           selectWidgets: (filter) => {

@@ -43,7 +43,14 @@ export default {
 
     onOptionsExtend() {
       this.emit("form-extend")
+    },
+
+    onSlideStart(wrapper){
+      if(this.$refs.content && this.$refs.content.onSlideStart) this.$refs.content.onSlideStart(wrapper)
+      // this.$forceUpdate()
+    
     }
+
 
   },
 
@@ -54,6 +61,7 @@ export default {
     options: null,
     answer: null,
     stat: null,
+    allStat:null,
     display: false,
     disabled: false
   }),
@@ -88,7 +96,8 @@ export default {
       event: "question-set-stat",
       callback: (stat) => {
         // console.log("SET STAT")
-        let founded = find(stat.questions, q => q.id == this.config.id)
+        this.allStat = stat
+        let founded = find(this.allStat.questions, q => q.id == this.config.id)
         // if (!this.stat){
         this.stat = (founded) ? JSON.parse(JSON.stringify(founded)) : null
         // console.log("SET STAT",this.config.id, this.stat)  

@@ -74,7 +74,7 @@
       tile
       color = "transparent"
       v-else
-      v-show = "completed" 
+      :style="`visibility:${(completed)? 'visible' : 'hidden' }`"
     >
     <v-card tile>
     <v-window v-model="slide">
@@ -126,7 +126,7 @@
       right
       small
       @click="next"
-      :style="`position: absolute; left:${windowWidth+2}px; top:${windowHeight/2-20}px; opacity:0.5;`"
+      :style="`position: absolute; left:${windowWidth-52}px; top:${windowHeight/2-20}px; opacity:0.5;`"
     >
       <v-icon>mdi-chevron-right</v-icon>
     </v-btn>
@@ -180,9 +180,9 @@
 </template>
 <script>
 
-import { find, sum, max, isArray, flatten, findIndex } from "lodash"
-
+import { find, sum, max, isArray, flatten, findIndex, isUndefined } from "lodash"
 import layoutMixin from "@/mixins/core/layout.mixin.js"
+
 
 export default {
 
@@ -226,11 +226,18 @@ export default {
     this.on({
       event:"page-start",
       callback: () => {
-        this.completed = true
         this.$nextTick( () => {
-          let el = document.getElementById("slider")
-          this.windowWidth = (el) ? el.clientWidth : 0
+          // let el = document.getElementById("slider")
+          this.windowWidth = this.$el.clientWidth // (el) ? el.clientWidth : 0
         })
+      },
+      rules: () => true
+    })
+
+    this.on({
+      event:"switch-mode",
+      callback: () => {
+        this.fullReload()
       },
       rules: () => true
     })
@@ -238,16 +245,13 @@ export default {
   },
 
   mounted(){
-    
-    this.app.currentPage.sections.forEach( (s, index) => {
-      this.$nextTick(() => {this.slide = index})
-    })
-    this.$nextTick(() => {this.slide = 0})
+    // this.initiateLayout(0)
     if (window.attachEvent) {
         window.attachEvent('onresize', this.resizeHandler);
       } else {
         window.addEventListener('resize', this.resizeHandler);
       }
+    
     this.emit("layout-page-start", this) 
    
   },
@@ -266,9 +270,34 @@ export default {
 
   methods: {
 
+  beforeLayoutStart(){
+    this.initiateLayout(0)
+  }, 
+  
+  initiateLayout(slide){
+    slide = (isUndefined(slide))? 0 : slide
+    
+    if( slide < this.app.currentPage.sections.length){
+      this.$nextTick(()=>{
+        this.slide = slide
+       
+        this.$nextTick(()=>{
+          this.initiateLayout(slide+1)
+        })
+      })
+    } else {
+      this.$nextTick(()=>{
+        this.slide = 0
+        this.completed = true
+       
+      })
+    }
+  },  
+
+  
   resizeHandler(){
     this.windowHeight = window.innerHeight-100
-    this.windowWidth = document.getElementById("slider").clientWidth
+    this.windowWidth = this.$el.clientWidth //document.getElementById("slider").clientWidth
   },
 
   next () {
@@ -400,7 +429,12 @@ export default {
         this.setNeedSave(true) 
       },
       deep: true
+    },
+
+    slide(){
+      this.emit("slide-start")
     }
+
   },
 
   

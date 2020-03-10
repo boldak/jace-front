@@ -90,6 +90,9 @@ export default {
 
   methods: {
 
+    // onSlideStart(wrapper){
+    //   this.$forceUpdate()
+    // },
 
     addAlternative() {
 

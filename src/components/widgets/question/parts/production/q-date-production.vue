@@ -57,6 +57,10 @@ export default {
 
   methods: {
 
+    // onSlideStart(wrapper){
+    //   this.$forceUpdate()
+    // },
+
     calculateStat() {
       let s = this.stat.responses.filter(a => a)
       let stats = [];

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-autocomplete v-model="selection" :items="items" :filter="filter" color="primary" :label="config.options.widget.label" :multiple="config.options.widget.multiple" :clearable="config.options.widget.multiple" v-if="source" item-text="title" :item-value="item => item" class="body-1">
+    <v-autocomplete v-model="selection" :items="items" :filter="filter" color="primary" :label="config.options.widget.label" :multiple="config.options.widget.multiple" :clearable="config.options.widget.multiple" v-if="source" item-text="title" :item-value="item => item" class="body-1" :search-input.sync="search">
     </v-autocomplete>
   </div>
 </template>
@@ -65,6 +65,7 @@ export default {
 
   watch: {
     selection(value) {
+      this.search = null
       // console.log("selection", value)
       if (!value) return
       // if (value.length == 0) return
@@ -87,7 +88,8 @@ export default {
 
   data: () => ({
     selection: [],
-    source: null
+    source: null,
+    search: null
   }),
 
 

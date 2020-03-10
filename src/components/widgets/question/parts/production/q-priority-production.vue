@@ -60,7 +60,9 @@ export default {
 
   methods: {
 
-
+    // onSlideStart(wrapper){
+    //   this.$forceUpdate()
+    // },
 
     onUpdateAnswer(value) {
       this.answer.data = JSON.parse(JSON.stringify(value))

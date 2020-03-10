@@ -5,7 +5,7 @@ import  { find } from "lodash"
 
 export default {
 
-    extends: echartWidget,
+  extends: echartWidget,
 
   name: "bar-chart-widget",
 

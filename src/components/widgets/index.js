@@ -45,6 +45,9 @@ export default {
       'geo-bubble-chart-widget': () => import("./chart-geo-bubble/geo-bubble-chart.vue"),
       'geo-markers-chart-widget': () => import( "./chart-geo-markers/geo-markers-chart.vue"),     
       'data-selector-widget': () => import("./data-selector/data-selector.vue"),
+
+      'data-legend-widget': () => import("./data-legend/data-legend.vue"),
+
       'data-keywords-widget': () => import("./data-keywords/data-keywords.vue"),
       
       'data-table-widget': () => import("./data-table/data-table.vue"),

@@ -42,6 +42,8 @@ import GeoMarkersChartWidget from "./chart-geo-markers/geo-markers-chart.type.js
 
 
 import DataSelectorWidget from "./data-selector/data-selector.type.js"
+import DataLegendWidget from "./data-legend/data-legend.type.js"
+
 import DataKeywordsWidget from "./data-keywords/data-keywords.type.js"
 import DataTableWidget from "./data-table/data-table.type.js"
 
@@ -101,6 +103,8 @@ export default {
 	
 
 	"data-selector-widget": DataSelectorWidget,
+	"data-legend-widget": DataLegendWidget,
+	
 	"data-keywords-widget": DataKeywordsWidget,
 	"data-table-widget": DataTableWidget,
 

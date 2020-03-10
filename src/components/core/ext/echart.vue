@@ -1,24 +1,75 @@
 <template>
-  <div class="echart" :style="style"></div>
+    <div class="echart" :style="style"></div>
 </template>
 <script>
+
 import echarts from "echarts/dist/echarts-en"
 
 import registerWordCloud from "@/modules/echarts-wordcloud"
 registerWordCloud(echarts)
 
+import listenerMixin from "@/mixins/core/listener.mixin.js"
+
 export default {
 
-
-
-
   name: "echart",
+
+  mixins: [listenerMixin],
 
   computed: {
     style() {
       return {
         height: (this.height || 250) + "px"
       }
+    }
+  },
+
+  methods:{
+
+    initChart(options){
+      
+      this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+      
+      this.resizeHandler = () => {
+        this.width = this.$el.clientWidth
+        this.chart.resize()
+      }  
+
+      if (window.attachEvent) {
+        window.attachEvent('onresize', this.resizeHandler);
+      } else {
+        window.addEventListener('resize', this.resizeHandler);
+      }
+
+      if (options) {
+       setTimeout(()=>{
+          this.chart.setOption(options)
+        },10)  
+      }
+
+      this.on({
+        event: "slide-start",
+        callback: () => {
+          // console.log(this._uid, "SLIDE START",this.$el.clientWidth)
+         setTimeout(()=>{
+         // this.$nextTick(()=>{ 
+            // console.log("Slide start",this._uid)
+            // if(!this.chart && this.$el.clientWidth > 0){
+            //   this.initChart(this.options)
+            //   return
+            //   console.log("Create chart", _uid)
+            //   // this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+
+            // }
+            if (this.chart && this.options)
+              // console.log("Slide start", this._uid, this.options) 
+              this.chart.setOption(this.options, true)
+              this.chart.resize()
+              // console.log(this._uid, "RESIZE",this.$el.clientWidth)
+          }, 10)   
+        },
+        rule: () => true
+      })
     }
   },
 
@@ -29,40 +80,91 @@ export default {
     options: {
       handler: function(value) {
 
-        if (value)
-          // this.$nextTick(() => {
-          this.chart.setOption(value, true)
+        if (value) {
+          // // this.$nextTick(() => {
+          // if(!this.chart && this.$el.clientWidth > 0){
+          //   this.initChart()
+          //   return
+          //   // console.log("Create chart")
+          //   // this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+          // }
+          if (this.chart) {
+            setTimeout(()=>{
+              // console.log("set options", this._uid, value)
+              this.chart.setOption(value, true)
+              this.chart.resize()
+            },10)
+            // this.chart.resize()
+          }  
         // })
-        this.chart.resize()
+        }
       },
       deep: true
     },
 
+   
     height(value) {
       // this.$nextTick(() => {
-      this.chart.resize({
-        height: value
+     // if(!this.chart && this.$el.clientWidth > 0){
+     //    this.initChart()
+     //    return
+     //    // console.log("Create chart")
+     //    // this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+     //  }
+      setTimeout(()=>{
+        this.chart.resize({
+          height: value
+        },10)
       })
+      
       // })
     }
   },
 
   mounted() {
 
-    // console.log("MOUNTED", this.options)
+    // console.log("MOUNTED", this)
+    
+    // if( this.$el.clientWidth > 0 ) {
+      this.initChart(this.options)  
+      // this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+      
+      // this.resizeHandler = () => {
+      //   this.width = this.$el.clientWidth
+      //   this.chart.resize()
+      // }  
 
-    this.chart = echarts.init(this.$el, null, { height: this.height, width: "auto" })
-    this.resizeHandler = () => this.chart.resize();
+      // if (window.attachEvent) {
+      //   window.attachEvent('onresize', this.resizeHandler);
+      // } else {
+      //   window.addEventListener('resize', this.resizeHandler);
+      // }
 
-    if (window.attachEvent) {
-      window.attachEvent('onresize', this.resizeHandler);
-    } else {
-      window.addEventListener('resize', this.resizeHandler);
-    }
+      // if (this.options) {
+      //   this.chart.setOption(this.options)
+      // }
 
-    if (this.options) {
-      this.chart.setOption(this.options)
-    }
+      // this.on({
+      //   event: "slide-start",
+      //   callback: () => {
+      //     // console.log(this._uid, "SLIDE START",this.$el.clientWidth)
+      //    setTimeout(()=>{
+      //    // this.$nextTick(()=>{ 
+      //       // console.log("Slide start",this.$el.clientWidth)
+      //       if(!this.chart && this.$el.clientWidth > 0){
+      //         // console.log("Create chart")
+      //         this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+
+      //       }
+      //       if (this.chart && this.options) 
+      //           this.chart.setOption(value, true)
+      //         // this.chart.resize()
+      //         // console.log(this._uid, "RESIZE",this.$el.clientWidth)
+      //     }, 10)   
+      //   },
+      //   rule: () => true
+      // })
+    // }  
 
   },
 
@@ -72,6 +174,7 @@ export default {
     } else {
       window.removeEventListener('resize', this.resizeHandler, false);
     }
+    this.off()
   },
 
 

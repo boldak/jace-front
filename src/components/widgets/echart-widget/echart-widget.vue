@@ -36,9 +36,14 @@ export default {
 
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(ChartConfig, { width: "90%" }, { config: widgetConfig })
-    }
+    },
     
-<<< } >>>    
+<<< } >>>
+  
+    onSlideStart(wrapper){
+      wrapper._updateConfig()
+    }
+
 
   },
 
@@ -46,7 +51,7 @@ export default {
   props: ["config"],
 
   mounted() {
-    this.$emit("init")
+    this.$emit("init")  
   }
 
 }

@@ -92,6 +92,9 @@ export default {
 
   methods: {
 
+    // onSlideStart(wrapper){
+    //   this.$forceUpdate()
+    // },
 
     addAlternative() {
       let newAlt = {

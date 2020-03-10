@@ -132,6 +132,7 @@
           return
         }
 
+        // console.log(this.config)
         this.colors = JSON.parse(JSON.stringify(this.config.options.palette.color))
         if(this.config.options.palette.isReverse) this.colors.reverse()
             

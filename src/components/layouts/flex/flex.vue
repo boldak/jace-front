@@ -81,6 +81,16 @@ export default {
 
   mixins: [layoutMixin],
 
+  created(){
+    this.on({
+      event:"switch-mode",
+      callback: () => {
+        this.fullReload()
+      },
+      rules: () => true
+    })
+  },
+
   methods: {
 
 <<< if( jace.mode == "development") { >>>

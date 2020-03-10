@@ -148,6 +148,10 @@ export default {
       this.options = tempOptions;
     },
 
+    onUpdate({ data, options }){
+      this.updateOptions({ data: this.data, options: this.config.options })
+    },
+
 
     filter(item, queryText) {
       return includes(((item.name) ? item.name.toLowerCase() : ""), ((queryText) ? queryText.toLowerCase() : ""))
@@ -159,7 +163,11 @@ export default {
       return this.$dialogManager.showAndWait(DsValueExplorerConfigDialog, { width: "80%" }, { config: widgetConfig })
     },
     
-<<< } >>>    
+<<< } >>> 
+
+    onSlideStart(wrapper){
+      wrapper._updateConfig()
+    },   
 
     // onError (error) {
     //   this.template = `<div style="color:red; font-weight:bold;">${error.toString()}</div>`;

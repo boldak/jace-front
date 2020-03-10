@@ -63,6 +63,10 @@ export default {
 
   methods: {
 
+    // onSlideStart(wrapper){
+    //   this.$forceUpdate()
+    // },
+
     calculateStat() {
       let s = this.stat.responses.filter(a => a) // &&  find(this.options.nominals, n => n.id == a[0]))
       let stats = [];

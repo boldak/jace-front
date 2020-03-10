@@ -170,14 +170,14 @@ export default {
         if (this.startedMode && this.startedMode == "production") {
           this.fullReload();
         } else {
-
+          this.emit("switch-mode", "development")
           this.emit("layout-page-start", this)
         }
       } else {
         this.setMode('production')
         // eslint-disable-next-line
         this.$cookie.set(window.__application_Mode_Key, "production")
-
+        this.emit("switch-mode", "production")
         this.emit("layout-page-start", this)
 
       }
@@ -201,9 +201,12 @@ export default {
 
   created() {
 
-
-
-    <<< if (jace.availablePublishing) { >>>
+    window.jaceApp = this
+	
+    <<< console.log(JSON.stringify(jace, null," ")) >>>
+    <<< if (jace.availablePublishing) { 
+        console.log("insert socket support")
+    >>>
 
       this.$socket.on("info", (socketID) => {
           this.$socket.emit("init", socketID + " " + window.location.href)

@@ -30,7 +30,6 @@ export default {
     methods:{
 
        onUpdate ({data, options}) {
-        
         if(!options) return
 
         data = data || {

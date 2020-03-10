@@ -23,6 +23,12 @@ import store from "@/state/index.js"
 import "@/modules/google-fonts/roboto.css"
 import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/dist/vuetify.min.css"
+
+
+// import bluebird from "bluebird"
+
+// window.Promise = bluebird
+
 // import "katex/dist/katex.min.css"
 
 

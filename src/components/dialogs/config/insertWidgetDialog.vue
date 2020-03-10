@@ -116,6 +116,8 @@ export default {
               "ds-value-explorer-widget:Value Explorer",
               // "sunburst-chart-widget:Ontology Radial",
               "data-selector-widget",
+              "data-legend-widget",
+              
               "data-keywords-widget:Keywords",
               "data-table-widget:Data Table",
               

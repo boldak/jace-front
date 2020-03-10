@@ -71,6 +71,11 @@ export default {
 
   methods: {
 
+    // onSlideStart(wrapper){
+    //   console.log("SlideStart")
+    //   this.$forceUpdate()
+    // },
+
     calculateStat() {
       let s = this.stat.responses.filter(a => a)
 
@@ -196,7 +201,9 @@ export default {
     }
   }),
 
-  mounted() { this.$emit("init") }
+  mounted() { 
+    this.$emit("init") 
+  }
 }
 
 </script>

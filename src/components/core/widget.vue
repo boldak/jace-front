@@ -30,7 +30,7 @@
         Exception
         {{data.message}}
       </pre>
-      
+     <!--  <div class="accent white--text caption">{{uid}}</div> -->
       <component  
         v-if="config.type" 
         :style="'width:100%;'+((hidden)?'display:none;' : '')" 
@@ -98,6 +98,7 @@ export default {
   },
 
   computed: {
+    uid(){ return this._uid },
     globalConfig() {
      return find(this.app.currentPage.holders[this.holder].widgets, (item) => item.id == this.config.id)
     }

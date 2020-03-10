@@ -145,6 +145,7 @@ import palettePicker from "@/components/core/ext/palette-picker.vue"
     methods:{
       onChangePalette(value){
         this.config.options.palette = value
+        console.log("CHANGE PALETTE", this.config.options)
       },
       onchangeColorSettings(value){
         this.showColorSettings = value

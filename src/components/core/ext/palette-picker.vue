@@ -13,6 +13,7 @@
       </template>
     </v-combobox>
     <v-switch label="Reverse colors" :disabled="!model" v-model="isReverse" @change="onChange" color="primary"></v-switch>
+    
   </v-layout>
 </template>
 <script>
@@ -41,8 +42,9 @@ export default {
   },
 
   created() {
-    this.isReverse = (this.value) ? this.value.isReverse : false
-    this.model = this.value
+    this.model = this.value || palettes[0]
+    this.isReverse = (this.model) ? this.model.isReverse : false
+    this.$emit("change", this.model)
    },
 
   methods: {
