@@ -22,6 +22,7 @@
           v-else 
           :content="config.data.script" 
           :lang="config.data.embedded.lang" 
+          :style="config.data.embedded.style"
         >
         </highlight>
       
