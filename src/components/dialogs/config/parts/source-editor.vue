@@ -28,10 +28,12 @@
     </v-layout>
   </v-container>
 </template>
+
 <script>
+
 import editor from '@/components/core/ext/ace-editor.vue';
 import snippetTree from "./dps/dps-snippets-tree.vue"
-
+import { isString } from "lodash"
 
 export default {
   name: "source-editor",
@@ -44,7 +46,11 @@ export default {
 
   computed: {
     embeddedSource() {
-      return JSON.stringify(this.config.data.embedded, null, "\t")
+
+      return (isString(this.config.data.embedded))
+                ? this.config.data.embedded
+                : JSON.stringify(this.config.data.embedded, null, "\t")
+
     }
   },
 
@@ -52,7 +58,8 @@ export default {
     sourceTypes: ["url", "dps", "embedded"],
     mode: "",
     snippets: false,
-    editor: null
+    editor: null,
+    esource:null
   }),
 
   methods: {
@@ -62,7 +69,7 @@ export default {
     },
 
     onUpdateSource(value) {
-      this.config.data.embedded = JSON.parse(value)
+      this.esource = value
     },
 
     onUpdateScript(value) {
@@ -71,8 +78,28 @@ export default {
   },
 
   created() {
+
     this.mode = this.config.data.source;
+    this.esource = (isString(this.config.data.embedded))
+                ? this.config.data.embedded
+                : JSON.stringify(this.config.data.embedded, null, "\t")
+
     this.clearWatch = this.$watch("mode", () => { this.config.data.source = this.mode })
+    
+  },
+
+  beforeDestroy () {
+    
+    try {
+      this.config.data.embedded = JSON.parse(this.esource)  
+    } catch (e) {
+      this.config.data.embedded = this.esource
+      this.warning({
+        type: "error",
+        title: "Data error",
+        text: e.toString()
+      })
+    }
   },
 
   destroyed() {

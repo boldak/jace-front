@@ -208,6 +208,22 @@ export default {
           },
 
           {
+            name: "Education",
+            editor: "widget-types-panel",
+            items: [
+
+              "html-widget:title", 
+              "html-widget:banner", 
+              "html-widget:paragraph", 
+              "mediator-widget", 
+              "inputs-widget:Inputs",
+              "edu-editor:Editor",
+              "dps-suite-widget"
+              
+            ]
+          },
+
+          {
             name: "Forms",
             editor: "widget-types-panel",
             items: [

@@ -13,6 +13,8 @@ export default {
     computed:{
        chartOptions(){
          if(!this.options) return 
+         if(!this.options.series) return
+          
          let res = JSON.parse(JSON.stringify(this.options));
          
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){
@@ -47,6 +49,8 @@ export default {
         const tempOptions = JSON.parse(JSON.stringify(options));
         const tempData = JSON.parse(JSON.stringify(data));
         
+        if(!tempData.series) return 
+
         let values = [];
         tempData.series.forEach( s => {
           values = values.concat(s.data.map( d => d[2]))

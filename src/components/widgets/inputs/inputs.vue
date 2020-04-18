@@ -32,6 +32,20 @@
             </div>
           </div>
         </v-col>
+
+        <v-col v-if="field.type == 'slider'">
+          <div class="v-input v-text-field v-input--is-label-active v-input--is-dirty theme--light">
+            <div class="v-input__control">
+              <div class="v-text-field">
+                <label aria-hidden="true" class="v-label v-label--active theme--light" :class="(messages[index].length>0) ? 'error--text': ''" style="left: 0px; right: auto; font-size:12px;">
+                  {{field.label}}
+                </label>
+                <v-slider class="mx-3" v-model="field.value" :disabled="field.disabled" :max="field.range[1]" :min="field.range[0]" :step="field.step" thumb-size="24" thumb-label="always" thumb-color="primary" ticks="always" tick-size="2" :error-messages="messages[index].join(' ')" :rules="field.rules"></v-slider>
+              </div>
+            </div>
+          </div>
+        </v-col>
+
         <v-col v-if="field.type == 'date'">
           <v-menu v-model="field._menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y full-width min-width="290px">
             <template v-slot:activator="{ on }">
@@ -49,7 +63,8 @@
           </v-menu>
         </v-col>
         <v-col v-if=" field.type == 'select' ">
-          <v-autocomplete v-model="field.value" :items="field.items" :filter="field.filter" color="primary" :label="field.label" :multiple="field.multiple" :clearable="field.multiple" :item-text="field.itemText" :item-value="item => item" :error-messages="messages[index].join(' ')" class="body-1"></v-autocomplete>
+          <v-autocomplete v-model="field.value" :items="field.items" :filter="field.filter" color="primary" :label="field.label" :multiple="field.multiple" :clearable="field.multiple" :item-text="field.itemText" :item-value="item => item" :error-messages="messages[index].join(' ')" class="body-1" :search-input.sync="field.search">
+          </v-autocomplete>
         </v-col>
         <v-col v-if=" field.type == 'number' ">
           <div class="v-input body-1 v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--is-booted">
@@ -85,7 +100,7 @@
   </v-card>
 </template>
 <script>
-import { find, isUndefined, isArray, includes, zipObject, keys } from "lodash"
+import { find, isUndefined, isArray, isNull, isString, includes, zipObject, keys, isEqual } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 
@@ -94,6 +109,8 @@ import listenerMixin from "@/mixins/core/listener.mixin.js";
   import configDialog from "./inputs-config.vue";
 
 <<< } >>> 
+
+
 
 import moment from "moment"
 
@@ -108,7 +125,10 @@ export default {
 
   data: () => ({
     valid: true,
+    options: null,
+    search:null,
     opts: [],
+    result:[],
     messages: [],
     rules: {
       required: value => (!isUndefined(value) && (value !== null) && (value !== "")) || "Required.",
@@ -128,16 +148,34 @@ export default {
 
       valid_one_selection: value => value != null || "Required.",
 
-      valid_multiple_selection: value => value.length > 0 || "Required."
+      valid_multiple_selection: ( min , max ) => value => {
+        min = (_.isUndefined(min)) ? 1 : min
+        if (_.isUndefined(max)){
+          return (value.length >= min) || ( (min == 1) ? "Required." : `Select ${min} or more items.` ) 
+        } else {
+          return (value.length > min && value.length <= max) || `Select ${min}..${max} items.` 
+        }
+      }  
     }
   }),
 
   watch: {
     opts: {
       handler(value) {
-
         let res = true
+        let result = []
         value.forEach((option, index) => {
+          
+          if(option.type == "select"){
+            let newValue = JSON.parse(JSON.stringify(option.value))
+            if( this.res  && this.res[index] && !isEqual(this.res[index].value, newValue) ) {
+              this.opts[index].search = ""
+            } 
+          }
+
+          result.push(JSON.parse(JSON.stringify(option)))
+
+
           if (option.required) {
             let temp = true
             this.messages[index] = []
@@ -152,6 +190,7 @@ export default {
           }
         })
         this.valid = res
+        this.res = result
       },
       deep: true
     }
@@ -159,13 +198,28 @@ export default {
 
   methods: {
 
+    onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+      return data  
+    },
+
+
     onUpdate({ data }) {
       if (!data) {
         this.opts = []
+        this.options = null
         return
       }
       // console.log("data", data)
       this.opts = this.normalizeOptions(data)
+      this.options = data
       // console.log("opts", this.opts)
     },
 
@@ -190,11 +244,19 @@ export default {
     },
 
     defaultFilter(item, queryText) {
+      item = (_.isString(item)) ? item : item.toString()
       return includes(item.toLowerCase(), queryText.toLowerCase())
     },
 
     customFilter(itemText) {
-      return (item, queryText) => includes(item[itemText].toLowerCase(), queryText.toLowerCase())
+      return (item, queryText) => {
+        let val = (_.isString(item)) 
+          ? item.toLowerCase() 
+          : ( _.isString(item[itemText]))
+            ? item[itemText].toLowerCase()
+            : (item[itemText]) ? item[itemText].toString().toLowerCase() : ""
+        return includes(val, queryText.toLowerCase())
+      } 
     },
 
 
@@ -238,7 +300,13 @@ export default {
         }
 
         if (options.field[o].required && (options.field[o].type == "select") && (options.field[o].multiple)) {
-          rules = rules.concat(this.rules.valid_multiple_selection)
+          let r
+          if(options.field[o].range && _.isArray(options.field[o].range)) {
+            r = this.rules.valid_multiple_selection(options.field[o].range[0], options.field[o].range[1])
+          } else {
+            r = this.rules.valid_multiple_selection()
+          }
+          rules = rules.concat(r)
         }
 
         let range = options.field[o].range || []
@@ -271,7 +339,8 @@ export default {
           itemText: (options.field[o].itemText) ?
             options.field[o].itemText : undefined,
           filter: (options.field[o].itemText) ?
-            this.customFilter(options.field[o].itemText) : this.defaultFilter
+            this.customFilter(options.field[o].itemText) : this.defaultFilter,
+          search: ""  
 
         })
         this.messages.push([])
@@ -287,7 +356,14 @@ export default {
 
 
     resolve() {
-      this.emit('apply', this.getOptions(this.opts))
+      let event 
+      if( this.options && this.options.event) {
+        event = this.options.event
+      } else {
+        event = "apply"
+      }  
+      
+      this.emit(event, this.getOptions(this.res))
     }
 
   },

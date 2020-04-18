@@ -176,11 +176,10 @@ export default {
       }
     },
 
-  
-    watch: {
+      watch: {
       selected: function(value){
         this.selectedItem = value
-      }
+      }  
     },
 
     data () {
@@ -199,7 +198,7 @@ export default {
       },
       
       resolve(){
-        this.submit(this.options.config)
+        this.submit(this.options.config)    
       },
 
       reject(){

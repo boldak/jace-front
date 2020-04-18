@@ -40,6 +40,7 @@
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
   import configDialog from "./data-keywords-config.vue"
+  import { isString } from "lodash"
 
   export default {
     
@@ -56,6 +57,19 @@
 
     
     methods: {
+
+      onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+      return data  
+    },
+
 
       onUpdate ({data}) {
          this.availableKeywords = data

@@ -101,6 +101,8 @@ window.appRouter = router
 
 
 window.onbeforeunload = (evt) => {
+  // console.log(jaceApp)
+  if(jaceApp.startedMode == "production") return
   sessionStorage.clear();
   let message = '111'
 

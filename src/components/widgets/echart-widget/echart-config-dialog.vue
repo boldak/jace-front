@@ -44,6 +44,10 @@ export default {
                 editor: () => import("@/components/dialogs/config/parts/name-editor.vue")
               },
               {
+                name: 'Style',
+                editor: () => import("@/components/dialogs/config/parts/css-editor.vue")
+              },
+              {
                 name: "Data",
                 editor: () => import("@/components/dialogs/config/parts/source-editor.vue")
               },

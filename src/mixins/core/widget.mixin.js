@@ -1,7 +1,8 @@
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import initiableMixin from "@/mixins/core/initiable.mixin.js"
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
-import { set, isArray } from "lodash"
+import { set, isArray, isString } from "lodash"
+import Promise from "bluebird"
 
 export default {
 
@@ -18,7 +19,9 @@ export default {
       widget: {
         visible: true
       }
-    }
+    },
+    hasError: false,
+    errorMessage: ""
   }),
 
 
@@ -71,7 +74,7 @@ export default {
 
 
     _updateConfig() {
-
+      
       if (!this.pageStarted && this.isProductionMode) return
 
       new Promise((resolve, reject) => {
@@ -91,6 +94,7 @@ export default {
             })
             .catch((error) => {
               this.hasError = true;
+              this.errorMessage = error.toString();
               this.$djvue.warning({
                 type: "error",
                 title: "Cannot load data",
@@ -107,10 +111,19 @@ export default {
               script: this.config.data.script
             })
             .then(response => {
-              this.hasError = false;
-              resolve(response.data)
+              if(!response.data.message){
+                this.hasError = false;
+                resolve(response.data)  
+              } else {
+                this.hasError = true;
+                this.errorMessage = response.data.message
+                reject()
+              }
+              
             })
             .catch(error => {
+              this.hasError = true;
+              this.errorMessage = error.toString();
               this.$djvue.warning({
                 type: "error",
                 title: "Cannot run dps",
@@ -137,7 +150,29 @@ export default {
       return new Promise( resolve => { resolve() })
     },
 
+    _validate( data ){
+      let validator = ( this.$refs.instance && this.$refs.instance.onValidate )
+                        ? this.$refs.instance.onValidate
+                        : (data) => data
+      let res = validator( data )
+      if ( res.error ){
+        this.errorMessage = res.error
+        this.hasError = true
+        return
+      } 
+      if(res.message){
+        this.errorMessage = "\nDATA PROCESSING SCRIPT\n" + data.message
+        this.hasError = true
+        return 
+      }
+
+      return res
+
+    },
+
     update(state) {
+        this.errorMessage = ""
+        this.hasError = false
 
       if (!state) state = {
         data: this.data,
@@ -149,11 +184,14 @@ export default {
 
       this.data = state.data;
       this.options = state.options;
+      
+      this.data = this._validate( this.data )
+      if( this.data ){
+        this.$nextTick(() => {
+         if (this.$refs.instance && this.$refs.instance.onUpdate) this.$refs.instance.onUpdate(state)
+        })
+      }
 
-      this.$nextTick(() => {
-        // console.log(this.$refs.instance)
-        if (this.$refs.instance && this.$refs.instance.onUpdate) this.$refs.instance.onUpdate(state)
-      })
     },
 
     hide() {
@@ -209,6 +247,14 @@ export default {
 
 <<< } >>>
 
+      // this.on({
+      //   event: "data-error",
+      //   callback: (emitter,msg) => {
+      //     this.hasError = true
+      //     this.errorMessage = msg
+      //   },
+      //   rule: (emitter) => emitter == this.$refs.instance
+      // })
 
       this.on({
         event: "widget-update",
@@ -222,6 +268,28 @@ export default {
           this.pageStarted = true;
           this._updateConfig()
           if (this.$refs.instance && this.$refs.instance.onPageStart) this.$refs.instance.onPageStart()
+        },
+        rule: () => true
+      })
+
+      this.on({
+        event: "slide-start",
+        callback: () => {
+          this.pageStarted = true;
+          
+          // this._updateConfig()
+          if (this.$refs.instance && this.$refs.instance.onSlideStart) this.$refs.instance.onSlideStart(this)
+        },
+        rule: () => true
+      })
+
+      this.on({
+        event: "before-layout-start",
+        callback: () => {
+          this.pageStarted = true;
+          
+          // this._updateConfig()
+          if (this.$refs.instance && this.$refs.instance.onLayoutStart) this.$refs.instance.onLayoutStart(this)
         },
         rule: () => true
       })

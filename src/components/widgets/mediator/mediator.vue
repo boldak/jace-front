@@ -16,7 +16,7 @@
 
       </v-flex>
     </v-layout>
-    <v-layout>
+    <v-layout v-if="!isProductionMode">
         <v-spacer></v-spacer>
         <v-btn text color="primary" v-on:click="_runScript()">
               Run

@@ -167,11 +167,25 @@ export default {
 
               "sunburst-chart-widget",
 
+              "graph-chart-widget"
 
 
 
             ]
           },
+
+          {
+            name: "Graph",
+            editor: () => import("./parts/widget-types-panel.vue"),
+            items: [
+              "graph-chart-widget:Absolute Node Position",
+              "graph-chart-widget:Circular Layout",
+              "graph-chart-widget:Force Layout",
+              "graph-chart-widget:With Categories",
+              "graph-chart-widget:2d-scatter Graph"
+            ]
+          },
+
 
           {
             name: "Tree Charts",
@@ -216,6 +230,23 @@ export default {
             name: "Page Management",
             editor: () => import("./parts/widget-types-panel.vue"),
             items: ["mediator-widget", "config-widget","inputs-widget:Inputs"]
+          },
+
+          {
+            name: "Education",
+            editor: () => import("./parts/widget-types-panel.vue"),
+            items: [
+
+              "html-widget:title", 
+              "html-widget:banner", 
+              "html-widget:paragraph", 
+              "mediator-widget", 
+              "inputs-widget:Inputs",
+              "edu-push-button-widget:Button",
+              "edu-editor-widget:Editor",
+              "dps-suite-widget"
+              
+            ]
           },
 
           {

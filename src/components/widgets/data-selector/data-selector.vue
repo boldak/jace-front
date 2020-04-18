@@ -8,7 +8,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import DataSelectorConfigDialog from "./data-selector-config.vue";
-import { isArray, sortBy, includes, findIndex } from "lodash"
+import { isArray, sortBy, includes, findIndex, isString } from "lodash"
 
 export default {
 
@@ -25,6 +25,24 @@ export default {
 
 
   methods: {
+
+    onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+
+      if(data.message){
+        return { error: "\nDATA PROCESSING SCRIPT \n" + data.message }
+      }
+  
+      return data  
+    },
+
 
     onUpdate({ data }) {
 
@@ -65,6 +83,8 @@ export default {
 
   watch: {
     selection(value) {
+      if( !this.items ) return
+      // console.log(this.items)  
       this.search = null
       // console.log("selection", value)
       if (!value) return

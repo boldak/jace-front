@@ -1290,6 +1290,7 @@ var supportedModes = {
     Csound_Score: ["sco"],
     CSS:         ["css"],
     Curly:       ["curly"],
+    Cypher:       ["cypher"],
     D:           ["d|di"],
     Dart:        ["dart"],
     Diff:        ["diff|patch"],

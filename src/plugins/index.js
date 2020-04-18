@@ -7,6 +7,7 @@ import customDialog from "@/components/dialogs/core/custom-dialog.vue"
 import splashDialog from "@/components/dialogs/core/splash.vue"
 import Vue from "vue"
 
+
 <<< if(jace.availablePublishing) { >>>
 
 import io from "socket.io-client";

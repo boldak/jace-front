@@ -14,6 +14,8 @@ export default {
     computed:{
        chartOptions(){
          if(!this.options) return 
+         if(!this.options.series) return  
+       
          let res = JSON.parse(JSON.stringify(this.options));
          
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){

@@ -1,6 +1,8 @@
 <template>
   <div>
+    
     <v-data-table
+      v-if="table" 
       :headers="table.headers"
       :items="table.rows"
       style="border:1px solid #dedede;"
@@ -35,7 +37,7 @@
 <<< } >>>
 
   import tinycolor from "tinycolor2"
-  import { isNumber, isBoolean, find, min, max, values } from "lodash"
+  import { isNumber, isBoolean, isString, find, min, max, values } from "lodash"
  
  export default  {
     
@@ -58,6 +60,19 @@
     },
 
     methods:{
+
+      onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+      return data  
+    },
+
 
       getClass(item,col){
         let value = item[col.value]
@@ -201,17 +216,17 @@
        
 
     created(){ 
-      this.data = this.config.data.embedded.dataset.source;
-      let temp = {
-        headers: this.config.data.embedded.dataset.dimensions.map( item => ({
-            text: item,
-            align: 'center',
-            value: item
-        })),
-        rows: this.data
+      // this.data = this.config.data.embedded.dataset.source;
+      // let temp = {
+      //   headers: this.config.data.embedded.dataset.dimensions.map( item => ({
+      //       text: item,
+      //       align: 'center',
+      //       value: item
+      //   })),
+      //   rows: this.data
 
-      }
-      this.table = temp
+      // }
+      // this.table = temp
     },
 
      mounted(){ 
@@ -220,7 +235,7 @@
    
     
     data: () =>({
-      table:{},
+      table:null,
       data:[],
       ranges:null,
       colors:null,

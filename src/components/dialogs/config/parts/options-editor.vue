@@ -10,6 +10,7 @@
 </template>
 <script>
 import editor from '@/components/core/ext/ace-editor.vue';
+import { isString } from "lodash"
 
 export default {
   name: "options-editor",
@@ -21,12 +22,16 @@ export default {
 
   computed: {
     embeddedSource() {
-      return JSON.stringify(this.config.data.embedded, null, "\t")
+      return (isString(this.config.data.embedded))
+          ? this.config.data.embedded
+          : JSON.stringify(this.config.data.embedded, null, "\t")
+
     }
   },
 
   data: () => ({
-    editor: null
+    editor: null,
+    esource:null
   }),
 
   methods: {
@@ -37,7 +42,7 @@ export default {
 
     onUpdateSource(value) {
 
-      this.config.data.embedded = JSON.parse(value)
+      this.esource  = value //JSON.parse(value)
 
     },
 
@@ -47,9 +52,29 @@ export default {
   },
 
   created() {
+
+     this.esource = (isString(this.config.data.embedded))
+                ? this.config.data.embedded
+                : JSON.stringify(this.config.data.embedded, null, "\t")
+
     this.mode = this.config.data.source;
     this.clearWatch = this.$watch("mode", () => { this.config.data.source = this.mode })
   },
+
+  beforeDestroy () {
+    
+    try {
+      this.config.data.embedded = JSON.parse(this.esource)  
+    } catch (e) {
+      this.config.data.embedded = this.esource
+      this.warning({
+        type: "error",
+        title: "Data error",
+        text: e.toString()
+      })
+    }
+  },
+
 
   destroyed() {
     this.clearWatch();

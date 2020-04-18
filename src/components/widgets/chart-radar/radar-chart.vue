@@ -16,6 +16,8 @@ export default {
     computed:{
        chartOptions(){
          if(!this.options) return 
+         if(!this.options.series) return 
+          
          let res = JSON.parse(JSON.stringify(this.options));
          if(res.series.length == 0) return res
          if(this.config.dataSelectEmitters && this.config.dataSelectEmitters.length>0){
@@ -33,10 +35,14 @@ export default {
     methods:{
 
        onUpdate ({data, options}) {
+        
+
         const tempOptions = JSON.parse(JSON.stringify(options));
+        if( !tempOptions ) return
+
         const tempData = JSON.parse(JSON.stringify(data));
         // tempOptions.legend.data = tempData.legend;
-        
+
         if(tempOptions.radar && tempOptions.radar[0])
           tempOptions.radar[0].indicator = (tempData.indicator) ? tempData.indicator : tempOptions[0].radar.indicator;
        

@@ -45,6 +45,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import moment from "moment"
+import { isString } from "lodash"
 
 <<< if( jace.mode == "development") { >>>
 import FooterConfig from "./app-footer-config.vue";
@@ -59,6 +60,18 @@ export default {
   mixins: [djvueMixin, listenerMixin],
 
   methods: {
+
+    onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+      return data  
+    },
 
   <<< if( jace.mode == "development") { >>>
   

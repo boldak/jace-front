@@ -17,7 +17,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import DataLegendConfigDialog from "./data-legend-config.vue";
-import { isArray, sortBy, includes, findIndex, isUndefined, isNull } from "lodash"
+import { isArray, sortBy, includes, findIndex, isUndefined, isNull, isString } from "lodash"
 
 export default {
 
@@ -34,6 +34,19 @@ export default {
 
 
   methods: {
+
+    onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+      return data  
+    },
+
 
     onUpdate({ data }) {
       this.stop()

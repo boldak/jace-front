@@ -3,6 +3,9 @@ export default {
       // 'hello-world' :() => import("./hello-world/HelloWorld.vue"),
 
       'html-widget' :() => import("./html/html.vue"),
+      'edu-editor-widget' :() => import("./edu-editor/edu-editor.vue"),
+      'edu-push-button-widget' :() => import("./edu-push-button/edu-push-button.vue"),
+      
       'inputs-widget' :() => import("./inputs/inputs.vue"),
       'flowchart-widget' :() => import("./flowchart/flowchart.vue"),
       // 'tree-widget' :() => import("./tree/tree.vue"),
@@ -29,6 +32,8 @@ export default {
       'wordcloud-chart-widget': () => import("./chart-word-cloud/wordcloud-chart.vue"),
 
       'pie-chart-widget': () => import("./chart-pie/pie-chart.vue"),
+      'graph-chart-widget': () => import("./chart-graph/graph-chart.vue"),
+      
       'gauge-chart-widget': () => import("./chart-gauge/gauge-chart.vue"),
       
       'line-chart-widget': () => import("./chart-line/line-chart.vue"),

@@ -15,6 +15,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import echart from "@/components/core/ext/echart.vue"
+import { isString } from "lodash"
 
 <<< if( jace.mode == "development") { >>>
   import ChartConfig from "./echart-config-dialog.vue"
@@ -33,6 +34,21 @@ export default {
   methods: {
 
 <<< if( jace.mode == "development") { >>>
+
+    onValidate(data,options){
+      if( isString(data) ) {
+          try {
+            data = JSON.parse(data)
+            return data
+          } catch (e) {
+            return { error: e.toString() }
+          }
+        }
+      if(data.message){
+        return { error: "\nDATA PROCESSING SCRIPT\n" + data.message } 
+      }  
+      return data  
+    },
 
     onReconfigure(widgetConfig) {
       return this.$dialogManager.showAndWait(ChartConfig, { width: "90%" }, { config: widgetConfig })

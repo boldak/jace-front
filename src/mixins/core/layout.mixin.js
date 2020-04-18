@@ -39,7 +39,15 @@ export default {
       if (appLevelMediators.length == 0) appLevelMediators.push({ run: () => {} })
 
 
-      return [pageLevelMediators, appLevelMediators]
+      return pageLevelMediators.map( d => ({
+          instance: d,
+          level: "Page level"
+        }))
+        .concat( appLevelMediators.map( d=> ({
+          instance: d,
+          level: "App level"
+        }))) 
+      // [pageLevelMediators, appLevelMediators]
     },
 
     pageStart() {
@@ -47,66 +55,68 @@ export default {
       // console.log(mediators)
       // console.log("PageStart", mediators)
 
-      Promise.all(mediators[0].map(pl => pl.run()))
-        .then(() => {
-          Promise.all(mediators[1].map(al => al.run()))
+      Promise.all(this.getMediators().map(m => m.instance.run()))
+      .then(() => {
+        // Promise.all(mediators[1].map(al => al.run()))
+        //   .then(() => {
+            this.$nextTick(() => {
+              this.emit("page-start")
+                .then(() => {
+                  this.emit("page-start-after")
+                })
+            })
+      })
+      .catch((e) => {
+        // eslint-disable-next-line
+        console.error(e.toString())
+        this.$djvue.warning({
+          type: "error",
+          title: `Mediator Error`,
+          text: e.toString()
+        })
+
+        this.$nextTick(() => {
+          this.emit("page-start")
             .then(() => {
-              this.$nextTick(() => {
-                this.emit("page-start")
-                  .then(() => {
-                    this.emit("page-start-after")
-                  })
-              })
-            })
-            .catch((e) => {
-              // eslint-disable-next-line
-              console.error("App level error", e.toString())
-              this.$djvue.warning({
-                type: "error",
-                title: `App level Error`,
-                text: e.toString()
-              })
-
-              this.$nextTick(() => {
-                this.emit("page-start")
-                  .then(() => {
-                    this.emit("page-start-after")
-                  })
-              })
-
+              this.emit("page-start-after")
             })
         })
-        .catch((e) => {
-          // eslint-disable-next-line	
-          console.error("Page level error", e.toString())
-          this.$djvue.warning({
-            type: "error",
-            title: `Page level Error`,
-            text: e.toString()
-          })
 
-          this.$nextTick(() => {
-            this.emit("page-start")
-              .then(() => {
-                this.emit("page-start-after")
-              })
-          })
+      })
 
-        })
+        // })
+        // .catch((e) => {
+        //   // eslint-disable-next-line	
+        //   console.error("Page level error", e.toString())
+        //   this.$djvue.warning({
+        //     type: "error",
+        //     title: `Page level Error`,
+        //     text: e.toString()
+        //   })
+
+        //   this.$nextTick(() => {
+        //     this.emit("page-start")
+        //       .then(() => {
+        //         this.emit("page-start-after")
+        //       })
+        //   })
+
+        // })
     },
 
     onChildsInitiated() {
-      // console.log("onchildInitiated",this.djId,"emit layout-page-start")
-      this.emit("layout-page-start", this) //pageStart() 
+      this.pageStart() 
     }
   },
 
   created() {
-    // console.log(this)
     this.djId = this.$djvue.randomName()
     this.on({
       event: "layout-page-start",
-      callback: () => { this.pageStart() },
+      callback: (caller) => {
+        if( this.beforeLayoutStart ) this.beforeLayoutStart()
+        // this.pageStart() 
+      },
       rule: () => true
     })
     this.on({

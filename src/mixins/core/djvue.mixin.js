@@ -43,13 +43,17 @@ export default {
           if (this.app.oldName != this.app.config.name) {
             this.$djvue.fullReload(`app/${this.app.config.name}/`)
           }
+          return true
         })
         .then(() => {
           this.setNeedSave(false)
+          return true
         })
         .then(() => {
           this.$portal.post(`/api/app/config/set`, window.devService)
+          return true
         })
+        .catch( e => {window.console.error( e.toString() )})
 
     },
 
@@ -93,7 +97,7 @@ export default {
     },
 
     setLocale(locale) {
-      this.$i18n.locale = locale;
+      if(this.$i18n) this.$i18n.locale = locale;
       moment.locale(locale)
       this.$cookie.set("currentLanguage", locale)
     }

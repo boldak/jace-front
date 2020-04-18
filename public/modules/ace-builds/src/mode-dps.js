@@ -2975,7 +2975,303 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-define("ace/mode/dps_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules","ace/mode/doc_comment_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/json_highlight_rules","ace/mode/html_highlight_rules","ace/mode/xml_highlight_rules","ace/mode/csv_highlight_rules","ace/mode/dot_highlight_rules"], function(require, exports, module) {
+define("ace/mode/cypher_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules","ace/mode/doc_comment_highlight_rules"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var lang = require("../lib/lang");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
+
+var CypherHighlightRules = function() {
+
+   var keywords = lang.arrayToMap(
+   		('as asc ascending assert by call case commit constraint create csv cypher delete desc descending detach distinct drop else end ends explain fieldterminator foreach from headers in index is join limit load match merge on optional order periodic profile remove return scan set skip start starts then union unique unwind using when where with yield').split(" ")
+   );
+
+   var attributes = lang.arrayToMap(
+   		('all any exists none single coalesce endNode head id last length properties size startNode timestamp toBoolean toFloat toInteger type avg collect count max min percentileCont percentileDisc stDev stDevP sum extract filter keys labels nodes range reduce relationships reverse tail abs ceil floor rand round sign e exp log log10 sqrt acos asin atan atan2 cos cot degrees haversin pi radians sin tan left ltrim replace reverse right rtrim split substring toLower toString toUpper trim distance').split("")
+   );
+
+   this.$rules = {
+        "start" : [
+            {
+                token : "comment",
+                regex : /\/\/.*$/
+            }, {
+                token : "comment",
+                regex : /#.*$/
+            }, {
+                token : "comment", // multi line comment
+                merge : true,
+                regex : /\/\*/,
+                next : "comment"
+            }, {
+                token : "string",
+                regex : "'(?=.)",
+                next  : "qstring"
+            }, {
+                token : "string",
+                regex : '"(?=.)',
+                next  : "qqstring"
+            }, {
+                token : "constant.numeric",
+                regex : /[+\-]?\d+(?:(?:\.\d*)?(?:[eE][+\-]?\d+)?)?\b/
+            }, {
+                token : "keyword.operator",
+                regex : /=|\-|\->/
+            }, {
+                token : "punctuation.operator",
+                regex : /,|;/
+            }, {
+                token : "paren.lparen",
+                regex : /[\[{]/
+            }, {
+                token : "paren.rparen",
+                regex : /[\]}]/
+            }, {
+                token: "comment",
+                regex: /^#!.*$/
+            }, {
+                token: function(value) {
+                    if (keywords.hasOwnProperty(value.toLowerCase())) {
+                        return "keyword.operator";
+                    }
+                    else if (attributes.hasOwnProperty(value.toLowerCase())) {
+                        return "variable";
+                    }
+                    else {
+                        return "text";
+                    }
+                },
+                regex: "\\-?[a-zA-Z_][a-zA-Z0-9_\\-]*"
+           },
+           {
+               token:"entity.name.function",
+               regex:/:[a-zA-Z_][a-zA-Z0-9_\-]*/
+           }
+        ],
+        "comment" : [
+            {
+                token : "comment", // closing comment
+                regex : "\\*\\/",
+                next : "start"
+            }, {
+                defaultToken : "comment"
+            }
+        ],
+        "qqstring" : [
+            {
+                token : "string",
+                regex : '[^"\\\\]+',
+                merge : true
+            }, {
+                token : "string",
+                regex : "\\\\$",
+                next  : "qqstring",
+                merge : true
+            }, {
+                token : "string",
+                regex : '"|$',
+                next  : "start",
+                merge : true
+            }
+        ],
+        "qstring" : [
+            {
+                token : "string",
+                regex : "[^'\\\\]+",
+                merge : true
+            }, {
+                token : "string",
+                regex : "\\\\$",
+                next  : "qstring",
+                merge : true
+            }, {
+                token : "string",
+                regex : "'|$",
+                next  : "start",
+                merge : true
+            }
+        ]
+   };
+};
+
+oop.inherits(CypherHighlightRules, TextHighlightRules);
+
+exports.CypherHighlightRules = CypherHighlightRules;
+
+});
+
+define("ace/mode/cypher",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/matching_brace_outdent","ace/mode/cypher_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var TextMode = require("./text").Mode;
+var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
+var CypherHighlightRules = require("./cypher_highlight_rules").CypherHighlightRules;
+var CypherFoldMode = require("./folding/cstyle").FoldMode;
+
+var Mode = function() {
+    this.HighlightRules = CypherHighlightRules;
+    this.$outdent = new MatchingBraceOutdent();
+    this.foldingRules = new CypherFoldMode();
+    this.$behaviour = this.$defaultBehaviour;
+};
+oop.inherits(Mode, TextMode);
+
+(function() {
+
+    this.lineCommentStart = ["//", "#"];
+    this.blockComment = {start: "/*", end: "*/"};
+
+    this.getNextLineIndent = function(state, line, tab) {
+        var indent = this.$getIndent(line);
+
+        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
+        var tokens = tokenizedLine.tokens;
+        var endState = tokenizedLine.state;
+
+        if (tokens.length && tokens[tokens.length-1].type == "comment") {
+            return indent;
+        }
+
+        if (state == "start") {
+            var match = line.match(/^.*(?:\bcase\b.*:|[\{\(\[])\s*$/);
+            if (match) {
+                indent += tab;
+            }
+        }
+
+        return indent;
+    };
+
+    this.checkOutdent = function(state, line, input) {
+        return this.$outdent.checkOutdent(line, input);
+    };
+
+    this.autoOutdent = function(state, doc, row) {
+        this.$outdent.autoOutdent(doc, row);
+    };
+
+    this.$id = "ace/mode/cypher";
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
+});
+
+define("ace/mode/mysql_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], function(require, exports, module) {
+
+var oop = require("../lib/oop");
+var lang = require("../lib/lang");
+var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+
+var MysqlHighlightRules = function() {
+
+    var mySqlKeywords = /*sql*/ "alter|and|as|asc|between|count|create|delete|desc|distinct|drop|from|having|in|insert|into|is|join|like|not|on|or|order|select|set|table|union|update|values|where" + "|accessible|action|add|after|algorithm|all|analyze|asensitive|at|authors|auto_increment|autocommit|avg|avg_row_length|before|binary|binlog|both|btree|cache|call|cascade|cascaded|case|catalog_name|chain|change|changed|character|check|checkpoint|checksum|class_origin|client_statistics|close|coalesce|code|collate|collation|collations|column|columns|comment|commit|committed|completion|concurrent|condition|connection|consistent|constraint|contains|continue|contributors|convert|cross|current_date|current_time|current_timestamp|current_user|cursor|data|database|databases|day_hour|day_microsecond|day_minute|day_second|deallocate|dec|declare|default|delay_key_write|delayed|delimiter|des_key_file|describe|deterministic|dev_pop|dev_samp|deviance|directory|disable|discard|distinctrow|div|dual|dumpfile|each|elseif|enable|enclosed|end|ends|engine|engines|enum|errors|escape|escaped|even|event|events|every|execute|exists|exit|explain|extended|fast|fetch|field|fields|first|flush|for|force|foreign|found_rows|full|fulltext|function|general|global|grant|grants|group|groupby_concat|handler|hash|help|high_priority|hosts|hour_microsecond|hour_minute|hour_second|if|ignore|ignore_server_ids|import|index|index_statistics|infile|inner|innodb|inout|insensitive|insert_method|install|interval|invoker|isolation|iterate|key|keys|kill|language|last|leading|leave|left|level|limit|linear|lines|list|load|local|localtime|localtimestamp|lock|logs|low_priority|master|master_heartbeat_period|master_ssl_verify_server_cert|masters|match|max|max_rows|maxvalue|message_text|middleint|migrate|min|min_rows|minute_microsecond|minute_second|mod|mode|modifies|modify|mutex|mysql_errno|natural|next|no|no_write_to_binlog|offline|offset|one|online|open|optimize|option|optionally|out|outer|outfile|pack_keys|parser|partition|partitions|password|phase|plugin|plugins|prepare|preserve|prev|primary|privileges|procedure|processlist|profile|profiles|purge|query|quick|range|read|read_write|reads|real|rebuild|recover|references|regexp|relaylog|release|remove|rename|reorganize|repair|repeatable|replace|require|resignal|restrict|resume|return|returns|revoke|right|rlike|rollback|rollup|row|row_format|rtree|savepoint|schedule|schema|schema_name|schemas|second_microsecond|security|sensitive|separator|serializable|server|session|share|show|signal|slave|slow|smallint|snapshot|soname|spatial|specific|sql|sql_big_result|sql_buffer_result|sql_cache|sql_calc_found_rows|sql_no_cache|sql_small_result|sqlexception|sqlstate|sqlwarning|ssl|start|starting|starts|status|std|stddev|stddev_pop|stddev_samp|storage|straight_join|subclass_origin|sum|suspend|table_name|table_statistics|tables|tablespace|temporary|terminated|to|trailing|transaction|trigger|triggers|truncate|uncommitted|undo|uninstall|unique|unlock|upgrade|usage|use|use_frm|user|user_resources|user_statistics|using|utc_date|utc_time|utc_timestamp|value|variables|varying|view|views|warnings|when|while|with|work|write|xa|xor|year_month|zerofill|begin|do|then|else|loop|repeat";
+    var builtins = "by|bool|boolean|bit|blob|decimal|double|enum|float|long|longblob|longtext|medium|mediumblob|mediumint|mediumtext|time|timestamp|tinyblob|tinyint|tinytext|text|bigint|int|int1|int2|int3|int4|int8|integer|float|float4|float8|double|char|varbinary|varchar|varcharacter|precision|date|datetime|year|unsigned|signed|numeric|ucase|lcase|mid|len|round|rank|now|format|coalesce|ifnull|isnull|nvl";
+    var variable = "charset|clear|connect|edit|ego|exit|go|help|nopager|notee|nowarning|pager|print|prompt|quit|rehash|source|status|system|tee";
+
+    var keywordMapper = this.createKeywordMapper({
+        "support.function": builtins,
+        "keyword": mySqlKeywords,
+        "constant": "false|true|null|unknown|date|time|timestamp|ODBCdotTable|zerolessFloat",
+        "variable.language": variable
+    }, "identifier", true);
+
+    
+    function string(rule) {
+        var start = rule.start;
+        var escapeSeq = rule.escape;
+        return {
+            token: "string.start",
+            regex: start,
+            next: [
+                {token: "constant.language.escape", regex: escapeSeq},
+                {token: "string.end", next: "start", regex: start},
+                {defaultToken: "string"}
+            ]
+        };
+    }
+
+    this.$rules = {
+        "start" : [ {
+            token : "comment", regex : "(?:-- |#).*$"
+        },  
+        string({start: '"', escape: /\\[0'"bnrtZ\\%_]?/}),
+        string({start: "'", escape: /\\[0'"bnrtZ\\%_]?/}),
+        DocCommentHighlightRules.getStartRule("doc-start"),
+        {
+            token : "comment", // multi line comment
+            regex : /\/\*/,
+            next : "comment"
+        }, {
+            token : "constant.numeric", // hex
+            regex : /0[xX][0-9a-fA-F]+|[xX]'[0-9a-fA-F]+'|0[bB][01]+|[bB]'[01]+'/
+        }, {
+            token : "constant.numeric", // float
+            regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+        }, {
+            token : keywordMapper,
+            regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+        }, {
+            token : "constant.class",
+            regex : "@@?[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+        }, {
+            token : "constant.buildin",
+            regex : "`[^`]*`"
+        }, {
+            token : "keyword.operator",
+            regex : "\\+|\\-|\\/|\\/\\/|%|<@>|@>|<@|&|\\^|~|<|>|<=|=>|==|!=|<>|="
+        }, {
+            token : "paren.lparen",
+            regex : "[\\(]"
+        }, {
+            token : "paren.rparen",
+            regex : "[\\)]"
+        }, {
+            token : "text",
+            regex : "\\s+"
+        } ],
+        "comment" : [
+            {token : "comment", regex : "\\*\\/", next : "start"},
+            {defaultToken : "comment"}
+        ]
+    };
+
+    this.embedRules(DocCommentHighlightRules, "doc-", [ DocCommentHighlightRules.getEndRule("start") ]);
+    this.normalizeRules();
+};
+
+oop.inherits(MysqlHighlightRules, TextHighlightRules);
+
+exports.MysqlHighlightRules = MysqlHighlightRules;
+});
+
+define("ace/mode/mysql",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mysql_highlight_rules"], function(require, exports, module) {
+
+var oop = require("../lib/oop");
+var TextMode = require("../mode/text").Mode;
+var MysqlHighlightRules = require("./mysql_highlight_rules").MysqlHighlightRules;
+
+var Mode = function() {
+    this.HighlightRules = MysqlHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
+};
+oop.inherits(Mode, TextMode);
+
+(function() {       
+    this.lineCommentStart = ["--", "#"]; // todo space
+    this.blockComment = {start: "/*", end: "*/"};
+
+    this.$id = "ace/mode/mysql";
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
+});
+
+define("ace/mode/dps_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules","ace/mode/doc_comment_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/json_highlight_rules","ace/mode/html_highlight_rules","ace/mode/xml_highlight_rules","ace/mode/csv_highlight_rules","ace/mode/dot_highlight_rules","ace/mode/cypher_highlight_rules","ace/mode/mysql_highlight_rules"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -2988,6 +3284,8 @@ var HtmlHighlightRules = require("./html_highlight_rules").HtmlHighlightRules;
 var XmlHighlightRules = require("./xml_highlight_rules").XmlHighlightRules;
 var CsvHighlightRules = require("./csv_highlight_rules").CsvHighlightRules;
 var DotHighlightRules = require("./dot_highlight_rules").DotHighlightRules;
+var CypherHighlightRules = require("./cypher_highlight_rules").CypherHighlightRules;
+var MysqlHighlightRules = require("./mysql_highlight_rules").MysqlHighlightRules;
 
 var BindableJSHighlightRules =  function() {
     this.$rules = new JSHighlightRules().getRules()
@@ -3191,6 +3489,21 @@ var DpsHighlightRules = function() {
             token: "meta.tag",
             regex: /<\?chart/,
             push: "dot-start"
+        },
+        {
+            token: "meta.tag",
+            regex: /<\?cypher/,
+            push: "cypher-start"
+        },
+        {
+            token: "meta.tag",
+            regex: /<\?neo4j/,
+            push: "cypher-start"
+        },
+        {
+            token: "meta.tag",
+            regex: /<\?sql/,
+            push: "sql-start"
         }
     ];
 
@@ -3208,6 +3521,8 @@ var DpsHighlightRules = function() {
     this.embedRules(XmlHighlightRules, "xml-", endRules, ["start"]);
     this.embedRules(CsvHighlightRules, "csv-", endRules, ["start"]);
     this.embedRules(DotHighlightRules, "dot-", endRules, ["start"]);
+    this.embedRules(CypherHighlightRules, "cypher-", endRules, ["start"]);
+    this.embedRules(MysqlHighlightRules, "sql-", endRules, ["start"]);
 
     for (var key in this.$rules)
         this.$rules[key].unshift.apply(this.$rules[key], startRules);
@@ -3221,7 +3536,7 @@ exports.DpsHighlightRules = DpsHighlightRules;
 
 });
 
-define("ace/mode/dps",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/json","ace/mode/html","ace/mode/xml","ace/mode/csv","ace/mode/dot","ace/mode/matching_brace_outdent","ace/mode/dps_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
+define("ace/mode/dps",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/json","ace/mode/html","ace/mode/xml","ace/mode/csv","ace/mode/dot","ace/mode/cypher","ace/mode/mysql","ace/mode/matching_brace_outdent","ace/mode/dps_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -3232,6 +3547,9 @@ var HtmlMode = require("./html").Mode;
 var XmlMode = require("./xml").Mode;
 var CsvMode = require("./csv").Mode;
 var DotMode = require("./dot").Mode;
+var CypherMode = require("./cypher").Mode;
+var MysqlMode = require("./mysql").Mode;
+
 
 var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
 var DpsHighlightRules = require("./dps_highlight_rules").DpsHighlightRules;
@@ -3248,7 +3566,9 @@ var Mode = function() {
         "html-": HtmlMode,
         "xml-": XmlMode,
         "csv-": CsvMode,
-        "dot-": DotMode 
+        "dot-": DotMode,
+        "cypher-": CypherMode,
+        "sql-": MysqlMode 
     });
 };
 oop.inherits(Mode, TextMode);

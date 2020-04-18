@@ -36,6 +36,10 @@ export default {
             editor: () => import("@/components/dialogs/config/parts/name-editor.vue")
           },
           {
+            name: "Options",
+            editor: () => import("./parts/options-editor.vue")
+          },
+          {
             name: "Data",
             editor: () => import("@/components/dialogs/config/parts/source-editor.vue")
           }

@@ -1,7 +1,7 @@
 <template>
   <<< if( jace.mode == "development") { >>>
   <v-card :class="{widget:!isProductionMode}" ma-1 flat style="background:transparent;">
-    <v-toolbar dark flat height="32px" :color="(!data.message)?'primary darken-1':'error'" v-if="!isProductionMode">
+    <v-toolbar dark flat height="32px" :color="(!hasError)?'primary darken-1':'error darken-1'" v-if="!isProductionMode">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
         <v-avatar class="handle" size="32" tile slot="activator" v-on="on">
@@ -26,31 +26,35 @@
       </v-btn>  
 
     </v-toolbar>
-      <pre v-if="!isProductionMode && data.message" class="error lighten-2 white--text caption pa-2">
+      <!-- <pre v-if="!isProductionMode && data && data.message" class="error lighten-2 white--text caption pa-2">
         Exception
         {{data.message}}
+      </pre> -->
+      <pre v-if="!isProductionMode && hasError" class="error--text caption pa-1" style="box-shadow: 0 0 9px 2px;">
+        {{errorMessage}}
       </pre>
+
      <!--  <div class="accent white--text caption">{{uid}}</div> -->
       <component  
         v-if="config.type" 
-        :style="'width:100%;'+((hidden)?'display:none;' : '')" 
+        v-show="!hasError && !hidden"
+        :style="widgetStyle" 
         :is="config.type" 
         ref="instance" 
         :config="config" 
         @init="onInit">
-          
       </component>
   </v-card>
   <<< } else { >>>
   <v-card  ma-1 flat style="background:transparent;">
       <component  
         v-if="config.type" 
-        :style="'width:100%;'+((hidden)?'display:none;' : '')" 
+        :style="widgetStyle" 
         :is="config.type" 
         ref="instance" 
         :config="config" 
         @init="onInit">
-      </component>
+      </component>        
   </v-card>
   <<< } >>>
 </template>
@@ -101,6 +105,17 @@ export default {
     uid(){ return this._uid },
     globalConfig() {
      return find(this.app.currentPage.holders[this.holder].widgets, (item) => item.id == this.config.id)
+    },
+    widgetStyle() {
+      if(!this.config.options.style) return 'width:100%;'
+      try {
+        let extractor = /(widget-style {)[\n\r]*([\W\w]*)[\n\r]*(})/m
+        return (extractor.test(this.config.options.style)) 
+                  ? 'width:100%;'+ this.config.options.style.match(extractor)[2] 
+                  : 'width:100%;' //this.config.options.style
+      }  catch(e) {
+        return 'width:100%;'
+      }
     }
   },
 

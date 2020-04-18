@@ -3,7 +3,6 @@
 <<< if (jace.mode == "development") { >>>
   <v-card flat color="transparent">
     <v-card-title class="py-0" v-if="user.isLoggedIn">
-      <span class="font-weight-light body-2">{{portalURL}}</span>
      <v-spacer></v-spacer>
       
       <v-btn icon small @click="createApp" class="primary--text">
@@ -42,9 +41,81 @@
     <v-divider></v-divider>
     <v-row>
       
-      <v-col cols="4" class="ml-3 pa-0">
-        
-        <v-list style="
+      <v-col cols="6" class="ml-3 pa-0" style="background:white;">
+        <v-row class="mx-0">
+          <v-spacer></v-spacer>
+          <div class="primary--text caption pr-2">{{portalURL}}</div>
+        </v-row>
+
+        <v-row class="mx-0">
+          <v-spacer></v-spacer>
+          <v-text-field
+            class="col-6 px-2"
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-row>
+
+        <div>
+    
+          <v-data-table
+            :items="appList"
+            dense
+            :items-per-page="Number.POSITIVE_INFINITY"
+            hide-default-footer
+            :headers="headers"
+            :search="search"
+            style="overflow:auto; height:30em; border-top:1px solid #eaeaea;"
+          >
+           
+            <template v-slot:body="props">
+              <tbody>
+                <tr 
+                  v-for="(item, rowIndex) in props.items" 
+                  :key="rowIndex" 
+                  @click="toggle(item)"
+                  :class="(selected && selected.name == item.name) ? 'primary--text':'secondary--text'"
+                >
+                  <td>
+                    <dj-img :src="item.icon" icon="mdi-application" style="width:24px;" class="my-1"></dj-img>
+                  </td>  
+                  <td>
+                    {{item.name}}
+                  </td>
+                  <!-- <td>
+                    <v-rating 
+                      v-model="item.rate" 
+                      :length="5" 
+                      :empty-icon="`mdi-star-outline`" 
+                      :full-icon="`mdi-star`" 
+                      color="warning lighten-2" 
+                      background-color="secondary lighten-3"
+                      size="10"
+                      dense
+                      readonly
+                    >
+                    </v-rating>
+                  </td> -->  
+                  <td>
+                    <span class="caption font-weight-light">{{timeFormat(item.updatedAt)}}</span>
+                  </td>  
+                </tr>
+              </tbody>
+            </template>
+
+            <v-alert slot="no-results" :value="true" color="error" icon="warning">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+
+
+          </v-data-table>
+          
+        </div>  
+
+<!--         <v-list style="
             background:transparent !important;    
             max-height: 650px;
             overflow: auto;">
@@ -52,11 +123,17 @@
               <v-list-item-avatar tile size="24" class="ma-0">
                 <dj-img :src="item.icon" icon="mdi-application"></dj-img>
               </v-list-item-avatar>
-              <v-list-item-title class="body-2 pl-2" :class="(selected && selected.name == item.name) ? 'primary--text':''">{{item.name}}</v-list-item-title>
+              <v-list-item-title class="body-2 pl-2" :class="(selected && selected.name == item.name) ? 'primary--text':''">{{item.name}}
+              </v-list-item-title>
+              <v-spacer></v-spacer>
+              <v-list-item-title>
+                <v-icon small class="pr-2">mdi-update</v-icon>
+                <span class="caption">{{timeAgo(item.updatedAt)}}</span>
+              </v-list-item-title>  
               
             </v-list-item>
         </v-list>
-
+ -->
         <v-overlay
           absolute="absolute"
           opacity="0.4"
@@ -73,8 +150,22 @@
       
       <v-col class="mx-2">
         <v-card flat v-if="selected" color="transparent">
+          <!-- <v-row>
+            <v-rating 
+                      v-model="selected.rate" 
+                      :length="5" 
+                      :empty-icon="`mdi-star-outline`" 
+                      :full-icon="`mdi-star`" 
+                      color="warning lighten-2" 
+                      background-color="secondary lighten-3"
+                      size="18"
+                      dense
+                      readonly
+                    >
+            </v-rating>
+          </v-row> -->  
           <v-row>
-            <v-col>
+            <v-col class="py-0">
               <v-avatar tile size="36">
                <dj-img :src="selected.icon" icon="mdi-application" class="pr-2"></dj-img>
               </v-avatar>
@@ -250,6 +341,10 @@ export default {
       return moment(new Date(d)).fromNow();
     },
 
+    timeFormat(d){
+      return moment(new Date(d)).format("YYYY.MM.DD HH:mm")
+    },
+
     formatDate(d) {
       return moment(new Date(d)).format("DD MMM YYYY HH:mm")
     },
@@ -278,7 +373,12 @@ export default {
         .get('api/app/get-list')
         .then(response => {
           this._makeKeywords(response.data)
-          this.appList = response.data.map( d=> d )
+          this.appList = response.data.filter( d => d )
+          // .map( d => {
+          //   d.rate = Math.random()*5
+          //   return d
+          // })
+
           if(!this.selected && this.appList.length>0) this.selected = this.appList[0] 
           this.$nextTick(() => { 
             this.overlay = false 
@@ -325,10 +425,33 @@ export default {
     keywordsSelection: [],
     portalURL: "",
     user: window.user,
-    overlay:false
+    overlay:false,
+    search:"",
+    headers:[
+      {
+        text:"",
+        sortable:false
+      },
+      {
+        text:"Application",
+        value:"name",
+        sortable:true
+      },
+      // {
+      //   text:"Rate",
+      //   value:"rate",
+      //   sortable:true
+      // },
+      {
+        text:"Updated at",
+        value:"updatedAt",
+        sortable:true
+      }
+    ]
   })
 
 }
 
 </script>
+
 

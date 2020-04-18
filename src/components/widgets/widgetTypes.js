@@ -1,5 +1,7 @@
 import htmlWidget from "./html/html.type.js"
 import inputsWidget from "./inputs/inputs.type.js"
+import EduEditorWidget from "./edu-editor/edu-editor.type.js"
+import EduPushButtonWidget from "./edu-push-button/edu-push-button.type.js"
 
 import flowchartWidget from "./flowchart/flowchart.type.js"
 
@@ -24,6 +26,8 @@ import BarChartWidget from "./chart-bar/bar-chart.type.js"
 import WordcloudChartWidget from "./chart-word-cloud/wordcloud-chart.type.js"
 
 import PieChartWidget from "./chart-pie/pie-chart.type.js"
+import GraphChartWidget from "./chart-graph/graph-chart.type.js"
+
 import GaugeChartWidget from "./chart-gauge/gauge-chart.type.js"
 
 import LineChartWidget from "./chart-line/line-chart.type.js"
@@ -64,6 +68,9 @@ import FormResponseWidget from "./form-response/form-response.type.js"
 export default {
 	'html-widget' : htmlWidget,
 	'inputs-widget' : inputsWidget,
+	'edu-editor-widget' : EduEditorWidget,
+	'edu-push-button-widget' : EduPushButtonWidget,
+	
 	'flowchart-widget' : flowchartWidget,
 	'tree-widget' : treeWidget,
 
@@ -84,6 +91,8 @@ export default {
 	"wordcloud-chart-widget": WordcloudChartWidget,
 	
 	"pie-chart-widget": PieChartWidget,
+	"graph-chart-widget": GraphChartWidget,
+	
 	"gauge-chart-widget": GaugeChartWidget,
 	
 	"line-chart-widget": LineChartWidget,
