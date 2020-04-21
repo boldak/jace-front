@@ -102,7 +102,8 @@ export default {
         )
 
       }
-      this.emit("data-select", this, res)
+      let event = this.config.options.widget.event || "data-select"
+      this.emit(event, this, res)
     }
   },
 

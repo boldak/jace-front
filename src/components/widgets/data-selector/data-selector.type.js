@@ -20,8 +20,10 @@ export default {
         widget: {
           visible: true,
           multiple: true,
-          label: "Select Entities"
+          label: "Select Entities",
+          event: "data-select"
         },
+        
         mapper: {
           id: "3_alpha_code",
           title: "name"

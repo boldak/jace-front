@@ -37,6 +37,13 @@
             color="primary"
           ></v-switch>
 
+          <v-flex>
+            <v-text-field
+              v-model="config.options.widget.event"
+              label="Event"
+            ></v-text-field>
+          </v-flex>
+          
 
           <!-- <v-flex xs12 md8>
             <palette-picker :value = "config.options.palette" @change="onChangePalette"></palette-picker>
