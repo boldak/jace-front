@@ -1,153 +1,174 @@
 <template>
-  <<< if( jace.mode == "development") { >>>
-
-   <v-container fluid class="pa-1" v-show="!isProductionMode">
-
-    <v-layout wrap v-if="!isProductionMode">
-      <v-flex xs12>
-        
-        <editor       :content="config.data.script" 
-                      lang="javascript" 
-                      :sync="true"
-                      @change="onUpdateSource"
-                      style="border:1px solid #999"
-        > 
-        </editor>
-
-      </v-flex>
-    </v-layout>
-    <v-layout v-if="!isProductionMode">
+  <<< if( jace.mode=="development" ) {>>>
+    <v-container fluid class="pa-1" v-show="!isProductionMode">
+      <v-layout wrap v-if="!isProductionMode">
+        <v-flex xs12>
+          <editor :content="config.data.script" lang="javascript" :sync="true" @change="onUpdateSource" style="border:1px solid #999">
+          </editor>
+        </v-flex>
+      </v-layout>
+      <v-layout v-if="!isProductionMode">
         <v-spacer></v-spacer>
         <v-btn text color="primary" v-on:click="_runScript()">
-              Run
-        </v-btn>  
-     </v-layout>  
-   
-  </v-container>
-
-  <<<  } else { >>>
-    <div></div>
-  <<< } >>>
+          Run
+        </v-btn>
+      </v-layout>
+    </v-container>
+    <<< } else {>>>
+      <div></div>
+      <<< }>>>
 </template>
-
 <script>
+import djvueMixin from "@/mixins/core/djvue.mixin.js";
+import listenerMixin from "@/mixins/core/listener.mixin.js";
+import axios from "axios";
 
-  import djvueMixin from "@/mixins/core/djvue.mixin.js";
-  import listenerMixin from "@/mixins/core/listener.mixin.js";
+<<<
+if (jace.mode == "development") { >>>
 
-<<< if( jace.mode == "development") { >>>  
-  
   import editor from '@/components/core/ext/ace-editor.vue';
 
-<<< } >>>
+  <<<
+} >>>
 
-  import * as _ from "lodash"
-  import moment from "moment"
-  // import * as Cookie from "tiny-cookie"
+import * as _ from "lodash"
+import moment from "moment"
+// import * as Cookie from "tiny-cookie"
 
-  
-  class MediatorError extends Error {
-    constructor(message) {
-      super(message);
-      this.name = "Mediator Error";
-    }
+
+class MediatorError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "Mediator Error";
   }
+}
 
- export default  {
-    
-    name:"mediator-widget",
+export default {
 
-    icon: "mdi-language-javascript",
+  name: "mediator-widget",
 
-<<< if( jace.mode == "development") { >>>  
+  icon: "mdi-language-javascript",
 
-    components:{editor},
+  <<<
+  if (jace.mode == "development") { >>>
 
-<<< } >>>
+    components: { editor },
 
-    mixins:[djvueMixin, listenerMixin],
+      <<<
+  } >>>
 
-    methods:{
+  mixins: [djvueMixin, listenerMixin],
 
-      // onReconfigure (widgetConfig) {
-      //  return this.$dialog.showAndWait(MediatorConfig, {config:widgetConfig})
-      // },
+  methods: {
 
-      onUpdateSource (value) {
-          this.config.data.script = value
-          this.setNeedSave(true)
-      },
+    // onReconfigure (widgetConfig) {
+    //  return this.$dialog.showAndWait(MediatorConfig, {config:widgetConfig})
+    // },
 
-      // onPageStart () {
-      //  this._runScript();
-      // },
+    onUpdateSource(value) {
+      this.config.data.script = value
+      this.setNeedSave(true)
+    },
+
+    // onPageStart () {
+    //  this._runScript();
+    // },
 
 
-      onRun () {
-        return new Promise( (resolve, reject) => {
-          try {
-            this._runScript()
-            resolve()
-          } catch (e) {
-            reject(`Mediator ${this.config.id} : ${e.toString()}`)
-          }
-        })
-      },
+    onRun() {
+      return new Promise((resolve, reject) => {
+        try {
+          this._runScript()
+          resolve()
+        } catch (e) {
+          reject(`Mediator ${this.config.id} : ${e.toString()}`)
+        }
+      })
+    },
 
-      _runScript () {
+    _runScript() {
 
-        window.console.log(`Run script ${this.config.id}
+      window.console.log(`Run script ${this.config.id}
 ${this.config.data.script}
 `)
 
-        this.api = {
-          selectWidgets: (filter) => {
-            filter = filter || ( () => true);
-            if(!_.isFunction(filter)){
-              let identifiers = (_.isArray(filter)) ? filter : [filter];
-              filter = (item) => _.find(identifiers, i => item.config.id == i)  
+      this.api = {
+        selectWidgets: (filter) => {
+          filter = filter || (() => true);
+          if (!_.isFunction(filter)) {
+            let identifiers = (_.isArray(filter)) ? filter : [filter];
+            filter = (item) => _.find(identifiers, i => item.config.id == i)
+          }
+
+          let res = this.$djvue.selectWidgets(this.$root, item => item.config && filter(item));
+
+          return (res.length == 0) ?
+            undefined :
+            (res.length == 1) ?
+            res[0] :
+            res
+        },
+
+        on: this.on,
+        off: this.off,
+        emit: (event, data) => { this.emit(event, this, data) },
+
+        progress: this.$djvue.progress,
+        selectFile: this.$djvue.selectFile,
+        confirm: this.$djvue.confirm,
+        warning: this.$djvue.warning,
+        dialog: this.$djvue.customDialog,
+        _: _,
+
+        moment: moment,
+        axios: axios,
+
+        Cookie: this.$cookie,
+
+        runDps: (script, state, file) => this.$dps.run({
+          script,
+          state: state || {},
+          file
+        }),
+
+        // .then(res => {
+        //   res.data.$$error = (res.type=="error") ? res.data.message: undefined
+        //   return res.data
+        // })
+        
+        flickrImage: tag => {
+
+          let flickr =  (method, params) => {
+              return axios({
+                method: 'get',
+                url: 'https://api.flickr.com/services/rest',
+                params: {
+                  api_key: "6f394a89a9739808123ba0808bdaf9d3",
+                  format: 'json',
+                  nojsoncallback: 1,
+                  ...params,
+                  method: `flickr.${method}`,
+                }
+              })
             }
-
-            let res = this.$djvue.selectWidgets( this.$root, item => item.config && filter(item)); 
-            
-            return (res.length == 0) 
-                      ? undefined
-                      : (res.length == 1)
-                        ? res[0]
-                        : res
-          },
           
-          on:this.on,
-          off: this.off,
-          emit: (event,data) => {this.emit(event,this,data)},
-          
-          progress: this.$djvue.progress,
-          selectFile: this.$djvue.selectFile,
-          confirm: this.$djvue.confirm,
-          warning: this.$djvue.warning,
-          dialog: this.$djvue.customDialog,
-          _ : _,
-
-          moment: moment, 
-
-          Cookie: this.$cookie,
-          
-          runDps: (script, state, file) => this.$dps.run({ 
-                      script, 
-                      state:state||{},
-                      file
-                    })
-                    // .then(res => {
-                    //   res.data.$$error = (res.type=="error") ? res.data.message: undefined
-                    //   return res.data
-                    // })
-
+          return flickr('photos.search', {
+                tags: tag.split(" ").join(","),
+                tag_mode: "all",
+                extras: 'url_n, owner_name, description, date_taken, views',
+                page: 1,
+                per_page: 1,
+            }).then((response) => {
+                return response.data.photos.photo
+            })
         }
 
-        try {
+      }
 
-          eval(
-            `
+      try {
+
+        eval(
+          `
             (function() { 
               let selectWidgets = this.api.selectWidgets;
               let on = this.api.on;
@@ -161,29 +182,29 @@ ${this.config.data.script}
             )
 
             `
-          ).apply(this)  
+        ).apply(this)
 
-        } catch(e) {
+      } catch (e) {
 
-          // this.$djvue.warning({
-          //           type:"error",
-          //           title:`Error mediator ${this.config.id}:${this.config.name} script error`,
-          //           text:e.toString()
-          //         })
-          throw new MediatorError(` Mediator ${this.config.id}: ${e.toString()} `)
-        }
+        // this.$djvue.warning({
+        //           type:"error",
+        //           title:`Error mediator ${this.config.id}:${this.config.name} script error`,
+        //           text:e.toString()
+        //         })
+        throw new MediatorError(` Mediator ${this.config.id}: ${e.toString()} `)
       }
-
-    },
-
-    
-    props:["config"],
-
-  
-    mounted(){
-       this.$emit("init")
     }
 
+  },
+
+
+  props: ["config"],
+
+
+  mounted() {
+    this.$emit("init")
   }
 
-</script>	
+}
+
+</script>
