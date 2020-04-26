@@ -3160,6 +3160,122 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
+define("ace/mode/plant_uml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+
+var PlantUMLHighlightRules = function() {
+
+    this.$rules = {
+        start: [{
+            token: "keyword.control.plantuml",
+            regex: /^\s*(?:@startuml|@enduml)\b/
+        }, {
+            token: "variable.other.stereotype.plantuml",
+            regex: /<<[\s\w]*>>/
+        }, {
+            token: "keyword.control.externalmsgs.plantuml",
+            regex: /^\s*(?:\[(?:<--?|-?->)|(?:<--?|-?->)\])\s+/
+        }, {
+            token: "keyword.operator.plantuml",
+            regex: /:|--/
+        }, {
+            token: "keyword.operator.relations.plantuml",
+            regex: /(?:^|\s)(?:\*|o|<\|)?(?:-+(?:right|left|up|down))?-+(?:\*|o|\|>)?\s+/
+        }, {
+            token: "keyword.operator.dottedrelations.plantuml",
+            regex: /(?:^|\s)(?:\*|o|<\|){0,2}(?:\.+(?:right|left|up|down))?\.+(?:\*|o|\|>){0,2}\s+/
+        }, {
+            token: "keyword.operator.arrows.plantuml",
+            regex: /(?:^|\s)<{0,2}(?:-+(?:right|left|up|down))?-+>{0,2}\s+/
+        }, {
+            token: "keyword.operator.dottedarrows.plantuml",
+            regex: /(?:^|\s)<{0,2}(?:\.+(?:right|left|up|down))?\.+>{0,2}\s+/
+        }, {
+            token: "keyword.operator.lines.plantuml",
+            regex: /(?:^|\s)(?:-|\.)+\s+/
+        }, {
+            token: "keyword.control.divider.plantuml",
+            regex: /^\s*==[\s\w]*==/
+        }, {
+            token: "keyword.control.synchronizationbar.plantuml",
+            regex: /^\s*===[\s\w]*===/
+        }, {
+            token: "keyword.other.plantuml",
+            regex: /\b(?:activate|again|also|alt|as|autonumber|bottom|box|break|center|create|critical|deactivate|destroy|down|else|end|endif|endwhile|footbox|footer|fork|group|header|hide|if|is|left|link|loop|namespace|newpage|note|of|on|opt|over|package|page|par|partition|ref|repeat|return|right|rotate|show|skin|skinparam|start|stop|title|top|top to bottom direction|up|while)\b/
+        }, {
+            token: "support.type.plantuml",
+            regex: /^\s*(?:abstract|actor|agent|artifact|boundary|class|cloud|component|control|database|entity|enum|folder|frame|interface|node|object|participant|rect|state|storage|usecase)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.language.skinparameter.plantuml",
+            regex: /\b(?:Activity2FontColor|Activity2FontName|Activity2FontSize|Activity2FontStyle|ActivityArrow2FontColor|ActivityArrow2FontName|ActivityArrow2FontSize|ActivityArrow2FontStyle|ActivityArrowColor|ActivityBackgroundColor|ActivityBarColor|ActivityBorderColor|ActivityEndColor|ActivityFontColor|ActivityFontName|ActivityFontSize|ActivityFontStyle|ActivityStartColor|ArtifactBackgroundColor|ArtifactBorderColor|BackgroundColor|BoundaryBackgroundColor|BoundaryBorderColor|CircledCharacterFontColor|CircledCharacterFontName|CircledCharacterFontSize|CircledCharacterFontStyle|CircledCharacterRadius|ClassArrowColor|ClassAttributeFontColor|ClassAttributeFontName|ClassAttributeFontSize|ClassAttributeFontStyle|ClassAttributeIconSize|ClassBackgroundColor|ClassBorderColor|ClassFontColor|ClassFontName|ClassFontSize|ClassFontStyle|ClassStereotypeFontColor|ClassStereotypeFontName|ClassStereotypeFontSize|ClassStereotypeFontStyle|CloudBackgroundColor|CloudBorderColor|ComponentBackgroundColor|ComponentBorderColor|ComponentFontColor|ComponentFontName|ComponentFontSize|ComponentFontStyle|ComponentInterfaceBackgroundColor|ComponentInterfaceBorderColor|ComponentStereotypeFontColor|ComponentStereotypeFontName|ComponentStereotypeFontSize|ComponentStereotypeFontStyle|ControlBackgroundColor|ControlBorderColor|DatabaseBackgroundColor|DatabaseBorderColor|DefaultFontColor|DefaultFontName|DefaultFontSize|DefaultFontStyle|EntityBackgroundColor|EntityBorderColor|FolderBackgroundColor|FolderBorderColor|FooterFontColor|FooterFontName|FooterFontSize|FooterFontStyle|FrameBackgroundColor|FrameBorderColor|GenericArrowFontColor|GenericArrowFontName|GenericArrowFontSize|GenericArrowFontStyle|HeaderFontColor|HeaderFontName|HeaderFontSize|HeaderFontStyle|IconPackageBackgroundColor|IconPackageColor|IconPrivateBackgroundColor|IconPrivateColor|IconProtectedBackgroundColor|IconProtectedColor|IconPublicBackgroundColor|IconPublicColor|LegendBackgroundColor|LegendBorderColor|LegendFontColor|LegendFontName|LegendFontSize|LegendFontStyle|Monochrome|NodeBackgroundColor|NodeBorderColor|NoteBackgroundColor|NoteBorderColor|NoteFontColor|NoteFontName|NoteFontSize|NoteFontStyle|ObjectArrowColor|ObjectAttributeFontColor|ObjectAttributeFontName|ObjectAttributeFontSize|ObjectAttributeFontStyle|ObjectBackgroundColor|ObjectBorderColor|ObjectFontColor|ObjectFontName|ObjectFontSize|ObjectFontStyle|ObjectStereotypeFontColor|ObjectStereotypeFontName|ObjectStereotypeFontSize|ObjectStereotypeFontStyle|PackageBackgroundColor|PackageBorderColor|PackageFontColor|PackageFontName|PackageFontSize|PackageFontStyle|PartitionBackgroundColor|PartitionBorderColor|RectangleBackgroundColor|RectangleBorderColor|SequenceActorBackgroundColor|SequenceActorBorderColor|SequenceActorFontColor|SequenceActorFontName|SequenceActorFontSize|SequenceActorFontStyle|SequenceArrowColor|SequenceArrowFontColor|SequenceArrowFontName|SequenceArrowFontSize|SequenceArrowFontStyle|SequenceBoxBackgroundColor|SequenceBoxBorderColor|SequenceBoxFontColor|SequenceBoxFontName|SequenceBoxFontSize|SequenceBoxFontStyle|SequenceDelayFontColor|SequenceDelayFontName|SequenceDelayFontSize|SequenceDelayFontStyle|SequenceDividerBackgroundColor|SequenceDividerFontColor|SequenceDividerFontName|SequenceDividerFontSize|SequenceDividerFontStyle|SequenceGroupBackgroundColor|SequenceGroupBorderColor|SequenceGroupFontColor|SequenceGroupFontName|SequenceGroupFontSize|SequenceGroupFontStyle|SequenceGroupHeaderFontColor|SequenceGroupHeaderFontName|SequenceGroupHeaderFontSize|SequenceGroupHeaderFontStyle|SequenceLifeLineBackgroundColor|SequenceLifeLineBorderColor|SequenceParticipantBackgroundColor|SequenceParticipantBorderColor|SequenceParticipantFontColor|SequenceParticipantFontName|SequenceParticipantFontSize|SequenceParticipantFontStyle|SequenceReferenceBackgroundColor|SequenceReferenceBorderColor|SequenceReferenceFontColor|SequenceReferenceFontName|SequenceReferenceFontSize|SequenceReferenceFontStyle|SequenceReferenceHeaderBackgroundColor|SequenceTitleFontColor|SequenceTitleFontName|SequenceTitleFontSize|SequenceTitleFontStyle|StateArrowColor|StateAttributeFontColor|StateAttributeFontName|StateAttributeFontSize|StateAttributeFontStyle|StateBackgroundColor|StateBorderColor|StateEndColor|StateFontColor|StateFontName|StateFontSize|StateFontStyle|StateStartColor|StereotypeABackgroundColor|StereotypeCBackgroundColor|StereotypeEBackgroundColor|StereotypeIBackgroundColor|StorageBackgroundColor|StorageBorderColor|TitleFontColor|TitleFontName|TitleFontSize|TitleFontStyle|UsecaseActorBackgroundColor|UsecaseActorBorderColor|UsecaseActorFontColor|UsecaseActorFontName|UsecaseActorFontSize|UsecaseActorFontStyle|UsecaseActorStereotypeFontColor|UsecaseActorStereotypeFontName|UsecaseActorStereotypeFontSize|UsecaseActorStereotypeFontStyle|UsecaseArrowColor|UsecaseBackgroundColor|UsecaseBorderColor|UsecaseFontColor|UsecaseFontName|UsecaseFontSize|UsecaseFontStyle|UsecaseStereotypeFontColor|UsecaseStereotypeFontName|UsecaseStereotypeFontSize|UsecaseStereotypeFontStyle)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.other.colors.plantuml",
+            regex: /\s+#(?:AliceBlue|AntiqueWhite|Aqua|Aquamarine|Azure|Beige|Bisque|Black|BlanchedAlmond|Blue|BlueViolet|Brown|BurlyWood|CadetBlue|Chartreuse|Chocolate|Coral|CornflowerBlue|Cornsilk|Crimson|Cyan|DarkBlue|DarkCyan|DarkGoldenRod|DarkGray|DarkGreen|DarkGrey|DarkKhaki|DarkMagenta|DarkOliveGreen|DarkOrchid|DarkRed|DarkSalmon|DarkSeaGreen|DarkSlateBlue|DarkSlateGray|DarkSlateGrey|DarkTurquoise|DarkViolet|Darkorange|DeepPink|DeepSkyBlue|DimGray|DimGrey|DodgerBlue|FireBrick|FloralWhite|ForestGreen|Fuchsia|Gainsboro|GhostWhite|Gold|GoldenRod|Gray|Green|GreenYellow|Grey|HoneyDew|HotPink|IndianRed|Indigo|Ivory|Khaki|Lavender|LavenderBlush|LawnGreen|LemonChiffon|LightBlue|LightCoral|LightCyan|LightGoldenRodYellow|LightGray|LightGreen|LightGrey|LightPink|LightSalmon|LightSeaGreen|LightSkyBlue|LightSlateGray|LightSlateGrey|LightSteelBlue|LightYellow|Lime|LimeGreen|Linen|Magenta|Maroon|MediumAquaMarine|MediumBlue|MediumOrchid|MediumPurple|MediumSeaGreen|MediumSlateBlue|MediumSpringGreen|MediumTurquoise|MediumVioletRed|MidnightBlue|MintCream|MistyRose|Moccasin|NavajoWhite|Navy|OldLace|Olive|OliveDrab|Orange|OrangeRed|Orchid|PaleGoldenRod|PaleGreen|PaleTurquoise|PaleVioletRed|PapayaWhip|PeachPuff|Peru|Pink|Plum|PowderBlue|Purple|Red|RosyBrown|RoyalBlue|SaddleBrown|Salmon|SandyBrown|SeaGreen|SeaShell|Sienna|Silver|SkyBlue|SlateBlue|SlateGray|SlateGrey|Snow|SpringGreen|SteelBlue|Tan|Teal|Thistle|Tomato|Turquoise|Violet|Wheat|White|WhiteSmoke|Yellow|YellowGreen)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.numeric.hexcolors.plantuml",
+            regex: /#[a-fA-F0-9]{6}/
+        }, {
+            token: "constant.language.symbols.plantuml",
+            regex: /\[\*\]|\(\)|\(\*\)/
+        }, {
+            token: "string.quoted.double.plantuml",
+            regex: /"/,
+            push: [{
+                token: "string.quoted.double.plantuml",
+                regex: /"/,
+                next: "pop"
+            }, {
+                token: "constant.character.escape.plantuml",
+                regex: /\./
+            }, {
+                defaultToken: "string.quoted.double.plantuml"
+            }]
+        }]
+    }
+    
+    this.normalizeRules();
+};
+
+PlantUMLHighlightRules.metaData = {
+    fileTypes: ["txt", "iuml"],
+    firstLineMatch: "@startuml",
+    name: "PlantUML",
+    scopeName: "source.plantuml",
+    semanticClass: "text.plantuml"
+}
+
+
+oop.inherits(PlantUMLHighlightRules, TextHighlightRules);
+
+exports.PlantUMLHighlightRules = PlantUMLHighlightRules;
+});
+
+define("ace/mode/plantuml",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/plant_uml_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var TextMode = require("./text").Mode;
+var PlantUMLHighlightRules = require("./plant_uml_highlight_rules").PlantUMLHighlightRules;
+var FoldMode = require("./folding/cstyle").FoldMode;
+
+var Mode = function() {
+    this.HighlightRules = PlantUMLHighlightRules;
+};
+oop.inherits(Mode, TextMode);
+
+(function() {
+    this.$id = "ace/mode/plant_uml"
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
+});
+
 define("ace/mode/mysql_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], function(require, exports, module) {
 
 var oop = require("../lib/oop");
@@ -3271,7 +3387,103 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-define("ace/mode/dps_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules","ace/mode/doc_comment_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/json_highlight_rules","ace/mode/html_highlight_rules","ace/mode/xml_highlight_rules","ace/mode/csv_highlight_rules","ace/mode/dot_highlight_rules","ace/mode/cypher_highlight_rules","ace/mode/mysql_highlight_rules"], function(require, exports, module) {
+define("ace/mode/plantuml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+
+var PlantUMLHighlightRules = function() {
+
+    this.$rules = {
+        start: [{
+            token: "keyword.control.plantuml",
+            regex: /^\s*(?:@startuml|@enduml)\b/
+        }, {
+            token: "variable.other.stereotype.plantuml",
+            regex: /<<[\s\w]*>>/
+        }, {
+            token: "keyword.control.externalmsgs.plantuml",
+            regex: /^\s*(?:\[(?:<--?|-?->)|(?:<--?|-?->)\])\s+/
+        }, {
+            token: "keyword.operator.plantuml",
+            regex: /:|--/
+        }, {
+            token: "keyword.operator.relations.plantuml",
+            regex: /(?:^|\s)(?:\*|o|<\|)?(?:-+(?:right|left|up|down))?-+(?:\*|o|\|>)?\s+/
+        }, {
+            token: "keyword.operator.dottedrelations.plantuml",
+            regex: /(?:^|\s)(?:\*|o|<\|){0,2}(?:\.+(?:right|left|up|down))?\.+(?:\*|o|\|>){0,2}\s+/
+        }, {
+            token: "keyword.operator.arrows.plantuml",
+            regex: /(?:^|\s)<{0,2}(?:-+(?:right|left|up|down))?-+>{0,2}\s+/
+        }, {
+            token: "keyword.operator.dottedarrows.plantuml",
+            regex: /(?:^|\s)<{0,2}(?:\.+(?:right|left|up|down))?\.+>{0,2}\s+/
+        }, {
+            token: "keyword.operator.lines.plantuml",
+            regex: /(?:^|\s)(?:-|\.)+\s+/
+        }, {
+            token: "keyword.control.divider.plantuml",
+            regex: /^\s*==[\s\w]*==/
+        }, {
+            token: "keyword.control.synchronizationbar.plantuml",
+            regex: /^\s*===[\s\w]*===/
+        }, {
+            token: "keyword.other.plantuml",
+            regex: /\b(?:activate|again|also|alt|as|autonumber|bottom|box|break|center|create|critical|deactivate|destroy|down|else|end|endif|endwhile|footbox|footer|fork|group|header|hide|if|is|left|link|loop|namespace|newpage|note|of|on|opt|over|package|page|par|partition|ref|repeat|return|right|rotate|show|skin|skinparam|start|stop|title|top|top to bottom direction|up|while)\b/
+        }, {
+            token: "support.type.plantuml",
+            regex: /^\s*(?:abstract|actor|agent|artifact|boundary|class|cloud|component|control|database|entity|enum|folder|frame|interface|node|object|participant|rect|state|storage|usecase)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.language.skinparameter.plantuml",
+            regex: /\b(?:Activity2FontColor|Activity2FontName|Activity2FontSize|Activity2FontStyle|ActivityArrow2FontColor|ActivityArrow2FontName|ActivityArrow2FontSize|ActivityArrow2FontStyle|ActivityArrowColor|ActivityBackgroundColor|ActivityBarColor|ActivityBorderColor|ActivityEndColor|ActivityFontColor|ActivityFontName|ActivityFontSize|ActivityFontStyle|ActivityStartColor|ArtifactBackgroundColor|ArtifactBorderColor|BackgroundColor|BoundaryBackgroundColor|BoundaryBorderColor|CircledCharacterFontColor|CircledCharacterFontName|CircledCharacterFontSize|CircledCharacterFontStyle|CircledCharacterRadius|ClassArrowColor|ClassAttributeFontColor|ClassAttributeFontName|ClassAttributeFontSize|ClassAttributeFontStyle|ClassAttributeIconSize|ClassBackgroundColor|ClassBorderColor|ClassFontColor|ClassFontName|ClassFontSize|ClassFontStyle|ClassStereotypeFontColor|ClassStereotypeFontName|ClassStereotypeFontSize|ClassStereotypeFontStyle|CloudBackgroundColor|CloudBorderColor|ComponentBackgroundColor|ComponentBorderColor|ComponentFontColor|ComponentFontName|ComponentFontSize|ComponentFontStyle|ComponentInterfaceBackgroundColor|ComponentInterfaceBorderColor|ComponentStereotypeFontColor|ComponentStereotypeFontName|ComponentStereotypeFontSize|ComponentStereotypeFontStyle|ControlBackgroundColor|ControlBorderColor|DatabaseBackgroundColor|DatabaseBorderColor|DefaultFontColor|DefaultFontName|DefaultFontSize|DefaultFontStyle|EntityBackgroundColor|EntityBorderColor|FolderBackgroundColor|FolderBorderColor|FooterFontColor|FooterFontName|FooterFontSize|FooterFontStyle|FrameBackgroundColor|FrameBorderColor|GenericArrowFontColor|GenericArrowFontName|GenericArrowFontSize|GenericArrowFontStyle|HeaderFontColor|HeaderFontName|HeaderFontSize|HeaderFontStyle|IconPackageBackgroundColor|IconPackageColor|IconPrivateBackgroundColor|IconPrivateColor|IconProtectedBackgroundColor|IconProtectedColor|IconPublicBackgroundColor|IconPublicColor|LegendBackgroundColor|LegendBorderColor|LegendFontColor|LegendFontName|LegendFontSize|LegendFontStyle|Monochrome|NodeBackgroundColor|NodeBorderColor|NoteBackgroundColor|NoteBorderColor|NoteFontColor|NoteFontName|NoteFontSize|NoteFontStyle|ObjectArrowColor|ObjectAttributeFontColor|ObjectAttributeFontName|ObjectAttributeFontSize|ObjectAttributeFontStyle|ObjectBackgroundColor|ObjectBorderColor|ObjectFontColor|ObjectFontName|ObjectFontSize|ObjectFontStyle|ObjectStereotypeFontColor|ObjectStereotypeFontName|ObjectStereotypeFontSize|ObjectStereotypeFontStyle|PackageBackgroundColor|PackageBorderColor|PackageFontColor|PackageFontName|PackageFontSize|PackageFontStyle|PartitionBackgroundColor|PartitionBorderColor|RectangleBackgroundColor|RectangleBorderColor|SequenceActorBackgroundColor|SequenceActorBorderColor|SequenceActorFontColor|SequenceActorFontName|SequenceActorFontSize|SequenceActorFontStyle|SequenceArrowColor|SequenceArrowFontColor|SequenceArrowFontName|SequenceArrowFontSize|SequenceArrowFontStyle|SequenceBoxBackgroundColor|SequenceBoxBorderColor|SequenceBoxFontColor|SequenceBoxFontName|SequenceBoxFontSize|SequenceBoxFontStyle|SequenceDelayFontColor|SequenceDelayFontName|SequenceDelayFontSize|SequenceDelayFontStyle|SequenceDividerBackgroundColor|SequenceDividerFontColor|SequenceDividerFontName|SequenceDividerFontSize|SequenceDividerFontStyle|SequenceGroupBackgroundColor|SequenceGroupBorderColor|SequenceGroupFontColor|SequenceGroupFontName|SequenceGroupFontSize|SequenceGroupFontStyle|SequenceGroupHeaderFontColor|SequenceGroupHeaderFontName|SequenceGroupHeaderFontSize|SequenceGroupHeaderFontStyle|SequenceLifeLineBackgroundColor|SequenceLifeLineBorderColor|SequenceParticipantBackgroundColor|SequenceParticipantBorderColor|SequenceParticipantFontColor|SequenceParticipantFontName|SequenceParticipantFontSize|SequenceParticipantFontStyle|SequenceReferenceBackgroundColor|SequenceReferenceBorderColor|SequenceReferenceFontColor|SequenceReferenceFontName|SequenceReferenceFontSize|SequenceReferenceFontStyle|SequenceReferenceHeaderBackgroundColor|SequenceTitleFontColor|SequenceTitleFontName|SequenceTitleFontSize|SequenceTitleFontStyle|StateArrowColor|StateAttributeFontColor|StateAttributeFontName|StateAttributeFontSize|StateAttributeFontStyle|StateBackgroundColor|StateBorderColor|StateEndColor|StateFontColor|StateFontName|StateFontSize|StateFontStyle|StateStartColor|StereotypeABackgroundColor|StereotypeCBackgroundColor|StereotypeEBackgroundColor|StereotypeIBackgroundColor|StorageBackgroundColor|StorageBorderColor|TitleFontColor|TitleFontName|TitleFontSize|TitleFontStyle|UsecaseActorBackgroundColor|UsecaseActorBorderColor|UsecaseActorFontColor|UsecaseActorFontName|UsecaseActorFontSize|UsecaseActorFontStyle|UsecaseActorStereotypeFontColor|UsecaseActorStereotypeFontName|UsecaseActorStereotypeFontSize|UsecaseActorStereotypeFontStyle|UsecaseArrowColor|UsecaseBackgroundColor|UsecaseBorderColor|UsecaseFontColor|UsecaseFontName|UsecaseFontSize|UsecaseFontStyle|UsecaseStereotypeFontColor|UsecaseStereotypeFontName|UsecaseStereotypeFontSize|UsecaseStereotypeFontStyle)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.other.colors.plantuml",
+            regex: /\s+#(?:AliceBlue|AntiqueWhite|Aqua|Aquamarine|Azure|Beige|Bisque|Black|BlanchedAlmond|Blue|BlueViolet|Brown|BurlyWood|CadetBlue|Chartreuse|Chocolate|Coral|CornflowerBlue|Cornsilk|Crimson|Cyan|DarkBlue|DarkCyan|DarkGoldenRod|DarkGray|DarkGreen|DarkGrey|DarkKhaki|DarkMagenta|DarkOliveGreen|DarkOrchid|DarkRed|DarkSalmon|DarkSeaGreen|DarkSlateBlue|DarkSlateGray|DarkSlateGrey|DarkTurquoise|DarkViolet|Darkorange|DeepPink|DeepSkyBlue|DimGray|DimGrey|DodgerBlue|FireBrick|FloralWhite|ForestGreen|Fuchsia|Gainsboro|GhostWhite|Gold|GoldenRod|Gray|Green|GreenYellow|Grey|HoneyDew|HotPink|IndianRed|Indigo|Ivory|Khaki|Lavender|LavenderBlush|LawnGreen|LemonChiffon|LightBlue|LightCoral|LightCyan|LightGoldenRodYellow|LightGray|LightGreen|LightGrey|LightPink|LightSalmon|LightSeaGreen|LightSkyBlue|LightSlateGray|LightSlateGrey|LightSteelBlue|LightYellow|Lime|LimeGreen|Linen|Magenta|Maroon|MediumAquaMarine|MediumBlue|MediumOrchid|MediumPurple|MediumSeaGreen|MediumSlateBlue|MediumSpringGreen|MediumTurquoise|MediumVioletRed|MidnightBlue|MintCream|MistyRose|Moccasin|NavajoWhite|Navy|OldLace|Olive|OliveDrab|Orange|OrangeRed|Orchid|PaleGoldenRod|PaleGreen|PaleTurquoise|PaleVioletRed|PapayaWhip|PeachPuff|Peru|Pink|Plum|PowderBlue|Purple|Red|RosyBrown|RoyalBlue|SaddleBrown|Salmon|SandyBrown|SeaGreen|SeaShell|Sienna|Silver|SkyBlue|SlateBlue|SlateGray|SlateGrey|Snow|SpringGreen|SteelBlue|Tan|Teal|Thistle|Tomato|Turquoise|Violet|Wheat|White|WhiteSmoke|Yellow|YellowGreen)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.numeric.hexcolors.plantuml",
+            regex: /#[a-fA-F0-9]{6}/
+        }, {
+            token: "constant.language.symbols.plantuml",
+            regex: /\[\*\]|\(\)|\(\*\)/
+        }, {
+            token: "string.quoted.double.plantuml",
+            regex: /"/,
+            push: [{
+                token: "string.quoted.double.plantuml",
+                regex: /"/,
+                next: "pop"
+            }, {
+                token: "constant.character.escape.plantuml",
+                regex: /\./
+            }, {
+                defaultToken: "string.quoted.double.plantuml"
+            }]
+        }]
+    }
+    
+    this.normalizeRules();
+};
+
+PlantUMLHighlightRules.metaData = {
+    fileTypes: ["txt", "iuml"],
+    firstLineMatch: "@startuml",
+    name: "PlantUML",
+    scopeName: "source.plantuml",
+    semanticClass: "text.plantuml"
+}
+
+
+oop.inherits(PlantUMLHighlightRules, TextHighlightRules);
+
+exports.PlantUMLHighlightRules = PlantUMLHighlightRules;
+});
+
+define("ace/mode/dps_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules","ace/mode/doc_comment_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/json_highlight_rules","ace/mode/html_highlight_rules","ace/mode/xml_highlight_rules","ace/mode/csv_highlight_rules","ace/mode/dot_highlight_rules","ace/mode/cypher_highlight_rules","ace/mode/plantuml_highlight_rules","ace/mode/mysql_highlight_rules"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -3285,6 +3497,8 @@ var XmlHighlightRules = require("./xml_highlight_rules").XmlHighlightRules;
 var CsvHighlightRules = require("./csv_highlight_rules").CsvHighlightRules;
 var DotHighlightRules = require("./dot_highlight_rules").DotHighlightRules;
 var CypherHighlightRules = require("./cypher_highlight_rules").CypherHighlightRules;
+var PlantUMLHighlightRules = require("./plantuml_highlight_rules").PlantUMLHighlightRules;
+
 var MysqlHighlightRules = require("./mysql_highlight_rules").MysqlHighlightRules;
 
 var BindableJSHighlightRules =  function() {
@@ -3497,6 +3711,17 @@ var DpsHighlightRules = function() {
         },
         {
             token: "meta.tag",
+            regex: /<\?plantuml/,
+            push: "plantuml-start"
+        },
+        {
+            token: "meta.tag",
+            regex: /<\?uml/,
+            push: "plantuml-start"
+        },
+
+        {
+            token: "meta.tag",
             regex: /<\?neo4j/,
             push: "cypher-start"
         },
@@ -3522,6 +3747,7 @@ var DpsHighlightRules = function() {
     this.embedRules(CsvHighlightRules, "csv-", endRules, ["start"]);
     this.embedRules(DotHighlightRules, "dot-", endRules, ["start"]);
     this.embedRules(CypherHighlightRules, "cypher-", endRules, ["start"]);
+    this.embedRules(PlantUMLHighlightRules, "plantuml-", endRules, ["start"]);
     this.embedRules(MysqlHighlightRules, "sql-", endRules, ["start"]);
 
     for (var key in this.$rules)
@@ -3536,7 +3762,7 @@ exports.DpsHighlightRules = DpsHighlightRules;
 
 });
 
-define("ace/mode/dps",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/json","ace/mode/html","ace/mode/xml","ace/mode/csv","ace/mode/dot","ace/mode/cypher","ace/mode/mysql","ace/mode/matching_brace_outdent","ace/mode/dps_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
+define("ace/mode/dps",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/json","ace/mode/html","ace/mode/xml","ace/mode/csv","ace/mode/dot","ace/mode/cypher","ace/mode/plantuml","ace/mode/mysql","ace/mode/matching_brace_outdent","ace/mode/dps_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -3548,6 +3774,7 @@ var XmlMode = require("./xml").Mode;
 var CsvMode = require("./csv").Mode;
 var DotMode = require("./dot").Mode;
 var CypherMode = require("./cypher").Mode;
+var PlantUMLMode = require("./plantuml").Mode;
 var MysqlMode = require("./mysql").Mode;
 
 
@@ -3568,6 +3795,7 @@ var Mode = function() {
         "csv-": CsvMode,
         "dot-": DotMode,
         "cypher-": CypherMode,
+        "plantuml-": PlantUMLMode,
         "sql-": MysqlMode 
     });
 };

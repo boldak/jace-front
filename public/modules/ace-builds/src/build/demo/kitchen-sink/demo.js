@@ -1297,6 +1297,7 @@ var supportedModes = {
     Dockerfile:  ["^Dockerfile"],
     Dot:         ["dot"],
     Dps:         ["dps"],
+    PlantUML:    ["txt|iuml|puml"],
     Drools:      ["drl"],
     Dummy:       ["dummy"],
     DummySyntax: ["dummy"],

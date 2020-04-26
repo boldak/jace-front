@@ -23,6 +23,14 @@
             ></v-text-field>
           </v-flex>
          
+         <!-- <v-flex>
+                <v-switch
+                  label="Activated"
+                  v-model="config.activated"
+                  color="primary"
+              ></v-switch>
+          </v-flex> -->  
+            
      </v-layout>      
 </template>	
 

@@ -331,6 +331,7 @@ export default {
   },
 
   created() {
+    this.config.activated = this.config.activated || false
     this.config.data = this.config.data || {}
     this.config.data.script = this.config.data.script || ""
     this._initSubscriptions()

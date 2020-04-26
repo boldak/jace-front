@@ -55,9 +55,9 @@ import initiableMixin from "@/mixins/core/initiable.mixin.js"
   import insertWidgetDialog from "@/components/dialogs/config/insertWidgetDialog.vue"
 <<< } >>>
 
-import Widget from "@/components/core//widget.vue"
+import Widget from "@/components/core/widget.vue"
 
-
+console.log("HOLDER WIDGET", Widget)
 
 // let accepted = null;
 
