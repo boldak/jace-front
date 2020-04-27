@@ -250,6 +250,31 @@ export default {
           },
 
           {
+            name: "UML",
+            editor: () => import("./parts/widget-types-panel.vue"),
+            items: [
+              "uml-chart-widget:Use Case Diagram",
+              "uml-chart-widget:Activity Diagram",
+              "uml-chart-widget:Sequence Diagram",
+              "uml-chart-widget:Component Diagram",
+              "uml-chart-widget:State Diagram",
+              "uml-chart-widget:Deployment Diagram",
+              "uml-chart-widget:Object Diagram",
+              "uml-chart-widget:Class Diagram"
+              
+              // "html-widget:title", 
+              // "html-widget:banner", 
+              // "html-widget:paragraph", 
+              // "mediator-widget", 
+              // "inputs-widget:Inputs",
+              // "edu-push-button-widget:Button",
+              // "edu-editor-widget:Editor",
+              // "dps-suite-widget"
+              
+            ]
+          },
+
+          {
             name: "Forms",
             editor: () => import("./parts/widget-types-panel.vue"),
             items: [

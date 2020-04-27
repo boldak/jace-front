@@ -48,7 +48,7 @@
       <v-btn v-show="!isActive" icon class="mx-3" style="color: #aeaeae !important;">
       </v-btn>
       </div> -->  
-      
+      <div class="d-flex justify-center">
       <component  
         v-if="config.type" 
         v-show="!hasError && !hidden"
@@ -58,6 +58,7 @@
         :config="config" 
         @init="onInit">
       </component>
+      </div>
   </v-card>
   <<< } else { >>>
   <v-card  ma-1 flat style="background:transparent;">

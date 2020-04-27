@@ -2,6 +2,7 @@ import htmlWidget from "./html/html.type.js"
 import inputsWidget from "./inputs/inputs.type.js"
 import EduEditorWidget from "./edu-editor/edu-editor.type.js"
 import EduPushButtonWidget from "./edu-push-button/edu-push-button.type.js"
+import UmlChartWidget from "./uml-chart/uml-chart.type.js"
 
 import flowchartWidget from "./flowchart/flowchart.type.js"
 
@@ -70,6 +71,7 @@ export default {
 	'inputs-widget' : inputsWidget,
 	'edu-editor-widget' : EduEditorWidget,
 	'edu-push-button-widget' : EduPushButtonWidget,
+	'uml-chart-widget' : UmlChartWidget,
 	
 	'flowchart-widget' : flowchartWidget,
 	'tree-widget' : treeWidget,
