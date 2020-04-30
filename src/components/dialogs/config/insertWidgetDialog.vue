@@ -244,7 +244,8 @@ export default {
               "inputs-widget:Inputs",
               "edu-push-button-widget:Button",
               "edu-editor-widget:Editor",
-              "dps-suite-widget"
+              "dps-suite-widget",
+              "edu-console-widget:Console"
               
             ]
           },

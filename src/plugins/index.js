@@ -8,6 +8,7 @@ import splashDialog from "@/components/dialogs/core/splash.vue"
 import Vue from "vue"
 
 
+
 <<< if(jace.availablePublishing) { >>>
 
 import io from "socket.io-client";
@@ -23,6 +24,7 @@ import dialogManager from "@/components/core/ext/dialog-manager"
 
 import axios from "axios"
 
+import consoleWrapper from "./console-wrapper"
 
 var _dialog_manager = (app) => {
   _dialog_manager = (new Vue(dialogManager)).$mount()
@@ -390,9 +392,9 @@ export var djvuePlugin = {
            document.body.appendChild(link);
            link.click();
         });
-      }
+      },
 
-
+      consoleWrapper
 
     }
 

@@ -5,6 +5,8 @@ export default {
       'html-widget' :() => import("./html/html.vue"),
       'edu-editor-widget' :() => import("./edu-editor/edu-editor.vue"),
       'edu-push-button-widget' :() => import("./edu-push-button/edu-push-button.vue"),
+      'edu-console-widget' :() => import("./edu-console/edu-console.vue"),
+      
       'uml-chart-widget' :() => import("./uml-chart/uml-chart.vue"),
       
       'inputs-widget' :() => import("./inputs/inputs.vue"),
