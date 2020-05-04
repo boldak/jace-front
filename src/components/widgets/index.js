@@ -3,6 +3,8 @@ export default {
       // 'hello-world' :() => import("./hello-world/HelloWorld.vue"),
 
       'html-widget' :() => import("./html/html.vue"),
+      'md-widget' :() => import("./md/md.vue"),
+      
       'edu-editor-widget' :() => import("./edu-editor/edu-editor.vue"),
       'edu-push-button-widget' :() => import("./edu-push-button/edu-push-button.vue"),
       'edu-console-widget' :() => import("./edu-console/edu-console.vue"),

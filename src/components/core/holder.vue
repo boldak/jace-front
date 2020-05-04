@@ -57,7 +57,7 @@ import initiableMixin from "@/mixins/core/initiable.mixin.js"
 
 import Widget from "@/components/core/widget.vue"
 
-console.log("HOLDER WIDGET", Widget)
+// console.log("HOLDER WIDGET", Widget)
 
 // let accepted = null;
 
@@ -265,6 +265,7 @@ export default {
         let widgetIndex = findIndex(this.widgets, w => w.id == context.widget.config.id);
         let newWidgets = JSON.parse(JSON.stringify(this.widgets));
         newWidgets[widgetIndex] = context.newConfig;
+        // console.log("Holder update ", newWidgets[widgetIndex])
         this.widgets = newWidgets;
         this.setNeedSave(true) 
 

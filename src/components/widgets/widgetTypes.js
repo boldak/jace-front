@@ -1,4 +1,6 @@
 import htmlWidget from "./html/html.type.js"
+import mdWidget from "./md/md.type.js"
+
 import inputsWidget from "./inputs/inputs.type.js"
 import EduEditorWidget from "./edu-editor/edu-editor.type.js"
 import EduPushButtonWidget from "./edu-push-button/edu-push-button.type.js"
@@ -70,6 +72,8 @@ import FormResponseWidget from "./form-response/form-response.type.js"
 
 export default {
 	'html-widget' : htmlWidget,
+	'md-widget' : mdWidget,
+	
 	'inputs-widget' : inputsWidget,
 	'edu-editor-widget' : EduEditorWidget,
 	'edu-push-button-widget' : EduPushButtonWidget,

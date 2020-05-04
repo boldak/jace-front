@@ -1,6 +1,6 @@
 export default {
 	
-	"default":{
+	"Markdown":{
       
         type:"md-widget", 
         // id:Vue.prototype.$djvue.randomName(),
@@ -13,36 +13,115 @@ export default {
         data:{
           source:"embedded",
           embedded:`
-            Ace (Ajax.org Cloud9 Editor)
-============================
+#MARKDOWN TIPS
+---
 
-Ace is a standalone code editor written in JavaScript. Our goal is to create a browser based editor that matches and extends the features, usability and performance of existing native editors such as TextMate, Vim or Eclipse. It can be easily embedded in any web page or JavaScript application. Ace is developed as the primary editor for [Cloud9 IDE](http://www.cloud9ide.com/) and the successor of the Mozilla Skywriter (Bespin) Project.
+### HEADER
 
-Features
---------
+    # Header1
+    ## Header2
+    ### Header3
+    #### Header4
+    ##### Header5
+    ###### Header6
+    H1
+    ===
+    H2
+    ---
 
-* Syntax highlighting
-* Automatic indent and outdent
-* An optional command line
-* Handles huge documents (100,000 lines and more are no problem)
-* Fully customizable key bindings including VI and Emacs modes
-* Themes (TextMate themes can be imported)
-* Search and replace with regular expressions
-* Highlight matching parentheses
-* Toggle between soft tabs and real tabs
-* Displays hidden characters
-* Drag and drop text using the mouse
-* Line wrapping
-* Unstructured / user code folding
-* Live syntax checker (currently JavaScript/CoffeeScript)
+# Header1
+## Header2
+### Header3
+#### Header4
+##### Header5
+###### Header6
+H1
+===
+H2
+---
 
-Take Ace for a spin!
---------------------
+### EMPHASIS
 
-Check out the Ace live [demo](http://ajaxorg.github.com/ace/) or get a [Cloud9 IDE account](http://run.cloud9ide.com) to experience Ace while editing one of your own GitHub projects.
+    *Italic1* _Italic2_
+    **Bold1** __Bold2__
+    ***Bold_Italic***
+    ~~Strikethrough~~
+    
+*Italic1* _Italic2_ </br>
+**Bold1** __Bold2__ </br>
+***Bold_Italic*** </br>
+~~Strikethrough~~
 
-If you want, you can use Ace as a textarea replacement thanks to the [Ace Bookmarklet](http://ajaxorg.github.com/ace/build/textarea/editor.html).
-          `
+### HORIZONTAL LINE
+
+    ---
+    ***
+    ___
+
+---
+***
+___
+
+### LIST
+
+    unordered list:
+    
+    * item-1
+      * sub-item-1
+      * sub-item-2
+    - item-2
+      - sub-item-3
+      - sub-item-4
+    + item-3
+      + sub-item-5
+      + sub-item-6
+    
+    
+
+unordered list:
+
+* item-1
+  * sub-item-1
+  * sub-item-2
+- item-2
+  - sub-item-3
+  - sub-item-4
++ item-3
+  + sub-item-5
+  + sub-item-6
+
+
+### TABLE
+
+\`\`\`
+Table Header-1 | Table Header-2 | Table Header-3
+:--- | :---: | ---:
+Table Data-1 | Table Data-2 | Table Data-3
+TD-4 | Td-5 | TD-6
+Table Data-7 | Table Data-8 | Table Data-9
+\`\`\`
+
+Table Header-1 | Table Header-2 | Table Header-3
+:--- | :---: | ---:
+Table Data-1 | Table Data-2 | Table Data-3
+TD-4 | Td-5 | TD-6
+Table Data-7 | Table Data-8 | Table Data-9
+
+### LINK
+
+    https://github.com/MinhasKamal/github-markdown-syntax
+    [GitHub](https://github.com/MinhasKamal/github-markdown-syntax)
+    [click](https://github.com/MinhasKamal/github-markdown-syntax "GitHub Markdown Syntax")
+    [README](/README.md)
+    [Image](#image)
+
+https://github.com/MinhasKamal/github-markdown-syntax    
+[GitHub](https://github.com/MinhasKamal/github-markdown-syntax)    
+[click](https://github.com/MinhasKamal/github-markdown-syntax "GitHub Markdown Syntax")    
+[README](/README.md)    
+[Image](#image)
+
+`
         }
        
     }

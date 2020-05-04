@@ -88,10 +88,14 @@ export default {
 
     _runScript() {
 
-      window.console.log(`Run script ${this.config.id}
-${this.config.data.script}
-`)
+//       window.console.log(`Run script ${this.config.id}
+// ${this.config.data.script}
+// `)
 
+      window._ = window._ || _
+      window.axios = window.axios || axios
+      window.moment = window.moment || moment
+      
       this.api = {
         selectWidgets: (filter) => {
           filter = filter || (() => true);
@@ -119,11 +123,27 @@ ${this.config.data.script}
         warning: this.$djvue.warning,
         dialog: this.$djvue.customDialog,
         _: _,
-
         moment: moment,
         axios: axios,
 
         Cookie: this.$cookie,
+
+        eval: (script, context) => {
+          try {
+
+            eval(
+              `
+                (function() {
+                  ${script} }
+                )
+
+                `
+            ).apply(context)
+
+          } catch (e) {
+            console.error(e.toString())
+          }
+        },
 
         runDps: (script, state, file) => this.$dps.run({
           script,

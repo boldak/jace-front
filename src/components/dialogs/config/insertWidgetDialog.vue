@@ -76,8 +76,10 @@ export default {
             items: [
               "app-topbar-widget",
               "app-footer-widget",
+              "app-list-widget",
               "html-widget:banner",
-              "app-list-widget"
+              "md-widget:Markdown"
+              
             ]
         },
           {
@@ -87,7 +89,8 @@ export default {
               "html-widget",
               "html-widget:title", 
               "html-widget:banner", 
-              "html-widget:paragraph", 
+              "html-widget:paragraph",
+              "md-widget:Markdown", 
               "html-widget:Theme Features"
             ]
           },
@@ -239,7 +242,8 @@ export default {
 
               "html-widget:title", 
               "html-widget:banner", 
-              "html-widget:paragraph", 
+              "html-widget:paragraph",
+              "md-widget:Markdown", 
               "mediator-widget", 
               "inputs-widget:Inputs",
               "edu-push-button-widget:Button",

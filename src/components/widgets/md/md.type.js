@@ -6,8 +6,8 @@ export default {
     icon: "mdi-markdown",
 
     getInitialConfig( snippet ){
-        snippet = snippet || "default"
-        let res = snippets[snippet] || snippets["default"]
+        snippet = snippet || "Markdown"
+        let res = snippets[snippet] || snippets["Markdown"]
         return res
     }
 

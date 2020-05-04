@@ -252,8 +252,7 @@ export default {
       rule: () => true
     })
 
-    console.log("consoleWrapper",this.consoleWrapper)
-
+   
     this.consoleWrapper.wrap({
       log: (output) => { this.emit("console.log", output)},
       error: (output) => { this.emit("console.error", output)},

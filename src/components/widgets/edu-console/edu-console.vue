@@ -1,16 +1,8 @@
 <template>
-  <div>
-    <!-- <div class="caption secondary--text">
-      <i class="mdi mdi-console-line"></i> Console:
-    </div>  --> 
-    <div>
-      <pre class="mx-2" style="line-height:1.1em;font-size:12px;">
-        <span v-for="(m, index) in messages" :key="index" :class="m['class']">{{m.text}}
+<pre class="">
+<span v-for="(m, index) in messages" :key="index" :class="m['class']">{{m.text}}
 </span>  
-      </pre>
-  
-    </div>
-  </div>
+</pre>
 </template>
 
 <script>
@@ -23,9 +15,8 @@
   import ConsoleConfig from "./edu-console-config.vue";
 <<< } >>>
 
-   
 
- export default  {
+  export default  {
     
     name:"edu-console-widget",
 
@@ -34,13 +25,20 @@
     mixins:[djvueMixin, listenerMixin],
 
     data: () => ({
-      messages:[]
+      messages: [],
+      listen: false
     }),
 
     methods:{
 
+
       onUpdate ({data}) {
-        this.config.data.script = data;
+        // console.log("On update console", data)
+        if (data.active) {
+          this.addListeners()
+        } else {
+          this.removeListeners()
+        }
       },
 
       push( type, text ){
@@ -65,81 +63,95 @@
         })
       },
 
+      addListeners(){
+        if( this.listen ) return
+        
+        this.on({
+          event:"console.log",
+          callback: (data) => {
+            this.push("log", data)
+          }
+        })
+        this.on({
+          event:"console.warn",
+          callback: (data) => {
+            this.push("warn", data)
+          }
+        })
+        this.on({
+          event:"console.error",
+          callback: (data) => {
+            this.push("error", data)
+          }
+        })
+        this.on({
+          event:"console.debug",
+          callback: (data) => {
+            this.push("debug", data)
+          }
+        })
+        this.on({
+          event:"console.info",
+          callback: (data) => {
+            this.push("info", data)
+          }
+        })
+        this.on({
+          event:"console.dir",
+          callback: (data) => {
+            this.push("dir", data)
+          }
+        })
+        this.on({
+          event:"console.trace",
+          callback: (data) => {
+            this.push("trace", data)
+          }
+        })
+        this.on({
+          event:"console.clear",
+          callback: (data) => {
+            this.messages = []
+            this.push("clear", "--- Console was cleared ---")
+          }
+        })
+        this.listen = true
+        this.push("clear","--- Console was started ---")  
+      },
+
+      removeListeners(){
+        this.off("console.log")
+        this.off("console.debug")
+        this.off("console.dir")
+        this.off("console.info")
+        this.off("console.warn")
+        this.off("console.error")
+        this.off("console.trace")
+        this.off("console.clear")
+        this.listen = false
+        this.push("clear","--- Console was stopped ---")
+      },
+
 
 <<< if( jace.mode == "development") { >>>
       onReconfigure (widgetConfig) {
        return this.$dialogManager.showAndWait(ConsoleConfig, {width:"90%"},{config:widgetConfig})
-      },
-<<< } >>>
+      }
+<<<}>>>            
 
+      
     },
 
+    
     props:["config"],
 
-  
-    mounted(){
-       this.$emit("init")
+    
+    created(){
+      // if (this.config.data.embedded.active) this.addListeners()
     },
 
-    created(){
-      this.on({
-        event:"console.log",
-        callback: (data) => {
-          this.push("log", data)
-        }
-      })
-      this.on({
-        event:"console.warn",
-        callback: (data) => {
-          this.push("warn", data)
-        }
-      })
-      this.on({
-        event:"console.error",
-        callback: (data) => {
-          this.push("error", data)
-        }
-      })
-      this.on({
-        event:"console.debug",
-        callback: (data) => {
-          this.push("debug", data)
-        }
-      })
-      this.on({
-        event:"console.info",
-        callback: (data) => {
-          this.push("info", data)
-        }
-      })
-      this.on({
-        event:"console.dir",
-        callback: (data) => {
-          this.push("dir", data)
-        }
-      })
-      this.on({
-        event:"console.trace",
-        callback: (data) => {
-          this.push("trace", data)
-        }
-      })
-      this.on({
-        event:"console.clear",
-        callback: (data) => {
-          this.messages = []
-          this.push("clear", "--- Console was cleared ---")
-        }
-      })
-    }
+    mounted(){ this.$emit("init") }
 
   }
 
-</script>	
-<style scoped>
-  .editor {
-    width: 100%;
-    font-size: 14px;
-    border: 1px solid #dedede;
-  }
-</style>
+</script> 

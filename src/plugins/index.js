@@ -133,12 +133,15 @@ export var dpsPlugin = {
 
     Vue.prototype.$dps = {
       run: ({ script, state, file }) => {
+
+        script = encodeURIComponent(JSON.stringify(script))
+
         if (!file) {
           return transport.post(
             url, {
               client,
               script,
-              state: { storage: state }
+              state: encodeURIComponent(JSON.stringify({ storage: state }))
             }
           ).then(response => {
             return {
@@ -150,7 +153,7 @@ export var dpsPlugin = {
           let formData = new FormData();
           formData.append("client", JSON.stringify(client))
           formData.append("script", script)
-          formData.append("state", JSON.stringify({ storage: state }))
+          formData.append("state", encodeURIComponent(JSON.stringify({ storage: state })))
           formData.append('file', file);
           return transport.post(
             url,

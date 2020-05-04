@@ -16,13 +16,9 @@ export default {
       },
 
       data: {
+        source:"embedded",
         embedded: {
-          lang: "javascript",
-          button: {
-            title: "Run",
-            event: "run-editor-script"
-          },
-          readOnly: true
+          active: true
         },
         script: `type code here`
       }

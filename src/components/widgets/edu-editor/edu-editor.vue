@@ -28,7 +28,7 @@
       
       </v-flex>
       <v-flex xs12 v-if="config.data.embedded.button">
-        <v-row class="mx-0 px-3">
+        <v-row class="mx-0 px-3 my-1">
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="resolve">{{config.data.embedded.button.title}}</v-btn>
         </v-row> 

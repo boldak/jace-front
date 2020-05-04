@@ -39,14 +39,17 @@ export default {
 <<< if( jace.mode == "development") { >>>
     
     _reconfigure(widget) {
-
+      // console.log("reconf", this)
+            
       if (this.$refs.instance.onReconfigure) {
-
+        // console.log("activate dialog")  
         let c = this.$djvue.extend({}, widget.config)
 
         this.$refs.instance.onReconfigure(c)
           .then(newConfig => {
-            if (newConfig)
+            // console.log("new config", newConfig)
+            if (newConfig) {
+              // console.log("Invoke ", "holder-update-widget-config", this)
               this.emit(
                 "holder-update-widget-config",
                 this, {
@@ -54,8 +57,11 @@ export default {
                   newConfig: this.$djvue.extend({}, newConfig)
                 }
               )
+            }  
           })
-          .catch(() => {})
+          .catch((e) => {
+            console.error(e.toString())
+          })
       }
 
     },
@@ -136,6 +142,7 @@ export default {
 
         if (this.config.data.source == "embedded") {
           this.hasError = false;
+          // console.log("FOR EMMBEDDED CONTENT", this.config.data.embedded)
           resolve(this.config.data.embedded)
           return
         }
@@ -186,8 +193,10 @@ export default {
       this.options = state.options;
       
       this.data = this._validate( this.data )
+      // console.log("Validated ", this.data)
       if( this.data ){
         this.$nextTick(() => {
+          // console.log("Invoke", this)
          if (this.$refs.instance && this.$refs.instance.onUpdate) this.$refs.instance.onUpdate(state)
         })
       }

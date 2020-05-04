@@ -16,6 +16,7 @@ export default {
       },
 
       data: {
+        source:"embedded",
         embedded: {
           lang: "javascript",
           button: {
@@ -24,7 +25,7 @@ export default {
           },
           readOnly: true
         },
-        script: `type code here`
+        script: `//type code here`
       }
     }
 
