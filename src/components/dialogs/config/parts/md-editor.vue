@@ -44,7 +44,7 @@ export default {
 
   computed: {
     embeddedSource() {
-      return this.config.data.embedded
+      return decodeURIComponent(this.config.data.embedded)
     }
   },
 
@@ -62,7 +62,7 @@ export default {
     },
 
     onUpdateSource(value) {
-      this.config.data.embedded = value
+      this.config.data.embedded = encodeURIComponent(value)
     },
 
     onUpdateScript(value) {

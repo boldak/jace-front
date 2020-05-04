@@ -28,6 +28,7 @@
       onUpdate ({data, options}) {
        if(!data) return
 
+       data = decodeURIComponent(data) 
 
        let script = `
         <?md
