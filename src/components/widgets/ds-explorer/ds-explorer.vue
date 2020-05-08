@@ -438,6 +438,9 @@ collection.limit(5)`
           // this.message = null
           p.children = res
           this.items = JSON.parse(JSON.stringify(this.items))
+          
+          console.log("indicators",this.items)
+
           return this.items
         })
         .catch(() => {
@@ -499,6 +502,9 @@ collection.limit(5)`
           // this.message = null
           this.error1 = false
           this.items = this.normalize(res)
+          console.log("indicators",this.items)
+
+
         })
         .catch(() => {
           this.error1 = true;

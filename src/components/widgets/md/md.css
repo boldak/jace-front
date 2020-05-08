@@ -30,7 +30,7 @@
   color: #8959a8;
 }
 
-pre {
+/*pre {
   margin:1em;
 }
 
@@ -46,45 +46,21 @@ pre code {
   width:100%;
   overflow:auto;
 }
-
-p code {
+*/
+p code, li code, td code, th code, div code  {
   display: block;
-  background: #eaeaea;
+  background: transparent;
   color: #4d4d4c;
+  font-weight:bold;
   font-family: Menlo, Monaco, Consolas, monospace;
-  line-height: 1.5;
-  border: 1px solid #ccc;
+  /*line-height: 1.5;*/
+  /*border: 1px solid #ccc;*/
   box-shadow:none !important;
 }
 
 
 .highlight {
-  background: #eaeaea;
   border: 1px solid #ccc;
-  margin: 2em;
-  padding:2em;  
+  margin: 1em;
 }
 
-svg.octicon.octicon-link {
-    display: none;
-}
-
-.md table {
-    border-spacing: 0px;
-    border-collapse: collapse;
-}
-
-.md th, .md td {
-    border: 1px solid #ccc;
-    padding: 0.2em 0.5em;
-}
-
-.md img {
-  width:90%;
-  margin: 0.5em;
-}
-
-.md h1, h2, h3, h4, h5, h6 {
-  padding-left: 0.5em; 
-  /*font-weight: 300!important;*/
-}

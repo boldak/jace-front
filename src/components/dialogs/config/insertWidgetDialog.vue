@@ -249,7 +249,9 @@ export default {
               "edu-push-button-widget:Button",
               "edu-editor-widget:Editor",
               "dps-suite-widget",
-              "edu-console-widget:Console"
+              "edu-console-widget:Console",
+              "edu-toc-widget:Table of content"
+              
               
             ]
           },

@@ -1,7 +1,7 @@
 <template>
    
   <div>
-     <div class="md" v-if="html" v-html="html"></div>
+     <div class="markdown-body pa-3" v-if="html" v-html="html"></div>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
   import "./md.css"
+  import "github-markdown-css"
 <<< if( jace.mode == "development") { >>>  
   import MdConfig from "./md-config.vue";
 <<< } >>>  
@@ -26,20 +27,25 @@
     methods:{
 
       onUpdate ({data, options}) {
+       // console.log("!!!",data)
        if(!data) return
+        try {
+        data = decodeURIComponent(data) 
+        } catch(e) {
 
-       data = decodeURIComponent(data) 
-
-       let script = `
-        <?md
-        ${(data.startsWith("\n")) ? data : "\n"+data}
-        ?>
-        md.toHtml()
-       `; 
-       this.$dps.run({script})
-        .then( res => {
-          this.html = res.data
-        })
+        } finally {
+          let script = `
+          <?md
+          ${(data.startsWith("\n")) ? data : "\n"+data}
+          ?>
+          md.toHtml()
+         `; 
+         this.$dps.run({script})
+          .then( res => {
+            this.html = res.data
+          })   
+        }
+       
       },
 
 <<< if( jace.mode == "development") { >>>

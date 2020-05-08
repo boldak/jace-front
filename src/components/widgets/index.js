@@ -8,6 +8,7 @@ export default {
       'edu-editor-widget' :() => import("./edu-editor/edu-editor.vue"),
       'edu-push-button-widget' :() => import("./edu-push-button/edu-push-button.vue"),
       'edu-console-widget' :() => import("./edu-console/edu-console.vue"),
+      'edu-toc-widget' :() => import("./edu-toc/edu-toc.vue"),
       
       'uml-chart-widget' :() => import("./uml-chart/uml-chart.vue"),
       
