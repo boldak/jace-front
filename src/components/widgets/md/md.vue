@@ -28,6 +28,9 @@
 
       onUpdate ({data, options}) {
        // console.log("!!!",data)
+       options = options || {}
+       
+       
        if(!data) return
         try {
         data = decodeURIComponent(data) 
@@ -38,9 +41,9 @@
           <?md
           ${(data.startsWith("\n")) ? data : "\n"+data}
           ?>
-          md.toHtml()
+          md.toHtml(options:{{options}})
          `; 
-         this.$dps.run({script})
+         this.$dps.run({script,state:{options}})
           .then( res => {
             this.html = res.data
           })   

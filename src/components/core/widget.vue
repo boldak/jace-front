@@ -98,7 +98,7 @@ import { find } from "lodash"
 // let components = requiredWidgets();
 
 // console.log("LOAD WIDGET COMPONENT")
-console.log(components)
+// console.log(components)
 
 export default {
 

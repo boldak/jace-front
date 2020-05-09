@@ -52,6 +52,10 @@ export default {
               {
                 name: "Data",
                 editor:() => import("@/components/dialogs/config/parts/md-editor.vue")
+              },
+              {
+                name: "Options",
+                editor:() => import("@/components/dialogs/config/parts/extras-editor.vue")
               }
             ]
           }
