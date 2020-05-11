@@ -46,6 +46,10 @@
          this.$dps.run({script,state:{options}})
           .then( res => {
             this.html = res.data
+            this.$nextTick(() => {
+              this.$el.scrollTop = 0 //this.$el.scrollHeight - this.$el.clientHeight;
+            })
+
           })   
         }
        
