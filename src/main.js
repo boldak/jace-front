@@ -75,7 +75,7 @@ var router = new VueRouter({
 
 
 router.beforeEach((_to, _from, next) => {
-  if (store.state.Djvue.app.needSave) {
+  if (store.state.Djvue.app.needSave && jaceApp.startedMode != "production") {
     Vue.prototype.$djvue.confirm({
         type: "warning",
         text: "App config not saved.",
@@ -106,7 +106,7 @@ window.onbeforeunload = (evt) => {
   sessionStorage.clear();
   let message = '111'
 
-  if (store.state.Djvue.app.needSave) {
+  if (store.state.Djvue.app.needSave && jaceApp.startedMode != "production") {
     if (typeof evt === "undefined") {
       evt = window.event;
     }
