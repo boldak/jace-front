@@ -1,7 +1,10 @@
 <template>
    
   <div>
-     <div class="markdown-body pa-3" v-if="html" v-html="html"></div>
+    <div v-if="loading" class="d-flex justify-center align-center secondary--text lighten-2">
+        <i class="mdi mdi-48px mdi-spin mdi-loading"></i>
+    </div>
+     <div v-else class="markdown-body pa-3" v-if="html" v-html="html"></div>
   </div>
 </template>
 
@@ -37,6 +40,7 @@
         } catch(e) {
 
         } finally {
+          this.loading = true
           let script = `
           <?md
           ${(data.startsWith("\n")) ? data : "\n"+data}
@@ -46,6 +50,7 @@
          this.$dps.run({script,state:{options}})
           .then( res => {
             this.html = res.data
+            this.loading = false
             this.$nextTick(() => {
               this.$el.scrollTop = 0 //this.$el.scrollHeight - this.$el.clientHeight;
             })
@@ -87,7 +92,8 @@
     mounted(){ this.$emit("init") },
     
     data: () =>({
-      html:"<div></div>"
+      html:"<div></div>",
+      loading: false
     })
 
   }
