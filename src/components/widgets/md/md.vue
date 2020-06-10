@@ -1,11 +1,12 @@
 <template>
-   
-  <v-fade-transition leave-absolute>
-    <div v-if="loading" class="d-flex justify-center align-center secondary--text lighten-2">
-        <i class="mdi mdi-48px mdi-spin mdi-loading"></i>
-    </div>
-     <div v-else class="markdown-body pa-3" v-if="html" v-html="html"></div>
-  </v-fade-transition>
+    <v-fade-transition leave-absolute>
+      <div>
+        <div v-if="loading" class="d-flex justify-center align-center secondary--text lighten-2">
+            <i class="mdi mdi-48px mdi-spin mdi-loading"></i>
+        </div>
+        <div v-if="html" class="markdown-body pa-3" v-html="html"></div>
+      </div>
+    </v-fade-transition>
 </template>
 
 <script>

@@ -166,11 +166,13 @@
           </v-row> -->  
           <v-row>
             <v-col class="py-0">
-              <v-avatar tile size="36">
-               <dj-img :src="selected.icon" icon="mdi-application" class="pr-2"></dj-img>
-              </v-avatar>
+              <!-- <v-avatar tile size="36"> -->
+              <!-- </v-avatar> -->
               <a :href="$resolveUrl('design/'+selected.name)" :target="'blank_'+selected.name"> 
-                <span class="headline font-weight-light">{{selected.name}}</span>
+                <div class="d-flex align-vertical">
+                  <dj-img :src="selected.icon" icon="mdi-application" class="pr-2" style="max-height:48px; max-width:48px"></dj-img>
+                  <div class="headline font-weight-light">{{selected.name}}</div>
+                </div>  
               </a>  
             </v-col>
             <div class="mx-2">
