@@ -3,8 +3,10 @@
     <v-app>
       <<< if( jace.mode=="development" ) {>>>
         <div class="caption secondary white--text px-2" style="text-align:right">
-          <span class="font-weight-bold"> JACE DEV SERVICE </span>
-          <span class="font-weight-light"> {{$resolveUrl('')}} </span>
+          <span class="font-weight-bold"> USE JACE DEV </span>
+          <span class="font-weight-light success darken-3"> {{$resolveUrl('')}} </span>
+          <span class="font-weight-bold"> DPS </span>
+          <span class="font-weight-light" :class="(dps_ready) ? 'success darken-3':'warning darken-4'"> {{$dps.getBaseURL()}} </span>
         </div>
         <<< }>>>
 
@@ -105,7 +107,8 @@ export default {
       overlay: true,
       loadingMessage: "Please wait...",
       fab: null,
-      log: []
+      log: [],
+      dps_ready: false
     }
   },
   computed: {
@@ -119,6 +122,13 @@ export default {
   },
 
   methods: {
+
+    checkDps(){
+      this.dps_ready = false
+      this.$http.get(this.$dps.getBaseURL()).then((res)=>{ 
+        this.dps_ready = true
+      })
+    },
 
     gotoPage(p) {
       let path = (p.id) ? '/' + p.id : '/'
@@ -273,6 +283,7 @@ export default {
 
   mounted() {
     this.setupI18n()
+    this.checkDps()
   }
 
 
