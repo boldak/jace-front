@@ -4,9 +4,9 @@
       <<< if( jace.mode=="development" ) {>>>
         <div class="caption secondary white--text px-2" style="text-align:right">
           <span class="font-weight-bold"> USE JACE DEV </span>
-          <span class="font-weight-light success darken-3"> {{$resolveUrl('')}} </span>
+          <span class="font-weight-light success--text text--lighten-4"> {{$resolveUrl('')}} </span>
           <span class="font-weight-bold"> DPS </span>
-          <span class="font-weight-light" :class="(dps_ready) ? 'success darken-3':'warning darken-4'"> {{$dps.getBaseURL()}} </span>
+          <span class="font-weight-light" :class="(dps_ready) ? 'success--text text--lighten-4':'warning--text text--lighten-4'"> {{$dps.getBaseURL()}} </span>
         </div>
         <<< }>>>
 
