@@ -5,6 +5,7 @@ import progressDialog from "@/components/dialogs/core/progress.vue"
 import selectFileDialog from "@/components/dialogs/core/select-file.vue"
 import customDialog from "@/components/dialogs/core/custom-dialog.vue"
 import splashDialog from "@/components/dialogs/core/splash.vue"
+import VueSSE from "./vue-sse"
 import Vue from "vue"
 
 
@@ -94,14 +95,32 @@ export var cookiePlugin = {
 
 
 export var portalPlugin = {
-  install(Vue, options = { baseURL: "/" }) {
-    Vue.prototype.$portal = axios.create(options)
-    Vue.prototype.$resolveUrl = (url) => {
+  install(Vue, options = { baseURL: "/", sse:"sse/" }) {
+    
+    Vue.portal = Vue.prototype.$portal = axios.create(options)
+    Vue.resolveUrl = Vue.prototype.$resolveUrl = (url) => {
        return `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl : window.location.origin}/`+url 
     }
+ 
   }
 }
 
+
+export var ssePubSubPlugin = {
+  install( Vue, options = {sse:"sse/"}){
+    VueSSE.install(Vue)
+    let resolveUrl = (url) => `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl : window.location.origin}/`+url
+    let http = axios.create(options)
+    
+    Vue.PubSub = Vue.prototype.$pubsub = {
+      publish: (channel, data) => http.post(resolveUrl(`${options.sse}${channel}`), data),
+      getChannel: (channel, credentials) => {
+        return Vue.SSE(resolveUrl(`${options.sse}${channel}`),{format: 'plain', credentials})
+      } 
+    }
+
+  }
+}
 
 <<< if(jace.availablePublishing) { >>>
   
@@ -116,7 +135,7 @@ export var socketPlugin = {
 
 export var httpPlugin = {
   install(Vue, options) {
-    Vue.prototype.$http = axios.create(options)
+    Vue.http = Vue.prototype.$http = axios.create(options)
   }
 }
 
