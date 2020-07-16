@@ -212,6 +212,17 @@ export default {
   created() {
 
     window.jaceApp = this
+
+    console.log(jaceApp)
+
+    this.$pubsub().then( service => service.publish({
+      channel:"app",
+      date: new Date(),
+      app: window.initialConfig.name,
+      user: window.initialConfig.user,
+      data:`Opened the application "${window.initialConfig.name}" in ${jaceApp.app.mode} mode`
+    }))
+
 	
     <<< console.log(JSON.stringify(jace, null," ")) >>>
     <<< if (jace.availablePublishing) { 

@@ -53,19 +53,41 @@
       </v-layout>
     </v-layout>
 
-<!--     <v-carousel v-else v-model="slide">
-      <v-carousel-item v-for="(s,index) in app.currentPage.sections" :key="index" >
-         <v-sheet height="100%">
-          
-           <v-row wrap :class="s.align" fill-height class="px-2 mx-0">
-                <v-flex v-for="(h, hIndex) in s.holders" :key="hIndex" :class="`md${h.width} xs12`" pa-1>
-                  <dj-holder :name="h.name" @init="onInitChild"></dj-holder>
-                </v-flex>
-            </v-row>
+    <v-carousel 
+      v-else 
+      v-model="slide"
+      show-arrows-on-hover
+      hide-delimiter-background
+      light
+      :height = "windowHeight"
+    >
+      
+      <v-carousel-item 
+        v-for="(s,index) in app.currentPage.sections" 
+        :key="index"
+        :style="`height: ${windowHeight}px;`" 
+      >
+        <v-sheet height="100%">
+          <v-row class="mx-0 px-2 primary--text display-1">
+            <div>
+              {{s.title}}
+            </div>
+            <v-spacer></v-spacer>
+            <div class="title secondary--text">
+              {{index+1}}
+            </div>  
+          </v-row>
+          <v-divider></v-divider>  
+          <v-row wrap :class="s.align" fill-height class="px-2 mx-0">
+            <v-flex v-for="(h, hIndex) in s.holders" :key="hIndex" :class="`md${h.width} xs12`" pa-1>
+              <dj-holder :name="h.name" @init="onInitChild"></dj-holder>
+            </v-flex>
+          </v-row>
         </v-sheet>
       </v-carousel-item>
+    
     </v-carousel>
- -->
+
 
     <v-card
       id="slider"

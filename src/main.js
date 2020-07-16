@@ -2,7 +2,7 @@ import Vue from '@/plugins/vue'
 import vuetify from "@/plugins/vuetify"
 import VueRouter from "vue-router"
 import VueClipboard from "vue-clipboard2"
-// import VueSSE from "vue-sse"
+import VueSSE from "./plugins/vue-sse"
 
 import { 
   portalPlugin,
@@ -53,7 +53,7 @@ Vue.use(VueClipboard)
 
 Vue.use(cookiePlugin)
 Vue.use(portalPlugin, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/`})
-Vue.use(ssePubSubPlugin, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/`, sse:"sse/" })
+Vue.use(VueSSE, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/`, sse:"sse/" })
 
 Vue.use(dpsPlugin, {
   baseURL: window.dpsURL.trim() || "http://127.0.0.1:8098/",
@@ -71,32 +71,37 @@ Vue.use(VueRouter)
 // Vue.use(VueSSE)
 
 
-Vue.PubSub.getChannel('app')// or { format: 'plain' }
-      .then( channel => {
+// Vue.PubSub.open({channel:'app'})// or { format: 'plain' }
+//       .then( channel => {
         
-        // Catch any errors (ie. lost connections, etc.)
-        channel.onError(e => {
+//         // Catch any errors (ie. lost connections, etc.)
+//         channel.onError(e => {
            
-           if(channel.getSource().readyState == EventSource.CONNECTING){
-            console.log("Reconnect")
+//            if(channel.source.readyState == EventSource.CONNECTING){
+//             // console.log("Reconnect")
 
-           }else{
-            console.error('lost connection; giving up!', e);
-            channel.close();
-           }  
-      });
+//            }else{
+//             console.error('lost connection; giving up!', e);
+//             channel.close();
+//            }  
+//         });
  
-        // Listen for messages without a specified event
-        channel.subscribe('access', data => {
-          console.warn('Received ', data);
-        });
-        channel.subscribe('close', data => {
-          console.warn('Received ', data);
-        });
-        channel.subscribe('', data => {
-          console.warn('Received ', data);
-        });
-      }) 
+//         // Listen for messages without a specified event
+//         let s = channel.subscribe(['message'], data => {
+//           console.warn('Received ', data);
+//         });
+
+//         // let s1 = channel.subscribe(['close'], data => {
+//         //   console.warn('Received close', data);
+//         //   if (data.app.name == "Layouts") {
+//         //     channel.unsubscribe(s)
+//         //     channel.unsubscribe(s1)
+//         //   }
+//         // });
+
+//         // console.log("subscription",s)
+        
+//       }) 
  
 
 
@@ -137,18 +142,21 @@ router.beforeEach((_to, _from, next) => {
 window.appRouter = router
 
 let appCfg =  window.initialConfig
+
+
+
+
 window.onbeforeunload = (evt) => {
   // console.log(jaceApp)
   if(jaceApp.startedMode == "production") {
-    Vue.PubSub.publish('app',{
-          event: "close",
-          date: new Date(),
-          app:{
-            id: appCfg.id,
-            name: appCfg.name
-          },
-          user: appCfg.user
-        })
+    Vue.PubSub().then( service => service.publish({
+      channel:"app",
+      date: new Date(),
+      app: appCfg.name,
+      user: appCfg.user,
+      data:`Closed the application "${appCfg.name}"`
+    }))
+
     return
   }  
   sessionStorage.clear();
@@ -163,15 +171,13 @@ window.onbeforeunload = (evt) => {
     }
     return message;
   } else {
-    Vue.PubSub.publish('app',{
-          event: "close",
-          date: new Date(),
-          app:{
-            id: appCfg.id,
-            name: appCfg.name
-          },
-          user: appCfg.user
-        })
+    Vue.PubSub().then( service => service.publish({
+      channel:"app",
+      date: new Date(),
+      app: appCfg.name,
+      user: appCfg.user,
+      data:`Closed the application "${appCfg.name}"`
+    }))
   }
 }
 

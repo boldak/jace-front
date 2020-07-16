@@ -10,6 +10,9 @@ export default {
       'edu-console-widget' :() => import("./edu-console/edu-console.vue"),
       'edu-toc-widget' :() => import("./edu-toc/edu-toc.vue"),
       
+      'sse-listener-widget' :() => import("./sse-listener/sse-listener.vue"),
+      
+
       'uml-chart-widget' :() => import("./uml-chart/uml-chart.vue"),
       
       'inputs-widget' :() => import("./inputs/inputs.vue"),

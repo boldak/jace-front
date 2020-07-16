@@ -7,6 +7,9 @@ import EduPushButtonWidget from "./edu-push-button/edu-push-button.type.js"
 import EduConsoleWidget from "./edu-console/edu-console.type.js"
 import EduTocWidget from "./edu-toc/edu-toc.type.js"
 
+import SSEListenerWidget from "./sse-listener/sse-listener.type.js"
+
+
 import UmlChartWidget from "./uml-chart/uml-chart.type.js"
 
 import flowchartWidget from "./flowchart/flowchart.type.js"
@@ -76,10 +79,13 @@ export default {
 	'md-widget' : mdWidget,
 	
 	'inputs-widget' : inputsWidget,
+	
 	'edu-editor-widget' : EduEditorWidget,
 	'edu-push-button-widget' : EduPushButtonWidget,
 	'edu-console-widget' : EduConsoleWidget,
 	'edu-toc-widget' : EduTocWidget,
+
+	'sse-listener-widget': SSEListenerWidget,
 	
 	'uml-chart-widget' : UmlChartWidget,
 	

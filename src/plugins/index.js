@@ -106,21 +106,19 @@ export var portalPlugin = {
 }
 
 
-export var ssePubSubPlugin = {
-  install( Vue, options = {sse:"sse/"}){
-    VueSSE.install(Vue)
-    let resolveUrl = (url) => `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl : window.location.origin}/`+url
-    let http = axios.create(options)
-    
-    Vue.PubSub = Vue.prototype.$pubsub = {
-      publish: (channel, data) => http.post(resolveUrl(`${options.sse}${channel}`), data),
-      getChannel: (channel, credentials) => {
-        return Vue.SSE(resolveUrl(`${options.sse}${channel}`),{format: 'plain', credentials})
-      } 
-    }
+// export var ssePubSubPlugin = {
+//   install( Vue, options = {sse:"sse/"}){
+//     let resolveUrl = (url) => `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl : window.location.origin}/`+url
+//     Vue.PubSub = Vue.prototype.$pubsub = {
+//       open: (config) => {
+//         if(config.channel) config.url = resolveUrl(`${options.sse}${config.channel}`)
+//         config.format = config.format || "json"  
+//         return VueSSE.openChannel(config)  
+//       }
+//     }
 
-  }
-}
+//   }
+// }
 
 <<< if(jace.availablePublishing) { >>>
   

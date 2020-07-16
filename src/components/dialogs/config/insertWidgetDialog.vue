@@ -280,6 +280,13 @@ export default {
               
             ]
           },
+          {
+            name: "Pub/Sub",
+            editor: () => import("./parts/widget-types-panel.vue"),
+            items: [
+              "sse-listener-widget:Channel Listener"
+            ]
+          },
 
           {
             name: "Forms",

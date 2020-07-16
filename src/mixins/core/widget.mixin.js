@@ -254,6 +254,13 @@ export default {
         rule: this.isSameWidget
       })
 
+      this.on({
+        event: "widget-delete",
+        callback: this._delete,
+        rule: this.isSameWidget
+      })
+
+
 <<< } >>>
 
       // this.on({
