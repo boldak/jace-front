@@ -1,10 +1,9 @@
 <template>
-        
      <v-autocomplete
       v-model="keywords"
       :items="availableKeywords"
       chips
-      label="Keywords"
+      :label="config.title"
       :search-input.sync="searchKeyword" 
       @keyup.enter="createKeyword(searchKeyword)"
       multiple
@@ -31,9 +30,7 @@
           </v-btn>
         </template>
     </v-autocomplete>
-
- 
-</template>
+ </template>
 
 <script>
 
@@ -96,6 +93,7 @@
 
     watch:{
       keywords(value){
+        this.searchKeyword = null
         this.emit("keywords-select", this, value)
       }  
     },

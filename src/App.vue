@@ -213,7 +213,7 @@ export default {
 
     window.jaceApp = this
 
-    console.log(jaceApp)
+    console.log("jaceApp",jaceApp)
 
     this.$pubsub().then( service => service.publish({
       channel:"app",
