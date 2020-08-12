@@ -15,7 +15,9 @@
   import listenerMixin from "@/mixins/core/listener.mixin";
   import "./md.css"
   import "github-markdown-css"
-<<< if( jace.mode == "development") { >>>  
+  import "katex/dist/katex.min.css"
+ 
+ <<< if( jace.mode == "development") { >>>  
   import MdConfig from "./md-config.vue";
 <<< } >>>  
 
@@ -103,3 +105,15 @@
   }
 
 </script>	
+<style>
+  span.mord.accent {
+    background: transparent !important;
+  }
+  span.katex {
+    font-size: 1.15em !important;
+
+  }
+  div.markdown-body {
+    font-size: inherit !important;
+  }
+</style>

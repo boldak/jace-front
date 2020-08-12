@@ -55,6 +55,7 @@
 
       $asciiMath (formula){
         formula = formula.split(/(?:\n\s*){2,}/).map((item) => { return asciimath2latex(item) }).join('\n\n')
+        console.log(formula)
         return mathBlock(formula)
       },
 
