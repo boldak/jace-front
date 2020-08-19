@@ -2,6 +2,10 @@ const path = require("path")
 const VuetifyLoaderPlugin = require('./build/vuetify-loader/lib/plugin')
 const JaceLoaderPlugin = require("./build/jace-loader/src/plugin")
 const jaceConfig = require("./jace.config.js")
+
+console.log("JACE CONFIG > ", JSON.stringify(jaceConfig, null," "))
+
+
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
 }

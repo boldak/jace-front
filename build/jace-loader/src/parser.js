@@ -15,6 +15,7 @@ module.exports = async function(content, sourceMap) {
 
   const detectJace = /<<</gim
   let compiled = content 
+  // console.log("JACE LOADER > ", this.resourcePath)
   if (detectJace.test(content)) {
     // console.log("-----------------------------------------------------------------------------------------")
     console.log("JACE LOADER > ", this.resourcePath)
