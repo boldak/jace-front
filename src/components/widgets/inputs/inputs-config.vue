@@ -35,7 +35,12 @@ export default {
           {
             name: "Options",
             editor: () => import("@/components/dialogs/config/parts/options-editor.vue")
+          },
+          {
+                name: 'Style',
+                editor: () => import("@/components/dialogs/config/parts/css-editor.vue")
           }
+
         ]
       }],
     }
