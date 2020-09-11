@@ -23,9 +23,11 @@ export default {
             title: "Run",
             event: "run-editor-script"
           },
-          readOnly: true
+          readOnly: true,
+          
         },
-        script: `//type code here`
+        content: `// type script here\n`
+        
       }
     }
 

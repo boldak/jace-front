@@ -10,7 +10,7 @@
       <v-flex xs12>
         <editor
           v-if="!isProductionMode || !config.data.embedded.readOnly"       
-          :content="config.data.script" 
+          :content="config.data.content" 
           :lang="config.data.embedded.lang" 
           :sync="true"
           @change="onUpdateSource"
@@ -20,7 +20,7 @@
         
         <highlight
           v-else 
-          :content="config.data.script" 
+          :content="config.data.content" 
           :lang="config.data.embedded.lang" 
           :style="config.data.embedded.style"
         >
@@ -39,7 +39,7 @@
     <v-container fluid class="pa-1">
       <v-flex xs12>
         <highlight
-          :content="config.data.script" 
+          :content="config.data.content" 
           lang="dps"
         >
         </highlight>
@@ -88,13 +88,13 @@
       },
 
       onUpdateSource (value) {
-          this.config.data.script = value
+          this.config.data.content = value
           this.setNeedSave(true)
       },
 
       resolve(){
         let event = this.config.data.embedded.button.event || "run-editor-script"
-        this.emit(event, this.config.data.script) 
+        this.emit(event, this.config.data.content) 
       },
 
 <<< if( jace.mode == "development") { >>>
@@ -110,6 +110,7 @@
 
   
     mounted(){
+      // console.log(this.config)
        this.$emit("init")
     }
 
