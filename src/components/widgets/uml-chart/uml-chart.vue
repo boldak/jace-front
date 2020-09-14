@@ -1,7 +1,19 @@
 <template>
   <div>
     <center>
-      <img v-if="plantRef" :src="plantRef" style="width:100%">
+      <!-- <v-fade-transition v-if="plantRef"> -->
+          <img  v-if="!loading" :src="plantRef" style="width:100%">
+      <!-- </v-fade-transition> -->
+
+      <!-- <v-fade-transition v-if="loading"> -->
+        <div v-if="loading" class="title font-weight-light secondary--text"> 
+          Rendering...
+          <div>
+            <i class="mdi mdi-36px mdi-spin mdi-loading"></i>
+          </div>
+        </div>
+      <!-- </v-fade-transition>   -->
+
     </center>
   </div>
 </template>
@@ -34,9 +46,8 @@
     methods:{
 
       onUpdate ({data}) {
-        console.log("update")
-        console.log(data)
-        
+        // console.log("update")
+        // console.log(data)
         let runDps =  (script, state, file) => this.$dps.run({
           script,
           state: state || {},
@@ -45,11 +56,17 @@
 
         this.plantRef = null
         if(!data) return
-        runDps(dps, {source:data})
-          .then( res => {
-            this.plantRef = res.data
-          })
+        
+        setTimeout(()=>{
+          if(!this.plantRef) this.loading = true
+        },250)  
 
+          runDps(dps, {source:data})
+          .then( res => {
+            this.loading = false
+            this.$nextTick(() => {this.plantRef = res.data})
+          })  
+       
       },
 
 <<< if( jace.mode == "development") { >>>
@@ -67,7 +84,8 @@
     },
     
     data: () =>({
-      plantRef: null
+      plantRef: null,
+      loading: false
     })
 }
 
