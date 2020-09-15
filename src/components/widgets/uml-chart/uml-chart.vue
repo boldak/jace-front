@@ -7,7 +7,7 @@
 
       <!-- <v-fade-transition v-if="loading"> -->
         <div v-if="loading" class="title font-weight-light secondary--text"> 
-          Rendering...
+          Rendering
           <div>
             <i class="mdi mdi-36px mdi-spin mdi-loading"></i>
           </div>
@@ -91,5 +91,3 @@
 
 
 </script> 
-
-

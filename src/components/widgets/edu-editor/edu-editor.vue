@@ -30,7 +30,7 @@
       <v-flex xs12 v-if="config.data.embedded.button">
         <v-row class="mx-0 px-3 my-1">
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="resolve">{{config.data.embedded.button.title}}</v-btn>
+          <v-btn v-for="(b,index) in config.data.embedded.button" :key="index" text :color="b.color || 'primary'" @click="resolve(index)">{{b.title || 'noname'}}</v-btn>
         </v-row> 
       </v-flex>
 
@@ -53,7 +53,7 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin.js";
   import listenerMixin from "@/mixins/core/listener.mixin.js";
-
+  import {isArray, isString} from "lodash"
     
   let components = {
       <<< if( jace.mode == "development") { >>>
@@ -84,7 +84,7 @@
     methods:{
 
       onUpdate ({data}) {
-        this.config.data.script = data;
+        if(isString(data)) this.config.data.content = data;
       },
 
       onUpdateSource (value) {
@@ -92,9 +92,9 @@
           this.setNeedSave(true)
       },
 
-      resolve(){
-        let event = this.config.data.embedded.button.event || "run-editor-script"
-        this.emit(event, this.config.data.content) 
+      resolve(index){
+        let event = this.config.data.embedded.button[index].event || "run-editor-script"
+        this.emit(event, this.config.data.content, this) 
       },
 
 <<< if( jace.mode == "development") { >>>
@@ -108,7 +108,13 @@
     
     props:["config"],
 
-  
+    created(){
+      this.config.data.content = this.config.data.content || " "
+      this.config.data.embedded.button = (this.config.data.embedded.button) ? 
+        (isArray(this.config.data.embedded.button)) ? this.config.data.embedded.button : [this.config.data.embedded.button]
+        : null  
+    },
+
     mounted(){
       // console.log(this.config)
        this.$emit("init")
