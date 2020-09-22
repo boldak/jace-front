@@ -57,6 +57,7 @@
       v-else 
       v-model="slide"
       show-arrows-on-hover
+      :continuous = "false"
       hide-delimiter-background
       light
       :height = "windowHeight"
@@ -89,7 +90,7 @@
     </v-carousel>
 
 
-    <v-card
+<!--     <v-card
       id="slider"
       class="ma-2"
       flat
@@ -176,7 +177,7 @@
       </v-item-group>
     </v-card-actions>
   </v-card>
-
+ -->
 
 
 
