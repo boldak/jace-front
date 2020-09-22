@@ -274,16 +274,16 @@ export default {
     })
 
    
-    this.consoleWrapper.wrap({
-      log: (output) => { this.emit("console.log", output)},
-      error: (output) => { this.emit("console.error", output)},
-      warn: (output) => { this.emit("console.warn", output)},
-      debug: (output) => { this.emit("console.debug", output)},
-      info: (output) => { this.emit("console.info", output)},
-      dir: (output) => { this.emit("console.dir", output)},
-      trace: (output) => { this.emit("console.trace", output)},
-      clear: (output) => { this.emit("console.clear", output)}
-    })
+    // this.consoleWrapper.wrap({
+    //   log: (output) => { this.emit("console.log", output)},
+    //   error: (output) => { this.emit("console.error", output)},
+    //   warn: (output) => { this.emit("console.warn", output)},
+    //   debug: (output) => { this.emit("console.debug", output)},
+    //   info: (output) => { this.emit("console.info", output)},
+    //   dir: (output) => { this.emit("console.dir", output)},
+    //   trace: (output) => { this.emit("console.trace", output)},
+    //   clear: (output) => { this.emit("console.clear", output)}
+    // })
 
   },
 

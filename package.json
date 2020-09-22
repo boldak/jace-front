@@ -17,6 +17,7 @@
     "babel-eslint": "^10.0.1",
     "core-js": "^2.6.5",
     "deepmerge": "^4.0.0",
+    "dom-to-image-improved": "^2.8.0",
     "easy-promise-queue": "^0.5.7",
     "echarts": "^4.2.1",
     "echarts-gl": "^1.1.1",

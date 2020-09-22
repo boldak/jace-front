@@ -25,7 +25,7 @@ import dialogManager from "@/components/core/ext/dialog-manager"
 
 import axios from "axios"
 
-import consoleWrapper from "./console-wrapper"
+// import consoleWrapper from "./console-wrapper"
 
 var _dialog_manager = (app) => {
   _dialog_manager = (new Vue(dialogManager)).$mount()
@@ -414,7 +414,7 @@ export var djvuePlugin = {
         });
       },
 
-      consoleWrapper
+      // consoleWrapper
 
     }
 

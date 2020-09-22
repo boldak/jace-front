@@ -63,12 +63,16 @@
       :height = "windowHeight"
     >
       
+      
+      
       <v-carousel-item 
         v-for="(s,index) in app.currentPage.sections" 
         :key="index"
-        :style="`height: ${windowHeight}px;`" 
+        :style="`height: ${windowHeight}px;`"
+        reverse-transition="fade-transition"
+        transition="fade-transition" 
       >
-        <v-sheet height="100%">
+        <v-sheet height="100%" :id="`section-${index}`">
           <v-row class="mx-0 px-2 primary--text display-1">
             <div>
               {{s.title}}
@@ -87,6 +91,25 @@
         </v-sheet>
       </v-carousel-item>
     
+    <v-carousel-item 
+        :style="`height: ${windowHeight}px;`" 
+      >
+        <v-sheet height="100%">
+          <v-row class="mx-0 px-2 primary--text display-1">
+            <div>
+              Slides
+            </div>
+          </v-row>
+          <v-divider></v-divider>  
+          <v-row wrap fill-height class="px-2 mx-0">
+              <a v-for="(s,i) in app.currentPage.sections" @click="slide = i"
+                  :key="i" style="border:1px solid; margin:0.5em; padding:0.5em;">
+                <screenshot :node="nodes[i]"  style="width:250px;"></screenshot></a>
+              
+          </v-row>
+        </v-sheet>
+      </v-carousel-item>
+
     </v-carousel>
 
 
@@ -210,7 +233,8 @@ import layoutMixin from "@/mixins/core/layout.mixin.js"
 export default {
 
   components: {
-    "dj-holder": () => import("@/components/core/holder.vue")
+    "dj-holder": () => import("@/components/core/holder.vue"),
+    "screenshot": () => import("@/components/core/ext/screenshot.vue")
   },
 
   mixins: [layoutMixin],
@@ -220,7 +244,8 @@ export default {
     windowHeight:window.innerHeight-100,
     windowWidth: null,
     completed: false,
-    state:[]
+    state:[],
+    nodes:[]
   }),
 
   created(){
@@ -252,6 +277,8 @@ export default {
         this.$nextTick( () => {
           // let el = document.getElementById("slider")
           this.windowWidth = this.$el.clientWidth // (el) ? el.clientWidth : 0
+          this.nodes = this.app.currentPage.sections.map( (s,index) => document.getElementById(`section-${index}`) )
+          console.log(this.nodes)
         })
       },
       rules: () => true
@@ -268,13 +295,14 @@ export default {
   },
 
   mounted(){
-    // this.initiateLayout(0)
+    this.initiateLayout(0)
     if (window.attachEvent) {
         window.attachEvent('onresize', this.resizeHandler);
       } else {
         window.addEventListener('resize', this.resizeHandler);
       }
     
+      
     this.emit("layout-page-start", this) 
    
   },
