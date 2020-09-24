@@ -101,7 +101,7 @@
             </div>
           </v-row>
           <v-divider></v-divider>  
-          <v-row wrap fill-height class="px-2 mx-0">
+          <v-row wrap fill-height class="px-2 mx-0" style="margin: 0 5em 0 5em !important">
               <a v-for="(s,i) in app.currentPage.sections" @click="slide = i"
                   :key="i" style="border:1px solid; margin:0.5em; padding:0.5em;">
                 <screenshot :node="nodes[i]"  style="width:250px;"></screenshot></a>
