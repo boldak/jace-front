@@ -1,4 +1,6 @@
 import htmlWidget from "./html/html.type.js"
+import nlpHighlightWidget from "./nlp-highlight/nlp-highlight.type.js"
+
 import mdWidget from "./md/md.type.js"
 
 import inputsWidget from "./inputs/inputs.type.js"
@@ -76,6 +78,9 @@ import FormResponseWidget from "./form-response/form-response.type.js"
 
 export default {
 	'html-widget' : htmlWidget,
+	
+	'nlp-highlight-widget' : nlpHighlightWidget,
+	
 	'md-widget' : mdWidget,
 	
 	'inputs-widget' : inputsWidget,

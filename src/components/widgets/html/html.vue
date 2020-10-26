@@ -4,6 +4,7 @@
 
 <script>
 
+
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
 
@@ -55,7 +56,7 @@
 
       $asciiMath (formula){
         formula = formula.split(/(?:\n\s*){2,}/).map((item) => { return asciimath2latex(item) }).join('\n\n')
-        console.log(formula)
+        // console.log(formula)
         return mathBlock(formula)
       },
 

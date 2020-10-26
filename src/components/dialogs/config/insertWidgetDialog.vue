@@ -289,6 +289,18 @@ export default {
           },
 
           {
+            name: "NLP",
+            editor: () => import("./parts/widget-types-panel.vue"),
+            items: [
+              "nlp-highlight-widget",
+              "data-selector-widget",
+              "data-keywords-widget:Keywords",
+              "dps-suite-widget"
+            ]
+          },
+
+
+          {
             name: "Forms",
             editor: () => import("./parts/widget-types-panel.vue"),
             items: [

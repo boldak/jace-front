@@ -3,6 +3,8 @@ export default {
       // 'hello-world' :() => import("./hello-world/HelloWorld.vue"),
 
       'html-widget' :() => import("./html/html.vue"),
+      'nlp-highlight-widget' :() => import("./nlp-highlight/nlp-highlight.vue"),
+      
       'md-widget' :() => import("./md/md.vue"),
       
       'edu-editor-widget' :() => import("./edu-editor/edu-editor.vue"),

@@ -208,6 +208,17 @@ export default {
           },
 
           {
+            name: "NLP",
+            editor: "widget-types-panel",
+            items: [
+              "nlp-highlight-widget",
+              "data-selector-widget",
+              "data-keywords-widget:Keywords",
+              "dps-suite-widget"
+            ]
+          },
+
+          {
             name: "Education",
             editor: "widget-types-panel",
             items: [

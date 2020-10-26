@@ -3,6 +3,8 @@ import vuetify from "@/plugins/vuetify"
 import VueRouter from "vue-router"
 import VueClipboard from "vue-clipboard2"
 import VueSSE from "./plugins/vue-sse"
+import Fragment from 'vue-fragment'
+
 
 import { 
   portalPlugin,
@@ -45,6 +47,7 @@ Vue.use(socketPlugin, window.devService.config.pubService);
 
 
 Vue.use(VueClipboard)
+Vue.use(Fragment.Plugin)
 
 // window.gotoPage = path => {
 //       console.log(window.appRouter)
