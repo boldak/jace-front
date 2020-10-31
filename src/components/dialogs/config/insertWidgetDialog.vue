@@ -293,6 +293,7 @@ export default {
             editor: () => import("./parts/widget-types-panel.vue"),
             items: [
               "nlp-highlight-widget",
+              "nlp-annotator-widget",              
               "data-selector-widget",
               "data-keywords-widget:Keywords",
               "dps-suite-widget"

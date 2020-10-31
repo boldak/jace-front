@@ -2,14 +2,15 @@
       <component 
         :id="node.id" 
         :is="(node.type == 'text') ? 'text-node' : (node.type == 'paragraph') ? 'paragraph-node' : 'node'" 
-        class="tom" 
-        :class="`${(selectable) ? 'selectable' : ''} ${(!!node.childs) ? 'node-container': ''} ${classes}`"
+        class="tom no-select" 
+        :class="`${(selectable) ? 'selectable' : ''} ${(!!node.childs) ? 'node-container': ''} ${(selected) ? 'selected' : ''} ${classes}`"
         :style="nodeStyle"
       >
           <span
             @mouseenter = "mouseEnter"
             @mouseleave = "mouseLeave"
-            @contextmenu.prevent="contextMenu" 
+            @contextmenu.prevent="contextMenu"
+            @click.prevent = "select" 
           >
             <span 
               v-if="labeled"
@@ -23,11 +24,13 @@
             <tom 
               v-if="node.childs" 
               v-for="c in node.childs" 
-              :node="c" 
+              :node="c"
+              :parent="node" 
               :options="options"
               @show-tooltip = "propagateShowTooltip"
               @hide-tooltip = "propagateHideTooltip"
               @show-menu = "propagateShowMenu"
+              @select = "propagateSelect"
             ></tom>
             {{!(node.childs) ? (node.value == ' ') ? '&nbsp;' : node.value : ''}}
           </span>
@@ -43,7 +46,7 @@ export default {
 
   name: "tom",
 
-  props: ["options", "node"],
+  props: ["options", "node", "parent"],
 
   components: {
     TextNode : () => import("./text-node.vue"),
@@ -55,9 +58,16 @@ export default {
     selectable(){
       if(!this.options) return null
       let options = this.options()
-      return options.selectable && !!options.selectable(this.node)
+      if (!options.selectable) return null
+      if( this.parent &&  !!options.selectable(this.parent) && options.selectable(this.parent).indexOf("wrap") >= 0 ) return null  
+      return !!options.selectable(this.node)
     },
-    
+
+    selected(){
+      // console.log(this.node.type, this.node.value, this.node.selected)
+      return this.node.selected
+    },
+
     labeled(){
       if(!this.options) return null
       let options = this.options()
@@ -114,6 +124,10 @@ export default {
       this.$emit("show-menu", e)
     },
 
+    propagateSelect(e){
+      this.$emit("select", e)
+    },
+
     emitMessage(msg, el){
       this.$emit(msg, {
         sender: this,
@@ -134,6 +148,10 @@ export default {
     
     mouseLeave(e) {
       this.emitMessage("hide-tooltip", e)
+    },
+
+    select(){
+      if (this.selectable) this.emitMessage("select", this)
     }
     
 
@@ -178,6 +196,17 @@ export default {
   .node-container {
     /*padding: 0.3em;*/
     /*line-height: 2;*/
+  }
+
+  .no-select,
+  .no-select:focus {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      outline-style: none; /* Internet Explorer  */
   }
 
 </style>

@@ -8,6 +8,8 @@ import splashDialog from "@/components/dialogs/core/splash.vue"
 import VueSSE from "./vue-sse"
 import Vue from "vue"
 
+import KeyController, { getCombi, getKey } from "keycon";
+
 
 
 <<< if(jace.availablePublishing) { >>>
@@ -93,6 +95,20 @@ export var cookiePlugin = {
   }
 }
 
+///////////////////////////////////////////////////////////////////
+
+let keycon = new KeyController()
+
+
+export var keyControllerPlugin = {
+  install: function(Vue) {
+    Vue.prototype.$keyController = keycon;
+    Vue.keyController = keycon;
+  }
+
+}
+
+///////////////////////////////////////////////////////////////////
 
 export var portalPlugin = {
   install(Vue, options = { baseURL: "/", sse:"sse/" }) {
@@ -104,6 +120,9 @@ export var portalPlugin = {
  
   }
 }
+
+
+
 
 
 // export var ssePubSubPlugin = {

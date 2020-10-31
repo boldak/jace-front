@@ -7,16 +7,8 @@
         @show-tooltip = "showTooltip"
         @hide-tooltip = "hideTooltip"
         @show-menu = "displayMenu"
-      ></tom>
-      
-      <vue-selecto
-        ref="selecto"
-        :selectableTargets="['.selectable']"
-        :hitRate="40"
-        :selectFromInside="false"
-        :selectByClick="true"
         @select="onSelect"
-      />
+      ></tom>
       
       <v-tooltip
         top 
@@ -74,30 +66,29 @@
 </template>
 
 <script>
-
-
-import {VueSelecto} from "vue-selecto"
-import { find, extend, first, last, slice, sortBy, isFunction, isArray } from "lodash"
+import { find, findIndex, extend, first, last, slice, sortBy, isFunction, isArray } from "lodash"
 import tom from "./tom.vue"
 import { v4 } from "uuid/dist"
-import { forEachNode, findNode } from "./utils.js"
+import { forEachNode, findNode, getSiblings, getParent } from "./utils.js"
 
 
 export default {
 
   name: "annotator",
 
-  props: ["data","options"],
+  props: ["data","options", "id"],
 
   components: {
-    VueSelecto,
     tom
   },
- 
+
+
   data() {
       return {
           
           selection: [],
+          selectionMode:"singly",
+          _selectionOrigin:null,
           
           showMenu: false,
           menu: [],
@@ -114,80 +105,130 @@ export default {
   },
 
   watch:{
+
     data(value){
       if(value) 
         forEachNode(value, node => {
-          node.id = node.id || v4()
+          node.id = `${this.id}-${v4()}`
         })
+    },
+    
+
+    selection(value){
+
+      forEachNode(this.data, node => {
+       let e = document.getElementById(node.id) 
+       if(e) e.classList.remove("selected")
+       node.selected = false
+      })
+
+      if(!value) return
+      value.forEach( node => {
+        let e = document.getElementById(node.id) 
+        if(e) e.classList.add("selected")
+        node.selected = true
+      })
+
+      this.$emit("select", value)
     }
+
   },
   
   methods: {
     
+    select(selection){
+      this.selection = isArray(selection) ? selection : [selection]
+    },
     
     onSelect(e) {
-      this.selection = this.getSelectedItems(e.selected)  
-      e.added.forEach(el => {
-        el.classList.add("selected");
-      })
-      e.removed.forEach(el => {
-        el.classList.remove("selected");
-      })
+      
+      let options = this.options()
+
+      if( !options.availableSelectionMode().includes(this.selectionMode) ) return
+
+      if (this.selectionMode == "bundly"){
+         if (!this._selectionOrigin) {
+            this._selectionOrigin = e.sender.node
+            this.selection = [e.sender.node]
+            return
+         }
+         
+        let siblings = getSiblings(e.sender.node, this.data)
+        this.selection = this.selection.filter( node => find(siblings, item => item.id == node.id))
+        this.selection.push(e.sender.node)
+        
+        if(this.selection.length == 1){
+          this._selectionOrigin = e.sender.node
+          return
+        }
+
+        let originIndex = findIndex(siblings, item => item.id == this._selectionOrigin.id)
+        let selectionIndex = findIndex(siblings, item => item.id == e.sender.node.id)
+        
+        this.selection = []
+        
+        
+        if( originIndex <= selectionIndex) {
+          for(let i=originIndex; i <= selectionIndex; i++) {
+            if( options.selectable(siblings[i]) && options.selectable(siblings[i]).includes("singly") ){
+              this.selection = []
+            } else {
+              this.selection.push(siblings[i])
+            }
+          }  
+        } else {
+          for(let i=originIndex; i >= selectionIndex; i--) {
+            if( options.selectable(siblings[i]) && options.selectable(siblings[i]).includes("singly") ){
+              this.selection = []
+            } else {
+              this.selection.unshift(siblings[i])
+            }
+          }
+        }
+        return
+      }
+
+      this._selectionOrigin = e.sender.node
+
+      let selectionPos = findIndex(this.selection, node => node.id == e.sender.node.id) 
+      if( selectionPos >= 0){
+        this.selection.splice(selectionPos, 1)
+        this._selectionFrom = last(this.selection)
+
+      } else {
+        switch (this.selectionMode) {
+          
+          case "singly":
+            this.selection = [e.sender.node]
+            break
+
+          case "selectively":
+            this.selection.push(e.sender.node)
+            break            
+        }  
+      }
+
     },
 
-    
-    getSelectedItems(elements) {
-      
-      if (elements.length == 0) return []
-      if (elements.length == 1) return elements.map( el => findNode(this.data, item => item.id == el.attributes.id.nodeValue ))
-      
-      // todo refact this code 
-
-      let s = sortBy(elements.map(el => find(this.data, item => item.id == el.attributes.id.nodeValue)), "index")
-      let firstItem = first(s)
-      let lastItem = last(s)
-      let d = this.data 
-
-      console.log(firstItem, lastItem)
-      let group = slice(d,firstItem.index,lastItem.index+1)
-      console.log(group)
-
-      
-      d.splice(firstItem.index,lastItem.index - firstItem.index+1,{
-        id:1112211,
-        value:group.map( g => g.value).join(""),
-        selectable: true,
-        selected: true
-      })
-
-      d = d.map( (item, index) => extend(item, {list:d, index}))
-      console.log(d)
-      return [find(d, item => item.id == "1112211")]
-    },
-    
-    select(nodes){
-      nodes = (isArray(nodes)) ? nodes : [nodes]
-      if (nodes.length == 1 && this.selection.length == 1 && nodes[0].id == this.selection[0].id) return
-      this.$refs.selecto.setSelectedTargets(nodes.map(item => document.getElementById(item.id)))
-      this.onSelect({
-        removed: this.selection.map( item => document.getElementById(item.id)),
-        added: nodes.map(item => document.getElementById(item.id)),
-        selected: nodes.map(item => document.getElementById(item.id))
-      })
-    },
 
     displayMenu(e) {
+      
       let options = this.options()
-     
-      if(options.menu && !!options.menu(e.sender.node)) {
-        this.select(e.sender.node)
+    
+      if(!options.menu || !e.sender.node.selected) return
+      let menu = options.menu(e.sender.node)  
+      
+      if(!!menu) {
         this.menu_x= e.position.x
         this.menu_y = e.sender.$el.getBoundingClientRect().bottom+5
-        this.menu = e.sender.menu(e.sender.node)
-        this.$nextTick(() => {this.showMenu = true})  
-      } 
+        this.menu = menu
+        this.$nextTick(() => {this.showMenu = true})
+        return  
+      }
       
     },
+
+    
 
     showTooltip(e){
       let options = this.options()
@@ -195,7 +236,7 @@ export default {
       if(options.tooltip && !!options.tooltip(e.sender.node)){
         this.tt_stack.push(e.sender)
         this.tt_x= e.position.x
-        this.tt_y = e.position.y //component.$el.getBoundingClientRect().top //tt_pos.y
+        this.tt_y = e.position.y 
         this.tooltipText = options.tooltip(e.sender.node)
         this.showTooltipModel = true  
       }
@@ -213,7 +254,7 @@ export default {
           this.tt_stack.pop()
           let component = this.tt_stack[this.tt_stack.length-1]
           this.tt_x = e.position.x
-          this.tt_y = e.position.y //component.$el.getBoundingClientRect().top
+          this.tt_y = e.position.y 
           this.tooltipText = options.tooltip(component.node)
           this.showTooltipModel = true  
         }
@@ -226,7 +267,23 @@ export default {
   
   created(){
     forEachNode(this.data, node => {
-      node.id = node.id || v4()
+      node.id = `${this.id}-${v4()}`
+    })
+    
+    this.$keyController.keydown(["shift"], e  => {
+      this.selectionMode = "bundly"
+    })
+
+    this.$keyController.keyup(["shift"], e  => {
+      this.selectionMode = "singly"
+    })
+
+    this.$keyController.keydown(["ctrl"], e  => {
+        this.selectionMode = "selectively"
+    })
+
+    this.$keyController.keyup(["ctrl"], e  => {
+      this.selectionMode = "singly"
     })
   }
   

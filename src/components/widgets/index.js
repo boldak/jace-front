@@ -4,6 +4,7 @@ export default {
 
       'html-widget' :() => import("./html/html.vue"),
       'nlp-highlight-widget' :() => import("./nlp-highlight/nlp-highlight.vue"),
+      'nlp-annotator-widget' :() => import("./nlp-annotator/nlp-annotator.vue"),
       
       'md-widget' :() => import("./md/md.vue"),
       

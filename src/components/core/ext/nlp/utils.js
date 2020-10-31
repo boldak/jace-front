@@ -1,4 +1,4 @@
-import { isFunction, isArray } from "lodash"
+import { isFunction, isArray, find } from "lodash"
 
 let forEachNode = (node, beforeAction, afterAction) => {
   if(beforeAction && isFunction(beforeAction)) beforeAction(node)
@@ -18,6 +18,12 @@ let findNode = (node, test) => {
   return null
 }
 
+let getParent = (node, root) => findNode(root, n => n.childs && find(n.childs, item => item.id == node.id))
+
+let getSiblings = (node, root) => {
+  let parent = getParent(node, root)
+  return (parent) ? parent.childs : []
+}
 
 let getStyle = (element, property) => {
       return window.getComputedStyle 
@@ -28,6 +34,8 @@ let getStyle = (element, property) => {
 export {
   forEachNode,
   findNode,
+  getParent,
+  getSiblings,
   getStyle
 }  
 

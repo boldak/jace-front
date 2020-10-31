@@ -13,7 +13,8 @@ import {
   djvuePlugin, 
   cookiePlugin, 
   eventhubPlugin, 
-  dpsPlugin, 
+  dpsPlugin,
+  keyControllerPlugin, 
   <<< if(jace.availablePublishing) { >>>
   socketPlugin 
   <<< } >>>
@@ -68,6 +69,7 @@ Vue.use(httpPlugin)
 
 Vue.use(djvuePlugin);
 Vue.use(eventhubPlugin);
+Vue.use(keyControllerPlugin);
 
 
 Vue.use(VueRouter)

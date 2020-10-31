@@ -1,5 +1,10 @@
 <template>
-    <annotator ref="annotator" :data="config.data.embedded.document" :options="getOptions"></annotator>
+    <annotator 
+      ref="annotator" 
+      :id="config.id"
+      :data="config.data.embedded.document" 
+      :options="getOptions"
+    ></annotator>
 </template>
 
 <script>
@@ -52,7 +57,9 @@
       if(!this.config) return {}
       let self = this  
       return {
-              classes(node){ 
+            
+            
+            classes(node){ 
               return (self.config && self.config.data.embedded.decoration.classes) 
                                 ? self.config.data.embedded.decoration.classes[node.type] 
                                 : null
