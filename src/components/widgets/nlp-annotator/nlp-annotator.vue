@@ -88,24 +88,41 @@
         }
     
       }
-      
-
+  
     },
 
-    removeAnnotation(selection){
+    nestingTest( node, annotation){
+      let a = this.config.data.embedded.availableAnnotation[annotation]
+      if(!a) return true
+      a.nestedIn = a.nestedIn || [] 
+      let parent = getParent(node, this.config.data.embedded.document)
+      return (parent && a.nestedIn.includes(parent.type)) || a.nestedIn.length == 0
+    },
+
+    _remove(selection){
       if(selection.length == 0 || selection.length > 1) return
 
+        
       let parent = getParent(selection[0], this.config.data.embedded.document)
-      let pos = findIndex(parent.childs, node => node.id == selection[0].id)
-      parent.childs.splice(pos,1)
-      parent.childs.splice(pos,0,selection[0].childs)
-      parent.childs = flattenDeep(parent.childs)
-      
+      if(parent){
+        let pos = findIndex(parent.childs, node => node.id == selection[0].id)
+        parent.childs.splice(pos,1)
+        parent.childs.splice(pos,0,selection[0].childs)
+        parent.childs = flattenDeep(parent.childs)
+        
+        parent.childs.forEach( child => {
+          if (!this.nestingTest(child, child.type)) this._remove([child])
+        })  
+      }
+     
       if(this.config.data.embedded.events){
         let event = this.config.data.embedded.events.remove || "remove-annotation"
         this.emit(event, selection[0])  
       }
-      
+    },
+
+    removeAnnotation(selection){
+      this._remove(selection)
       this.$nextTick(() => {this.$refs.annotator.select(selection[0].childs)})
       this.onUpdate({data:this.config.data.embedded})
     },
@@ -120,55 +137,69 @@
             },
 
             menu(node){
+              if(!node) return
               if (!keys(self.config.data.embedded.selection).includes(node.type)) return
   
-              if(self.config.data.embedded.availableAnnotation.includes(node.type)){
+              if(self.config.data.embedded.availableAnnotation[node.type]){
                 return [{
                   title:`Remove annotation "${node.type}"`,
                   action: self.removeAnnotation
                 }]
               } else {
-                return self.config.data.embedded.availableAnnotation.map( item =>({
-                  title:`Annotate as "${item}"`,
-                  action: self.createAnnotation(item)
-                }))
+                return keys(self.config.data.embedded.availableAnnotation)
+                        .filter( key => self.nestingTest(node, key))
+                        .map( item =>({
+                          title:`Annotate as "${item}"`,
+                          action: self.createAnnotation(item)
+                        })
+                )
               }
             }, 
 
             
             selectable(node){ 
-              return (self.config && self.config.data.embedded.selection) 
+              return  (node)
+                        ?  (self.config && self.config.data.embedded.selection) 
                             ? ( self.config.data.embedded.selection[node.type] )
                                 ? ( isArray( self.config.data.embedded.selection[node.type] ) )
                                     ? self.config.data.embedded.selection[node.type]
                                     : self.config.data.embedded.selection[node.type].split(",").map( item => item.trim())
                                 : null
-                            : null            
+                            : null
+                        : null                
             },
 
             classes(node){ 
-              return (self.config && self.config.data.embedded.decoration.classes) 
+              return   (node)
+                        ?  (self.config && self.config.data.embedded.decoration.classes) 
                                 ? self.config.data.embedded.decoration.classes[node.type] 
                                 : null
+                        : null        
             },
 
             color(node){
-              return (self.config && self.config.data.embedded.decoration.color) 
+              return   (node)
+                        ?  (self.config && self.config.data.embedded.decoration.color) 
                                 ? self.config.data.embedded.decoration.color[node.type] 
                                 : null
+                        : null        
             },
             
             label(node){
-              return (self.config && self.config.data.embedded.decoration.label) 
+              return   (node)
+                        ?  (self.config && self.config.data.embedded.decoration.label) 
                                 ? self.config.data.embedded.decoration.label[node.type] 
                                 : null
+                        : null        
             },
             
             tooltip(node){
               if (!self.config) return null
-              return (self.config && self.config.data.embedded.decoration.tooltip && self.config.data.embedded.decoration.tooltip[node.type]) 
+              return   (node)
+                        ?  (self.config && self.config.data.embedded.decoration.tooltip && self.config.data.embedded.decoration.tooltip[node.type]) 
                                 ? compile(self.config.data.embedded.decoration.tooltip[node.type], {node} ) 
                                 : null
+                        : null        
             }
         
       }       

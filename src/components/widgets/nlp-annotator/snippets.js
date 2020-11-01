@@ -20,12 +20,28 @@ export default {
               "remove": "remove-entity"
             },
             
-            "availableAnnotation": [
-              "ORGANIZATION",
-              "LOCATION",
-              "PERSON",
-              "DATE"
-            ],
+            "availableAnnotation": {
+                "ORGANIZATION": {
+                  "nestedIn": [
+                    "subSentence"
+                  ]
+                },
+                "LOCATION": {
+                  "nestedIn": [
+                    "subSentence"
+                  ]
+                },
+                "PERSON": {
+                  "nestedIn": [
+                    "subSentence"
+                  ]
+                },
+                "DATE": {
+                  "nestedIn": [
+                    "subSentence"
+                  ]
+                }
+              },
 
             "selection": {
               "ORGANIZATION": "singly, wrap",

@@ -10,7 +10,7 @@
             @mouseenter = "mouseEnter"
             @mouseleave = "mouseLeave"
             @contextmenu.prevent="contextMenu"
-            @click.prevent = "select" 
+            @click.stop = "select" 
           >
             <span 
               v-if="labeled"
@@ -59,12 +59,11 @@ export default {
       if(!this.options) return null
       let options = this.options()
       if (!options.selectable) return null
-      if( this.parent &&  !!options.selectable(this.parent) && options.selectable(this.parent).indexOf("wrap") >= 0 ) return null  
-      return !!options.selectable(this.node)
+      // if( this.parent &&  !!options.selectable(this.parent) && options.selectable(this.parent).includes("wrap") ) return null  
+      return options.selectable(this.node)
     },
 
     selected(){
-      // console.log(this.node.type, this.node.value, this.node.selected)
       return this.node.selected
     },
 
@@ -125,7 +124,17 @@ export default {
     },
 
     propagateSelect(e){
-      this.$emit("select", e)
+      let options = this.options()
+      
+      if( options.selectable 
+          && options.selectable(this.node) 
+          && options.selectable(this.node).includes("wrap")
+      ){
+        this.$emit("select", {sender: this})  
+      } else {
+        this.$emit("select", e)  
+      }
+      
     },
 
     emitMessage(msg, el){
@@ -151,7 +160,7 @@ export default {
     },
 
     select(){
-      if (this.selectable) this.emitMessage("select", this)
+      this.emitMessage("select", this)
     }
     
 

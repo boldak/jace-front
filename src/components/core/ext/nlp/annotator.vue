@@ -143,7 +143,7 @@ export default {
     onSelect(e) {
       
       let options = this.options()
-
+      if(!options.availableSelectionMode) return
       if( !options.availableSelectionMode().includes(this.selectionMode) ) return
 
       if (this.selectionMode == "bundly"){
