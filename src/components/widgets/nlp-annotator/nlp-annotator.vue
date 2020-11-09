@@ -11,7 +11,7 @@
 <script>
 
   import annotator from "@/components/core/ext/nlp/annotator.vue"
-  import { getParent, getSiblings } from "@/components/core/ext/nlp/utils.js"
+  import * as utils from "@/components/core/ext/nlp/utils.js"
 
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
@@ -56,10 +56,36 @@
 
     methods:{
 
+
+    getDocument(){
+      return this.config.data.embedded.document 
+    },
+    
+    getDecoration(){
+      return this.config.data.embedded.decoration 
+    },
+
+    getAvailableAnnotation(){
+      return this.config.data.embedded.availableAnnotation 
+    },
+
+    getSelection(){
+      return this.config.data.embedded.selection
+    },
+
+    getEvents(){
+      return this.config.data.embedded.events
+    },
+
+    getUtils(){
+      return utils
+    },
+
+
     onSelectNodes(selection){
       if(this.config.data.embedded.events){
         let event = this.config.data.embedded.events.select || "select-nodes"
-        this.emit(event, selection)  
+        this.emit(event, selection, this)  
       }
     },
 
@@ -68,7 +94,7 @@
       return selection => {
         if(selection.length == 0) return
 
-        let parent = getParent(selection[0], this.config.data.embedded.document)
+        let parent = utils.getParent(selection[0], this.config.data.embedded.document)
         let start = findIndex(parent.childs, node => node.id == selection[0].id)
         let stop = findIndex(parent.childs, node => node.id == selection[selection.length-1].id)
         let childs = parent.childs.splice(start, stop-start+1)
@@ -84,7 +110,12 @@
 
         if(this.config.data.embedded.events){
           let event = this.config.data.embedded.events.create || "create-annotation"
-          this.emit(event, newAnnotation)  
+          this.emit(event, newAnnotation, this)  
+        }
+
+        if(this.config.data.embedded.events){
+          let event = this.config.data.embedded.events.change || "change-document"
+          this.emit(event, this.config.data.embedded.document, this)  
         }
     
       }
@@ -95,7 +126,7 @@
       let a = this.config.data.embedded.availableAnnotation[annotation]
       if(!a) return true
       a.nestedIn = a.nestedIn || [] 
-      let parent = getParent(node, this.config.data.embedded.document)
+      let parent = utils.getParent(node, this.config.data.embedded.document)
       return (parent && a.nestedIn.includes(parent.type)) || a.nestedIn.length == 0
     },
 
@@ -103,7 +134,7 @@
       if(selection.length == 0 || selection.length > 1) return
 
         
-      let parent = getParent(selection[0], this.config.data.embedded.document)
+      let parent = utils.getParent(selection[0], this.config.data.embedded.document)
       if(parent){
         let pos = findIndex(parent.childs, node => node.id == selection[0].id)
         parent.childs.splice(pos,1)
@@ -117,8 +148,17 @@
      
       if(this.config.data.embedded.events){
         let event = this.config.data.embedded.events.remove || "remove-annotation"
-        this.emit(event, selection[0])  
+        this.emit(event, selection[0], this)  
       }
+
+      if(this.config.data.embedded.events){
+        let event = this.config.data.embedded.events.change || "change-document"
+        this.emit(event, this.config.data.embedded.document, this)  
+      }
+  
+    
+
+
     },
 
     removeAnnotation(selection){
@@ -186,9 +226,15 @@
             },
             
             label(node){
+              // console.log(node.type)
+              // if(node.type == "BRANCH"){
+              //   console.log(self.config.data.embedded.decoration.label[node.type], {node})
+              //   console.log(compile(self.config.data.embedded.decoration.label[node.type], {node} ))
+                 
+              // }
               return   (node)
                         ?  (self.config && self.config.data.embedded.decoration.label) 
-                                ? self.config.data.embedded.decoration.label[node.type] 
+                                ? compile(self.config.data.embedded.decoration.label[node.type], {node} )
                                 : null
                         : null        
             },
@@ -209,6 +255,12 @@
       this.config.data.embedded = {}
       this.$nextTick(() => {
         this.config.data.embedded = data
+
+        if(this.config.data.embedded.events){
+          let event = this.config.data.embedded.events.change || "change-document"
+          this.emit(event, this.config.data.embedded.document, this)  
+        }
+      
       })
     },
 

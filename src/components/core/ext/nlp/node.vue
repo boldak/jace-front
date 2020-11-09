@@ -1,6 +1,6 @@
 <template>
       <span>
-        <slot>NODE</slot>
+        <slot class="d-flex align-center">NODE</slot>
       </span>  
 </template>
 

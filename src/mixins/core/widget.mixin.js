@@ -66,6 +66,10 @@ export default {
 
     },
 
+    getInstance() {
+      return this.$refs.instance
+    },
+
      _delete() {
       let rule = (this.$refs.instance && this.$refs.instance.isDeleteAvailable) ? this.$refs.instance.isDeleteAvailable : (() => true)
       if (rule.apply(this.$refs.instance)) {

@@ -1,7 +1,7 @@
 <template>
       <component 
         :id="node.id" 
-        :is="(node.type == 'text') ? 'text-node' : (node.type == 'paragraph') ? 'paragraph-node' : 'node'" 
+        :is="(node.type == 'text') ? 'text-node' : (node.type == 'paragraph') ? 'paragraph-node' : (node.type == 'DIFF') ? 'diff': (node.type == 'BRANCH') ? 'branch' : 'node'" 
         class="tom no-select" 
         :class="`${(selectable) ? 'selectable' : ''} ${(!!node.childs) ? 'node-container': ''} ${(selected) ? 'selected' : ''} ${classes}`"
         :style="nodeStyle"
@@ -51,7 +51,9 @@ export default {
   components: {
     TextNode : () => import("./text-node.vue"),
     ParagraphNode : () => import("./paragraph-node.vue"),
-    Node : () => import("./node.vue")
+    Node : () => import("./node.vue"),
+    Diff: () => import("./diff.vue"),
+    Branch: () => import("./branch.vue")
   },
 
   computed: {
@@ -98,7 +100,7 @@ export default {
       if(!this.options) return null
       let options = this.options()
       let base = (options.color) ? options.color(this.node) : "#ffffff"
-      return `background: ${base}; border-color:${tinycolor(base).darken(50).toHexString()};`
+      return `background: ${(this.node.type =="DIFF") ? base : base}; border-color:${tinycolor(base).darken(50).toHexString()};`
     }
     
 
@@ -173,7 +175,7 @@ export default {
 <style scoped>
 
   .selectable.selected {
-    border:2px solid;
+    border:2px solid !important;
     margin: 0 0.25em 0 0;
     padding:0 0.25em;
   }

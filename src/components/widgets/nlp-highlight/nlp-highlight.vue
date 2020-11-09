@@ -10,6 +10,7 @@
 <script>
 
   import annotator from "@/components/core/ext/nlp/annotator.vue"
+  import * as utils from "@/components/core/ext/nlp/utils.js"
 
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
@@ -52,6 +53,31 @@
 
     methods:{
 
+    getDocument(){
+      return this.config.data.embedded.document 
+    },
+    
+    getDecoration(){
+      return this.config.data.embedded.decoration 
+    },
+
+    getAvailableAnnotation(){
+      return this.config.data.embedded.availableAnnotation 
+    },
+
+    getSelection(){
+      return this.config.data.embedded.selection
+    },
+
+    getEvents(){
+      return this.config.data.embedded.events
+    },
+
+    getUtils(){
+      return utils
+    },
+
+
 
     getOptions(){
       if(!this.config) return {}
@@ -73,7 +99,7 @@
             
             label(node){
               return (self.config && self.config.data.embedded.decoration.label) 
-                                ? self.config.data.embedded.decoration.label[node.type] 
+                                ? compile(self.config.data.embedded.decoration.label[node.type], {node} ) //self.config.data.embedded.decoration.label[node.type] 
                                 : null
             },
             
@@ -91,6 +117,10 @@
       this.config.data.embedded = {}
       this.$nextTick(() => {
         this.config.data.embedded = data
+        if(this.config.data.embedded.events){
+          let event = this.config.data.embedded.events.change || "change-document"
+          this.emit(event, this.config.data.embedded.document, this)  
+        }
       })
     },
 
