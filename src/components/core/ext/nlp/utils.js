@@ -133,6 +133,7 @@ let takeSegment = (fragment, stopped) => {
 }
 
 let segmentBranches = (original, current) =>{
+  
   if(isAnnotationOpened(original.branch)){
     original = takeSegment(original, item => item.action == "STOP" && item.concept == "SEMANTIC")
     current = takeSegment(current, item => diff.compare(original.branch[original.branch.length-2],item).status == "EQUAL")
@@ -149,8 +150,29 @@ let segmentBranches = (original, current) =>{
       current: res.original, 
       original:res.current
     }
-  } 
+  }
+
+  if(original.branch[0].concept == "SEMANTIC" && current.branch[0].concept == "SEMANTIC"){
+    if (original.branch.length > current.branch.length){
+      let suffix = takeSegment(current, item => diff.compare(original.branch[original.branch.length-2],item).status == "EQUAL")
+      let res = segmentBranches(original, suffix)
+      return {
+        current: res.current, 
+        original:res.original
+      } 
+    }
+
+    if(original.branch.length < current.branch.length) {
+      let res = segmentBranches(current, original)
+      return {
+        current: res.original, 
+        original:res.current
+      }
+    }  
   
+  }
+  
+
   return {
     original, current
   } 
@@ -209,11 +231,14 @@ let getDifferenceTom = (d1,d2) => {
     if( l1[0].concept=="SEMANTIC" && l2[0].concept=="SEMANTIC"){
       let f1 = takeSegment({source:l1,branch:[]}, item => item.action == "STOP" && item.concept == "SEMANTIC")
       let f2 = takeSegment({source:l2,branch:[]}, item => item.action == "STOP" && item.concept == "SEMANTIC")
+      
       if( diff.compare(f1.branch,f2.branch).status == "EQUAL"){
         res = res.concat(f1.branch)
         l1 = drop(l1,f1.branch.length)
         l2 = drop(l2,f1.branch.length)
       } else {
+        // l1 = []
+        // l2 = []
         let tres = segmentBranches(f1,f2)
         
         l1 = tres.original.source

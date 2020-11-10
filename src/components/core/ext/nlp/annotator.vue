@@ -115,14 +115,16 @@ export default {
     
 
     selection(value){
-
+      
+      if(!value) return
+      
       forEachNode(this.data, node => {
        let e = document.getElementById(node.id) 
        if(e) e.classList.remove("selected")
        node.selected = false
       })
 
-      if(!value) return
+
       value.forEach( node => {
         let e = document.getElementById(node.id) 
         if(e) e.classList.add("selected")
