@@ -49,19 +49,17 @@ let tom2Plain = node => {
   let versionNode = ["DIFF","BRANCH"]
 
   forEachNode(node, n => {
-    // delete n.id
-    // delete n.selected
     n.concept = (syntaxNode.includes(n.type)) ? "SYNTAX" : (versionNode.includes(n.type)) ? "VERSION" : "SEMANTIC" 
   })
 
 
   let res = []
-  
+  let i = 0;
   forEachNode(node, n => {
     if (n.childs) {
-      res.push({ action:"START", concept:n.concept, type:n.type, value: n.value })
+      res.push({ action:"START", concept:n.concept, type:n.type, value: n.value})
     } else {
-      res.push({ action:"TERMINAL", concept:n.concept, type:n.type, value:n.value })
+      res.push({ action:"TERMINAL", concept:n.concept, type:n.type, value:n.value, terminalIndex:i++ })
     }
   }, n => {
     if (n.childs) {
@@ -78,6 +76,11 @@ let plain2Tom = (data, parentStack) => {
   parentStack = parentStack || [] 
   
   let node = data[0]
+  
+  if(node.terminalIndex){
+    delete node.terminalIndex
+  }
+  
   let parent = last(parentStack)
   
   switch (node.action){
@@ -121,7 +124,7 @@ let isAnnotationOpened = branch => {
       return
     }
   })
-  return c != 0
+  return c > 0
 }
 
 let takeSegment = (fragment, stopped) => {
@@ -152,14 +155,31 @@ let segmentBranches = (original, current) =>{
     }
   }
 
+  
   if(original.branch[0].concept == "SEMANTIC" && current.branch[0].concept == "SEMANTIC"){
+    
+    if(diff.compare(original.source[0],current.source[0]).status == "EQUAL"
+      && !isAnnotationOpened(original.branch)
+      && !isAnnotationOpened(current.branch)
+      ) {
+      
+      return {
+        current, 
+        original
+      }
+    
+    }
+
+
     if (original.branch.length > current.branch.length){
       let suffix = takeSegment(current, item => diff.compare(original.branch[original.branch.length-2],item).status == "EQUAL")
+      
       let res = segmentBranches(original, suffix)
       return {
         current: res.current, 
         original:res.original
-      } 
+      }
+
     }
 
     if(original.branch.length < current.branch.length) {
@@ -168,8 +188,8 @@ let segmentBranches = (original, current) =>{
         current: res.original, 
         original:res.current
       }
-    }  
-  
+    }
+
   }
   
 
@@ -237,14 +257,14 @@ let getDifferenceTom = (d1,d2) => {
         l1 = drop(l1,f1.branch.length)
         l2 = drop(l2,f1.branch.length)
       } else {
-        // l1 = []
-        // l2 = []
+  
         let tres = segmentBranches(f1,f2)
         
         l1 = tres.original.source
         l2 = tres.current.source
         
         res = res.concat(diffSequence(tres))
+      
       }
       continue  
     } 

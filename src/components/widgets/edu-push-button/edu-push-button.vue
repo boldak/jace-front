@@ -2,7 +2,7 @@
   <v-container fluid class="pa-1">
     <v-row class="mx-0">
       <v-spacer></v-spacer>
-      <v-btn v-for="(b, index) in config.data.embedded " :key="index" text :color="b.color || 'primary'" class="pr-3" @click="resolve(index)">{{b.title}}</v-btn>
+      <v-btn v-for="(b, index) in config.data.embedded " :key="index"  text :disabled="b.disabled" :color="b.color || 'primary'" class="pr-3" @click="resolve(index)" >{{b.title}}</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -31,7 +31,10 @@ export default {
   methods: {
 
     onUpdate({ data }) {
-      this.config.data.embedded = data;
+      this.config.data.embedded = []
+      this.$nextTick(() => {
+        this.config.data.embedded = data;  
+      })
     },
 
 

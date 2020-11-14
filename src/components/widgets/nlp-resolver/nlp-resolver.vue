@@ -15,12 +15,12 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
-  import { extend, template, templateSettings, isArray, keys, findIndex, flattenDeep } from "lodash"
+  import { extend, template, templateSettings, isArray, keys, findIndex, flattenDeep, flatten } from "lodash"
   import { v4 } from "uuid/dist"
 
 
 <<< if( jace.mode == "development") { >>>  
-  import NlpAnnotatorConfig from "./nlp-annotator-config.vue";
+  import NlpResolverConfig from "./nlp-resolver-config.vue";
 <<< } >>>  
   
   
@@ -42,13 +42,13 @@
 
  export default  {
     
-    name:"nlp-annotator-widget",
+    name:"nlp-resolver-widget",
 
     components:{
       annotator
     },
 
-    icon: "mdi-format-color-highlight",
+    icon: "mdi-source-merge",
 
     mixins:[djvueMixin, listenerMixin],
 
@@ -170,6 +170,24 @@
       this.$nextTick(() => {this.$refs.annotator.select(selection[0].childs)})
       this.onUpdate({data:this.config.data.embedded})
     },
+
+
+    resolveBranch(selection){
+      // console.log("RESOLVE", selection)
+      let branch = selection[0]
+      let diff = utils.getParent(branch, this.config.data.embedded.document)
+      let parent = utils.getParent(diff, this.config.data.embedded.document)
+      // console.log(branch, diff, parent,findIndex(parent.childs, node => node.id == diff.id))
+      
+      parent.childs.splice(
+        findIndex(parent.childs, node => node.id == diff.id),
+        1,
+        branch.childs
+      )
+
+      parent.childs = flatten(parent.childs)
+      this.onUpdate({data:this.config.data.embedded})
+    },
       
     getOptions(){
       if(!this.config) return {}
@@ -182,34 +200,21 @@
 
             menu(node){
               if(!node) return
-              if (!keys(self.config.data.embedded.selection).includes(node.type)) return
-  
-              if(self.config.data.embedded.availableAnnotation[node.type]){
-                return [{
-                  title:`Remove annotation "${node.type}"`,
-                  action: self.removeAnnotation
-                }]
-              } else {
-                return keys(self.config.data.embedded.availableAnnotation)
-                        .filter( key => self.nestingTest(node, key))
-                        .map( item =>({
-                          title:`Annotate as "${item}"`,
-                          action: self.createAnnotation(item)
-                        })
-                )
-              }
+
+              return (node.type == "BRANCH") 
+                ? [{
+                    title:`Apply ${node.name} branch`,
+                    action: self.resolveBranch
+                  }]
+                : null  
             }, 
 
             
             selectable(node){ 
               return  (node)
-                        ?  (self.config && self.config.data.embedded.selection) 
-                            ? ( self.config.data.embedded.selection[node.type] )
-                                ? ( isArray( self.config.data.embedded.selection[node.type] ) )
-                                    ? self.config.data.embedded.selection[node.type]
-                                    : self.config.data.embedded.selection[node.type].split(",").map( item => item.trim())
-                                : null
-                            : null
+                        ? (node.type == "BRANCH")
+                          ? ["singly","wrap"]
+                          : null
                         : null                
             },
 
@@ -270,7 +275,7 @@
 
 <<< if( jace.mode == "development") { >>>
       onReconfigure (widgetConfig) {
-       return this.$dialogManager.showAndWait(NlpAnnotatorConfig,{width:"90%"}, {config:widgetConfig})  
+       return this.$dialogManager.showAndWait(NlpResolverConfig,{width:"90%"}, {config:widgetConfig})  
       },
 <<< } >>>      
 

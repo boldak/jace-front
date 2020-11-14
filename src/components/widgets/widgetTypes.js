@@ -1,6 +1,7 @@
 import htmlWidget from "./html/html.type.js"
 import nlpHighlightWidget from "./nlp-highlight/nlp-highlight.type.js"
 import nlpAnnotatortWidget from "./nlp-annotator/nlp-annotator.type.js"
+import nlpResolverWidget from "./nlp-resolver/nlp-resolver.type.js"
 
 import mdWidget from "./md/md.type.js"
 
@@ -82,6 +83,7 @@ export default {
 	
 	'nlp-highlight-widget' : nlpHighlightWidget,
 	'nlp-annotator-widget' : nlpAnnotatortWidget,
+	'nlp-resolver-widget' : nlpResolverWidget,
 	
 	'md-widget' : mdWidget,
 	

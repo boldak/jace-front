@@ -77,6 +77,9 @@
       return utils
     },
 
+    getData(){
+      return this.config.data.embedded
+    },
 
 
     getOptions(){
