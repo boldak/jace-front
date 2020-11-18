@@ -268,6 +268,7 @@ export default {
   
   
   created(){
+    if(this.data)
     forEachNode(this.data, node => {
       node.id = `${this.id}-${v4()}`
     })

@@ -1,4 +1,4 @@
-import { isFunction, isArray, find, last, drop, findIndex, take } from "lodash"
+import { isFunction, isArray, find, last, drop, findIndex, take, flatten } from "lodash"
 import Diff from "@netilon/differify"
 
 let forEachNode = (node, beforeAction, afterAction) => {
@@ -19,7 +19,7 @@ let findNode = (node, test) => {
   return null
 }
 
-let getParent = (node, root) => findNode(root, n => n.childs && find(n.childs, item => item.id == node.id))
+let getParent = (node, root) => findNode(root, n => n.childs && find(n.childs, item => diff.compare(item,node).status == "EQUAL"))//item => item.id == node.id))
 
 let getSiblings = (node, root) => {
   let parent = getParent(node, root)
@@ -57,13 +57,13 @@ let tom2Plain = node => {
   let i = 0;
   forEachNode(node, n => {
     if (n.childs) {
-      res.push({ action:"START", concept:n.concept, type:n.type, value: n.value})
+      res.push({ action:"START", concept:n.concept, type:n.type, value: n.value, name: n.name})
     } else {
       res.push({ action:"TERMINAL", concept:n.concept, type:n.type, value:n.value, terminalIndex:i++ })
     }
   }, n => {
     if (n.childs) {
-      res.push({ action:"STOP", concept:n.concept, type:n.type })
+      res.push({ action:"STOP", concept:n.concept, type:n.type, name: n.name })
     }
   })
   return res
@@ -276,6 +276,63 @@ let getDifferenceTom = (d1,d2) => {
   return plain2Tom(res)
 }  
 
+let EQUAL_STARTEGY = (src, dest) => null
+
+let OVERRIDE_STRATEGY = (src, dest) => src.childs
+
+let UNION_STRATEGY = (src, dest) => {
+  if (      src.childs.length == 1
+        &&  src.childs[0].concept == "SEMANTIC"
+        &&  dest.childs.length == src.childs[0].childs.length
+        &&  !find(dest.childs, n => n.concept == "SEMANTIC")
+  ) return src.childs 
+
+  if (      dest.childs.length == 1
+        &&  dest.childs[0].concept == "SEMANTIC"
+        &&  src.childs.length == dest.childs[0].childs.length
+        &&  !find(src.childs, n => n.concept == "SEMANTIC")
+  ) return dest.childs 
+
+  return null  
+    
+}  
+
+
+
+let mergeDiff = (diff, strategy) => {
+  // diff must be DIFF node
+  let destination = diff.childs[0]
+  let source = diff.childs[1]
+  strategy = strategy || EQUAL_STARTEGY
+  // strategy returns array of TOM nodes
+  return strategy(source, destination)
+}
+
+let mergeTom = (tom, strategy) => {
+  forEachNode(tom, node => {
+    if(node.type == "DIFF"){
+      let merged = mergeDiff(node, strategy)
+      if( merged ){
+        let parent = getParent(node, tom)
+        parent.childs.splice(
+          findIndex(parent.childs, n => diff.compare(node,n).status == "EQUAL"),
+          1,
+          merged
+        )
+
+        parent.childs = flatten(parent.childs)
+      }
+    }
+  })
+  return tom
+}
+
+let resolveStrategies = {
+    EQUAL : EQUAL_STARTEGY,
+    OVERRIDE : OVERRIDE_STRATEGY,
+    UNION : UNION_STRATEGY
+  } 
+
 export {
 
   forEachNode,
@@ -283,7 +340,14 @@ export {
   getParent,
   getSiblings,
   getStyle,
-  getDifferenceTom
+  getDifferenceTom,
+  plain2Tom,
+  tom2Plain,
+  mergeTom,
+  EQUAL_STARTEGY,
+  OVERRIDE_STRATEGY,
+  UNION_STRATEGY,
+  resolveStrategies
 
 }  
 

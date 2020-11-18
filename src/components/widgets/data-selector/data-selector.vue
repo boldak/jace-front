@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-autocomplete v-model="selection" :items="items" :filter="filter" color="primary" :label="config.options.widget.label" :multiple="config.options.widget.multiple" :clearable="config.options.widget.multiple" v-if="source" item-text="title" :item-value="item => item" class="body-1" :search-input.sync="search">
+    <v-autocomplete v-model="selection" :items="items" :filter="filter" color="primary" outlined dense :label="config.options.widget.label" :multiple="config.options.widget.multiple" :clearable="config.options.widget.multiple" v-if="source" item-text="title" :item-value="item => item" class="body-1" :search-input.sync="search">
     </v-autocomplete>
   </div>
 </template>
