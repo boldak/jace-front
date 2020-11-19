@@ -186,15 +186,19 @@
   
               if(self.config.data.embedded.availableAnnotation[node.type]){
                 return [{
-                  title:`Remove annotation "${node.type}"`,
-                  action: self.removeAnnotation
+                  title:node.type,
+                  action: self.removeAnnotation,
+                  icon:"mdi-pen-off",
+                  color:"#ff9999"
                 }]
               } else {
                 return keys(self.config.data.embedded.availableAnnotation)
                         .filter( key => self.nestingTest(node, key))
                         .map( item =>({
-                          title:`Annotate as "${item}"`,
-                          action: self.createAnnotation(item)
+                          icon: "mdi-pen",
+                          title:item,
+                          action: self.createAnnotation(item),
+                          color:self.config.data.embedded.decoration.color[item] || "#aaaaaa"
                         })
                 )
               }

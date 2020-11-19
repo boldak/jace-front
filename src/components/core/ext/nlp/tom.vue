@@ -175,9 +175,14 @@ export default {
 <style scoped>
 
   .selectable.selected {
-    border:2px solid !important;
+    /*border:2px solid !important;
     margin: 0 0.25em 0 0;
     padding:0 0.25em;
+*/
+    border: 2px solid #607D8B !important;
+    margin: 0 0.25em 0 0;
+    padding: 0 0.25em;
+    background: #cfd8dc;
   }
 
   .selectable {

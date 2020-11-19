@@ -203,8 +203,9 @@
 
               return (node.type == "BRANCH") 
                 ? [{
-                    title:`Apply ${node.name} branch`,
-                    action: self.resolveBranch
+                    title:node.name,
+                    action: self.resolveBranch,
+                    icon:"mdi-source-pull"
                   }]
                 : null  
             }, 

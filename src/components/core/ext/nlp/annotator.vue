@@ -49,9 +49,10 @@
                 v-for="(item, i) in menu"
                 :key="i"
                 @click="item.action(selection)"
+                
               >
-                <v-list-item-icon v-if="!!item.icon">
-                  <v-icon v-text="item.icon"></v-icon>
+                <v-list-item-icon v-if="!!item.icon" class="mr-1">
+                  <v-icon :style="`color:${tinycolor(item.color || '#aaaaaa').darken(30).toHexString()}`" v-text="item.icon"></v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -70,6 +71,8 @@ import { find, findIndex, extend, first, last, slice, sortBy, isFunction, isArra
 import tom from "./tom.vue"
 import { v4 } from "uuid/dist"
 import { forEachNode, findNode, getSiblings, getParent } from "./utils.js"
+import tinycolor from "./tinycolor.js"
+
 
 
 export default {
@@ -99,7 +102,8 @@ export default {
           tooltipText:"",
           tt_x:0,
           tt_y:0,
-          tt_stack:[]
+          tt_stack:[],
+          tinycolor
           
       }
   },
