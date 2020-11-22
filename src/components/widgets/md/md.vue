@@ -36,10 +36,11 @@
        // console.log("!!!",data)
        options = options || {}
        
-       
+       // console.log("data", data)
        if(!data) return
         try {
         data = decodeURIComponent(data) 
+        // console.log(data)
         } catch(e) {
 
         } finally {

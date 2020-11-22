@@ -37,6 +37,12 @@
             color="primary"
           ></v-switch>
 
+          <v-switch
+            label="Anyway select first item"
+            v-model="config.options.widget.anywaySelectFirst"
+            color="primary"
+          ></v-switch>
+
           <v-flex>
             <v-text-field
               v-model="config.options.widget.event"

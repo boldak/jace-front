@@ -48,10 +48,16 @@ export default {
 
       this.source = data
       // this.mapper = options.mapper;
-
-      this.$nextTick(() => {
-        this.selection = (this.config.options.widget.multiple) ? [this.items[0]] : this.items[0]
-      })
+      if( this.config.options.widget.anywaySelectFirst){
+        this.$nextTick(() => {
+          this.selection = (this.config.options.widget.multiple) ? [this.items[0]] : this.items[0]
+        })  
+      } else {
+        this.$nextTick(() => {
+          this.selection = (this.config.options.widget.multiple) ? [] : null
+        })
+      }
+      
 
     },
 
