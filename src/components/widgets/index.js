@@ -3,6 +3,8 @@ export default {
       // 'hello-world' :() => import("./hello-world/HelloWorld.vue"),
 
       'html-widget' :() => import("./html/html.vue"),
+      'login-widget' :() => import("./login/login.vue"),
+      
       'nlp-highlight-widget' :() => import("./nlp-highlight/nlp-highlight.vue"),
       'nlp-annotator-widget' :() => import("./nlp-annotator/nlp-annotator.vue"),
       'nlp-resolver-widget' :() => import("./nlp-resolver/nlp-resolver.vue"),
@@ -20,6 +22,10 @@ export default {
       'uml-chart-widget' :() => import("./uml-chart/uml-chart.vue"),
       
       'inputs-widget' :() => import("./inputs/inputs.vue"),
+      'input-group-widget' :() => import("./input-group/input-group.vue"),
+      'dialog-widget' :() => import("./dialog/dialog.vue"),
+      
+      
       'flowchart-widget' :() => import("./flowchart/flowchart.vue"),
       // 'tree-widget' :() => import("./tree/tree.vue"),
 
@@ -72,6 +78,10 @@ export default {
 
 
       'app-topbar-widget': () => import("./app-topbar/app-topbar.vue"),
+      'tab-bar-widget': () => import("./tab-bar/tab-bar.vue"),
+      'button-bar-widget': () => import("./button-bar/button-bar.vue"),
+      'list-widget': () => import("./list/list.vue"),
+      
       'app-footer-widget': () => import("./app-footer/app-footer.vue"),
       'app-list-widget': () => import("./app-list/app-list.vue"),
 

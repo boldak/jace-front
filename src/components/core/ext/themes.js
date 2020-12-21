@@ -1,6 +1,16 @@
 export default [
 
   {
+    primary: "#06305a", //"#0065a4", //"#0277BD",
+    secondary: "#121b1f",//"#37474F",
+    accent: "#8E24AA",
+    error: "#f44336",
+    warning: "#E65100",
+    info: "#0091EA",
+    success: "#388E3C"
+  },
+
+  {
     primary: "#0065a4", //"#0277BD",
     secondary: "#37474F",
     accent: "#8E24AA",

@@ -70,6 +70,8 @@ export default {
 
         this.items.push(component)
 
+        // console.log(component)
+
       })
 
       res.dialogID = id

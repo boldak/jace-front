@@ -3,7 +3,7 @@ import snippets from "./snippets.js"
 export default {
 	name:"md-widget",
 
-    icon: "mdi-markdown",
+    icon: "mdi-language-markdown-outline",
 
     getInitialConfig( snippet ){
         snippet = snippet || "Markdown"

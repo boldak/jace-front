@@ -18,15 +18,15 @@
       <v-toolbar-title class="body-2 white--text font-weight-light">{{config.id}} "{{config.name}}"</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn icon small text @click="configure()" :disabled="!reconfigurable" class="white--text body-2">
+      <v-btn icon small text @click.stop="configure()" :disabled="!reconfigurable" class="white--text body-2">
         <v-icon class="body-2">mdi-square-edit-outline</v-icon>
       </v-btn>  
       
-      <v-btn icon small text @click="cloneWidget()" class="white--text  body-2">
+      <v-btn icon small text @click.stop="cloneWidget()" class="white--text  body-2">
         <v-icon  class="body-2">mdi-content-copy</v-icon>
       </v-btn>  
       
-      <v-btn icon small text @click="deleteWidget()" class="white--text  body-2">
+      <v-btn icon small text @click.stop="deleteWidget()" class="white--text  body-2">
         <v-icon  class="body-2">mdi-close</v-icon>
       </v-btn>  
 
@@ -56,6 +56,7 @@
         :is="config.type" 
         ref="instance" 
         :config="config" 
+        :listener="widget"
         @init="onInit">
       </component>
       </div>
@@ -67,7 +68,8 @@
         :style="widgetStyle" 
         :is="config.type" 
         ref="instance" 
-        :config="config" 
+        :config="config"
+        :listener="widget" 
         @init="onInit">
       </component>        
   </v-card>
@@ -115,8 +117,14 @@ export default {
       collapsed: false,
       hidden: false,
       hasError: false,
-      isActive: false
+      isActive: false,
+      _widgetWrapper:true,
+      widget:null
     }
+  },
+
+  created(){
+    this.widget = this
   },
 
   computed: {
@@ -141,15 +149,16 @@ export default {
 
     <<< if (jace.mode == "development") {>>>
     configure() {
-      this.$eventHub.emit("widget-reconfigure", this)
+      // console.log("emit reconf", this)
+      this.emit("widget-reconfigure", this)
     },
 
     cloneWidget() {
-      this.$eventHub.emit("widget-clone", this)
+      this.emit("widget-clone", this)
     },
 
     deleteWidget() {
-      this.$eventHub.emit("widget-delete", this)
+      this.emit("widget-delete", this)
     },
     <<< } >>>
 

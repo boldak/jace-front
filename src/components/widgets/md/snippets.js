@@ -5,7 +5,7 @@ export default {
         type:"md-widget", 
         // id:Vue.prototype.$djvue.randomName(),
         name:"noname",
-        icon:"mdi-markdown",
+        icon:"mdi-language-markdown-outline",
         options: { widget:{
             visible: true
           }

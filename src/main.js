@@ -3,6 +3,7 @@ import vuetify from "@/plugins/vuetify"
 import VueRouter from "vue-router"
 import VueClipboard from "vue-clipboard2"
 import VueSSE from "./plugins/vue-sse"
+import Storage from 'vue-ls';
 import Fragment from 'vue-fragment'
 
 
@@ -48,6 +49,14 @@ Vue.use(socketPlugin, window.devService.config.pubService);
 
 
 Vue.use(VueClipboard)
+
+ 
+Vue.use(Storage, {
+  namespace: 'jace__', // key prefix
+  name: 'localStorage', // name variable Vue.[ls] or this.[$ls],
+  storage: 'local', // storage name session, local, memory
+});
+
 Vue.use(Fragment.Plugin)
 
 // window.gotoPage = path => {
@@ -188,8 +197,9 @@ window.onbeforeunload = (evt) => {
 
 
 
-new Vue({
+let app = new Vue({
   router,
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+

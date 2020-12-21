@@ -26,7 +26,7 @@
     
     name:"md-widget",
 
-    icon: "mdi-markdown",
+    icon: "mdi-language-markdown-outline",
 
     mixins:[djvueMixin, listenerMixin],
 

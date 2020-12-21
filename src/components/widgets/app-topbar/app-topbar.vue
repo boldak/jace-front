@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar v-if="options" dark dence flat color="primary darken-1" class="mt-0 mb-2 py-0" style="padding-top: 1em; font-weight:300;">
+  <v-app-bar v-if="options" dark dence flat color="primary darken-1" class="my-0 py-0" style="padding-top: 1em; font-weight:300;">
     <div class="headline font-weight-light">
       {{options.title}}
     </div>

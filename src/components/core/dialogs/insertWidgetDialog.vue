@@ -70,7 +70,8 @@ export default {
               "app-topbar-widget",
               "app-footer-widget",
               "html-widget:banner",
-              "app-list-widget"
+              "app-list-widget",
+              "login-widget"
             ]
           },
           {

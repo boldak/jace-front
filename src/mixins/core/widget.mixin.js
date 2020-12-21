@@ -24,7 +24,7 @@ export default {
     errorMessage: ""
   }),
 
-
+  
   methods: {
 
 
@@ -33,12 +33,14 @@ export default {
 
     onChildsInitiated() { this.$emit("init", this.config.id) },
 
-    isSameWidget(widget) { return this.config.id == widget.config.id },
+    isSameWidget(widget) {return this == widget}, //{ return this.config.id == widget.config.id },
 
 
 <<< if( jace.mode == "development") { >>>
     
     _reconfigure(widget) {
+// console.log(this,widget)
+      if(!this.isSameWidget(widget)) return
       // console.log("reconf", this)
             
       if (this.$refs.instance.onReconfigure) {
@@ -70,7 +72,8 @@ export default {
       return this.$refs.instance
     },
 
-     _delete() {
+     _delete(widget) {
+      if(!this.isSameWidget(widget)) return
       let rule = (this.$refs.instance && this.$refs.instance.isDeleteAvailable) ? this.$refs.instance.isDeleteAvailable : (() => true)
       if (rule.apply(this.$refs.instance)) {
         if (this.$refs.instance && this.$refs.instance.onDelete) this.$refs.instance.onDelete()
@@ -181,7 +184,7 @@ export default {
 
     },
 
-    update(state) {
+    update(state, mode) {
         this.errorMessage = ""
         this.hasError = false
 
@@ -196,12 +199,13 @@ export default {
       this.data = state.data;
       this.options = state.options;
       
+      
       this.data = this._validate( this.data )
       // console.log("Validated ", this.data)
       if( this.data ){
         this.$nextTick(() => {
           // console.log("Invoke", this)
-         if (this.$refs.instance && this.$refs.instance.onUpdate) this.$refs.instance.onUpdate(state)
+         if (this.$refs.instance && this.$refs.instance.onUpdate) this.$refs.instance.onUpdate(state, mode)
         })
       }
 
@@ -356,9 +360,13 @@ export default {
     this.config.data.script = this.config.data.script || ""
     this._initSubscriptions()
     this._updateConfig()
+    // console.log("$create", this._uid, this.config.id, this.config.type)
+  
   },
 
   beforeDestroy() {
+    // this.off()
     this._removeSubscriptions()
+    // console.log("$off", this._uid)
   }
 }

@@ -17,6 +17,7 @@
         <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2019</p>
       </v-layout>
     </v-container>
+    
     <v-container v-if="isProductionMode && form && access.available == true">
       <v-layout v-if="!form.config.access.enabled" align-center justify-end row class="mx-0 my-2">
         <p class="subheading warning--text">FORM IS CLOSED</p>

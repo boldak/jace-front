@@ -1,4 +1,8 @@
 import htmlWidget from "./html/html.type.js"
+
+import loginWidget from "./login/login.type.js"
+
+
 import nlpHighlightWidget from "./nlp-highlight/nlp-highlight.type.js"
 import nlpAnnotatortWidget from "./nlp-annotator/nlp-annotator.type.js"
 import nlpResolverWidget from "./nlp-resolver/nlp-resolver.type.js"
@@ -6,6 +10,10 @@ import nlpResolverWidget from "./nlp-resolver/nlp-resolver.type.js"
 import mdWidget from "./md/md.type.js"
 
 import inputsWidget from "./inputs/inputs.type.js"
+import inputGroupWidget from "./input-group/input-group.type.js"
+import DialogWidget from "./dialog/dialog.type.js"
+
+
 import EduEditorWidget from "./edu-editor/edu-editor.type.js"
 import EduPushButtonWidget from "./edu-push-button/edu-push-button.type.js"
 import EduConsoleWidget from "./edu-console/edu-console.type.js"
@@ -67,6 +75,10 @@ import DataTableWidget from "./data-table/data-table.type.js"
 
 
 import AppTopbarWidget from "./app-topbar/app-topbar.type.js"
+import TabBarWidget from "./tab-bar/tab-bar.type.js"
+import ButtonBarWidget from "./button-bar/button-bar.type.js"
+import ListWidget from "./list/list.type.js"
+
 import AppFooterWidget from "./app-footer/app-footer.type.js"
 import AppListWidget from "./app-list/app-list.type.js"
 
@@ -80,7 +92,9 @@ import FormResponseWidget from "./form-response/form-response.type.js"
 
 export default {
 	'html-widget' : htmlWidget,
+	'login-widget' : loginWidget,
 	
+
 	'nlp-highlight-widget' : nlpHighlightWidget,
 	'nlp-annotator-widget' : nlpAnnotatortWidget,
 	'nlp-resolver-widget' : nlpResolverWidget,
@@ -88,6 +102,9 @@ export default {
 	'md-widget' : mdWidget,
 	
 	'inputs-widget' : inputsWidget,
+	'input-group-widget' : inputGroupWidget,
+	'dialog-widget' : DialogWidget,
+	
 	
 	'edu-editor-widget' : EduEditorWidget,
 	'edu-push-button-widget' : EduPushButtonWidget,
@@ -146,6 +163,10 @@ export default {
 
 
 	"app-topbar-widget": AppTopbarWidget,
+	"tab-bar-widget": TabBarWidget,
+	"button-bar-widget": ButtonBarWidget,
+	"list-widget": ListWidget,
+	
 	"app-footer-widget": AppFooterWidget,
 	"app-list-widget": AppListWidget,
 

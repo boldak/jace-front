@@ -20,7 +20,7 @@ export default {
 
   name: "form-response-widget",
 
-  icon: "mdi-file-document-box-check-outline",
+  icon: "mdi-file-document-outline",
 
   mixins: [djvueMixin, listenerMixin],
 

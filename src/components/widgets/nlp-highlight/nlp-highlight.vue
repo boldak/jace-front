@@ -1,8 +1,9 @@
 <template>
     <annotator 
+      v-if="options"
       ref="annotator" 
       :id="config.id"
-      :data="config.data.embedded.document" 
+      :data="options.document" 
       :options="getOptions"
     ></annotator>
 </template>
@@ -14,7 +15,7 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
-  import { extend, template, templateSettings } from "lodash"
+  import { extend, template, templateSettings, set, get } from "lodash"
 
 <<< if( jace.mode == "development") { >>>  
   import NlpHighlightConfig from "./nlp-highlight-config.vue";
@@ -51,26 +52,30 @@
 
     props:["config"],
 
+    data: () => ({
+      options:null
+    }),
+
     methods:{
 
     getDocument(){
-      return this.config.data.embedded.document 
+      return this.options.document 
     },
     
     getDecoration(){
-      return this.config.data.embedded.decoration 
+      return this.options.decoration 
     },
 
     getAvailableAnnotation(){
-      return this.config.data.embedded.availableAnnotation 
+      return this.options.availableAnnotation 
     },
 
     getSelection(){
-      return this.config.data.embedded.selection
+      return this.options.selection
     },
 
     getEvents(){
-      return this.config.data.embedded.events
+      return this.options.events
     },
 
     getUtils(){
@@ -78,51 +83,65 @@
     },
 
     getData(){
-      return this.config.data.embedded
+      return this.options
     },
 
 
     getOptions(){
-      if(!this.config) return {}
+      if(!this.options) return {}
       let self = this  
       return {
             
             
             classes(node){ 
-              return (self.config && self.config.data.embedded.decoration.classes) 
-                                ? self.config.data.embedded.decoration.classes[node.type] 
+              return (self.options && self.options.decoration.classes) 
+                                ? self.options.decoration.classes[node.type] 
                                 : null
             },
 
             color(node){
-              return (self.config && self.config.data.embedded.decoration.color) 
-                                ? self.config.data.embedded.decoration.color[node.type] 
+              return (self.options && self.options.decoration.color) 
+                                ? self.options.decoration.color[node.type] 
                                 : null
             },
             
             label(node){
-              return (self.config && self.config.data.embedded.decoration.label) 
-                                ? compile(self.config.data.embedded.decoration.label[node.type], {node} ) //self.config.data.embedded.decoration.label[node.type] 
+              return (self.options && self.options.decoration.label) 
+                                ? compile(self.options.decoration.label[node.type], {node} ) //self.config.data.embedded.decoration.label[node.type] 
                                 : null
             },
             
             tooltip(node){
-              if (!self.config) return null
-              return (self.config && self.config.data.embedded.decoration.tooltip && self.config.data.embedded.decoration.tooltip[node.type]) 
-                                ? compile(self.config.data.embedded.decoration.tooltip[node.type], {node} ) 
+              if (!self.options) return null
+              return (self.options && self.options.decoration.tooltip && self.options.decoration.tooltip[node.type]) 
+                                ? compile(self.options.decoration.tooltip[node.type], {node} ) 
                                 : null
             }
         
       }       
     },  
 
-    onUpdate ({data}) {
-      this.config.data.embedded = {}
+    onUpdate ({data}, mode) {
+   
+      if( mode ){
+        if (mode.override) {
+          set(this, mode.override, data)
+        }
+        if (mode.extend) {
+          set(this, mode.extend, extend(get(this, mode.extend), data))
+        }
+      } else {
+        this.options = data  
+      }
+      let temp = this.options
+   
+      this.options = null
+      
       this.$nextTick(() => {
-        this.config.data.embedded = data
-        if(this.config.data.embedded.events){
-          let event = this.config.data.embedded.events.change || "change-document"
-          this.emit(event, this.config.data.embedded.document, this)  
+        this.options = temp
+        if(this.options.events){
+          let event = this.options.events.change || "change-document"
+          this.emit(event, this.options.document, this)  
         }
       })
     },

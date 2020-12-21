@@ -1,8 +1,9 @@
 <template>
-    <annotator 
+    <annotator
+      v-if="options" 
       ref="annotator"
       :id="config.id" 
-      :data="config.data.embedded.document" 
+      :data="options.document" 
       :options="getOptions"
       @select = "onSelectNodes"
     ></annotator>
@@ -15,7 +16,7 @@
 
   import djvueMixin from "@/mixins/core/djvue.mixin";
   import listenerMixin from "@/mixins/core/listener.mixin";
-  import { extend, template, templateSettings, isArray, keys, findIndex, flattenDeep } from "lodash"
+  import { extend, template, templateSettings, isArray, keys, findIndex, flattenDeep, set, get } from "lodash"
   import { v4 } from "uuid/dist"
 
 
@@ -54,27 +55,31 @@
 
     props:["config"],
 
+    data:  ()=>({
+      options: null
+    }),
+
     methods:{
 
 
     getDocument(){
-      return this.config.data.embedded.document 
+      return this.options.document 
     },
     
     getDecoration(){
-      return this.config.data.embedded.decoration 
+      return this.options.decoration 
     },
 
     getAvailableAnnotation(){
-      return this.config.data.embedded.availableAnnotation 
+      return this.options.availableAnnotation 
     },
 
     getSelection(){
-      return this.config.data.embedded.selection
+      return this.options.selection
     },
 
     getEvents(){
-      return this.config.data.embedded.events
+      return this.options.events
     },
 
     getUtils(){
@@ -82,13 +87,13 @@
     },
 
     getData(){
-      return this.config.data.embedded
+      return this.options
     },
 
 
     onSelectNodes(selection){
-      if(this.config.data.embedded.events){
-        let event = this.config.data.embedded.events.select || "select-nodes"
+      if(this.options.events){
+        let event = this.options.events.select || "select-nodes"
         this.emit(event, selection, this)  
       }
     },
@@ -98,7 +103,7 @@
       return selection => {
         if(selection.length == 0) return
 
-        let parent = utils.getParent(selection[0], this.config.data.embedded.document)
+        let parent = utils.getParent(selection[0], this.options.document)
         let start = findIndex(parent.childs, node => node.id == selection[0].id)
         let stop = findIndex(parent.childs, node => node.id == selection[selection.length-1].id)
         let childs = parent.childs.splice(start, stop-start+1)
@@ -112,14 +117,14 @@
 
         this.$nextTick(() => {this.$refs.annotator.select(newAnnotation)})
 
-        if(this.config.data.embedded.events){
-          let event = this.config.data.embedded.events.create || "create-annotation"
+        if(this.options.events){
+          let event = this.options.events.create || "create-annotation"
           this.emit(event, newAnnotation, this)  
         }
 
-        if(this.config.data.embedded.events){
-          let event = this.config.data.embedded.events.change || "change-document"
-          this.emit(event, this.config.data.embedded.document, this)  
+        if(this.options.events){
+          let event = this.options.events.change || "change-document"
+          this.emit(event, this.options.document, this)  
         }
     
       }
@@ -127,10 +132,10 @@
     },
 
     nestingTest( node, annotation){
-      let a = this.config.data.embedded.availableAnnotation[annotation]
+      let a = this.options.availableAnnotation[annotation]
       if(!a) return true
       a.nestedIn = a.nestedIn || [] 
-      let parent = utils.getParent(node, this.config.data.embedded.document)
+      let parent = utils.getParent(node, this.options.document)
       return (parent && a.nestedIn.includes(parent.type)) || a.nestedIn.length == 0
     },
 
@@ -138,7 +143,7 @@
       if(selection.length == 0 || selection.length > 1) return
 
         
-      let parent = utils.getParent(selection[0], this.config.data.embedded.document)
+      let parent = utils.getParent(selection[0], this.options.document)
       if(parent){
         let pos = findIndex(parent.childs, node => node.id == selection[0].id)
         parent.childs.splice(pos,1)
@@ -150,14 +155,14 @@
         })  
       }
      
-      if(this.config.data.embedded.events){
-        let event = this.config.data.embedded.events.remove || "remove-annotation"
+      if(this.options.events){
+        let event = this.options.events.remove || "remove-annotation"
         this.emit(event, selection[0], this)  
       }
 
-      if(this.config.data.embedded.events){
-        let event = this.config.data.embedded.events.change || "change-document"
-        this.emit(event, this.config.data.embedded.document, this)  
+      if(this.options.events){
+        let event = this.options.events.change || "change-document"
+        this.emit(event, this.options.document, this)  
       }
   
     
@@ -166,13 +171,16 @@
     },
 
     removeAnnotation(selection){
+      // console.log(this.$refs)
       this._remove(selection)
-      this.$nextTick(() => {this.$refs.annotator.select(selection[0].childs)})
-      this.onUpdate({data:this.config.data.embedded})
+      // this.$nextTick(() => {
+        this.$refs.annotator.select(selection[0].childs)
+      // })
+      this.onUpdate({data:this.options})
     },
       
     getOptions(){
-      if(!this.config) return {}
+      if(!this.options) return {}
       let self = this  
       return {
 
@@ -182,9 +190,9 @@
 
             menu(node){
               if(!node) return
-              if (!keys(self.config.data.embedded.selection).includes(node.type)) return
+              if (!keys(self.options.selection).includes(node.type)) return
   
-              if(self.config.data.embedded.availableAnnotation[node.type]){
+              if(self.options.availableAnnotation[node.type]){
                 return [{
                   title:node.type,
                   action: self.removeAnnotation,
@@ -192,13 +200,13 @@
                   color:"#ff9999"
                 }]
               } else {
-                return keys(self.config.data.embedded.availableAnnotation)
+                return keys(self.options.availableAnnotation)
                         .filter( key => self.nestingTest(node, key))
                         .map( item =>({
                           icon: "mdi-pen",
                           title:item,
                           action: self.createAnnotation(item),
-                          color:self.config.data.embedded.decoration.color[item] || "#aaaaaa"
+                          color:self.options.decoration.color[item] || "#aaaaaa"
                         })
                 )
               }
@@ -207,11 +215,11 @@
             
             selectable(node){ 
               return  (node)
-                        ?  (self.config && self.config.data.embedded.selection) 
-                            ? ( self.config.data.embedded.selection[node.type] )
-                                ? ( isArray( self.config.data.embedded.selection[node.type] ) )
-                                    ? self.config.data.embedded.selection[node.type]
-                                    : self.config.data.embedded.selection[node.type].split(",").map( item => item.trim())
+                        ?  (self.options && self.options.selection) 
+                            ? ( self.options.selection[node.type] )
+                                ? ( isArray( self.options.selection[node.type] ) )
+                                    ? self.options.selection[node.type]
+                                    : self.options.selection[node.type].split(",").map( item => item.trim())
                                 : null
                             : null
                         : null                
@@ -219,16 +227,16 @@
 
             classes(node){ 
               return   (node)
-                        ?  (self.config && self.config.data.embedded.decoration.classes) 
-                                ? self.config.data.embedded.decoration.classes[node.type] 
+                        ?  (self.options && self.options.decoration.classes) 
+                                ? self.options.decoration.classes[node.type] 
                                 : null
                         : null        
             },
 
             color(node){
               return   (node)
-                        ?  (self.config && self.config.data.embedded.decoration.color) 
-                                ? self.config.data.embedded.decoration.color[node.type] 
+                        ?  (self.options && self.options.decoration.color) 
+                                ? self.options.decoration.color[node.type] 
                                 : null
                         : null        
             },
@@ -236,22 +244,22 @@
             label(node){
               // console.log(node.type)
               // if(node.type == "BRANCH"){
-              //   console.log(self.config.data.embedded.decoration.label[node.type], {node})
-              //   console.log(compile(self.config.data.embedded.decoration.label[node.type], {node} ))
+              //   console.log(self.options.decoration.label[node.type], {node})
+              //   console.log(compile(self.options.decoration.label[node.type], {node} ))
                  
               // }
               return   (node)
-                        ?  (self.config && self.config.data.embedded.decoration.label) 
-                                ? compile(self.config.data.embedded.decoration.label[node.type], {node} )
+                        ?  (self.options && self.options.decoration.label) 
+                                ? compile(self.options.decoration.label[node.type], {node} )
                                 : null
                         : null        
             },
             
             tooltip(node){
-              if (!self.config) return null
+              if (!self.options) return null
               return   (node)
-                        ?  (self.config && self.config.data.embedded.decoration.tooltip && self.config.data.embedded.decoration.tooltip[node.type]) 
-                                ? compile(self.config.data.embedded.decoration.tooltip[node.type], {node} ) 
+                        ?  (self.config && self.options.decoration.tooltip && self.options.decoration.tooltip[node.type]) 
+                                ? compile(self.options.decoration.tooltip[node.type], {node} ) 
                                 : null
                         : null        
             }
@@ -259,14 +267,30 @@
       }       
     },  
 
-    onUpdate ({data}) {
-      this.config.data.embedded = {}
-      this.$nextTick(() => {
-        this.config.data.embedded = data
+    onUpdate ({data}, mode) {
+      
+      if( mode ){
+        if (mode.override) {
+          set(this, mode.override, data)
+        }
+        if (mode.extend) {
+          set(this, mode.extend, extend(get(this, mode.extend), data))
+        }
+      } else {
+        this.options = data  
+      }
+      
+      let temp = this.options
+   
+      this.options = null
+   
 
-        if(this.config.data.embedded.events){
-          let event = this.config.data.embedded.events.change || "change-document"
-          this.emit(event, this.config.data.embedded.document, this)  
+      this.$nextTick(() => {
+        this.options = temp
+
+        if(this.options.events){
+          let event = this.options.events.change || "change-document"
+          this.emit(event, this.options.document, this)  
         }
       
       })

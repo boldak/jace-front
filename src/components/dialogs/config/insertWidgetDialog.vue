@@ -78,6 +78,7 @@ export default {
               "app-footer-widget",
               "app-list-widget",
               "html-widget:banner",
+              "login-widget",
               "md-widget:Markdown"
               
             ]
@@ -230,9 +231,18 @@ export default {
           },
 
           {
-            name: "Page Management",
+            name: "User Interface",
             editor: () => import("./parts/widget-types-panel.vue"),
-            items: ["mediator-widget", "config-widget","inputs-widget:Inputs"]
+            items: [
+              "mediator-widget", 
+              "config-widget",
+              "input-group-widget:Input Group",
+              "inputs-widget:Inputs",
+              "tab-bar-widget",
+              // "button-bar-widget",
+              "list-widget",
+              "dialog-widget"
+            ]
           },
 
           {

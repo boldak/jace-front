@@ -29,7 +29,7 @@
             <v-tooltip left>
               <template v-slot:activator="{ on }">
                 <v-btn fab dark small color="primary" v-on="on" v-if="!isProductionMode" @click="openSettingsDialog()">
-                  <v-icon>mdi-settings</v-icon>
+                  <v-icon>mdi-cog</v-icon>
                 </v-btn>
               </template>
               <span>App Settings...</span>
@@ -72,6 +72,7 @@
             </div>
           </v-content>
           <dialog-manager></dialog-manager>
+          <dialog-widget-manager></dialog-widget-manager>
     </v-app>
   </div>
 </template>
@@ -80,6 +81,7 @@ import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 import holder from "@/components/core/holder.vue"
 import dialogManager from "@/components/core/ext/dialog-manager"
+import dialogWidgetManager from "@/components/core/ext/dialog-widget-manager"
  <<< if( jace.mode=="development" ) {>>>
   import settingsDialog from "@/components/dialogs/config/settings-dialog.vue"
  <<< } >>> 
@@ -87,7 +89,9 @@ import dialogManager from "@/components/core/ext/dialog-manager"
 
 let components = {
   holder,
-  "dialog-manager": dialogManager
+  "dialog-manager": dialogManager,
+  "dialog-widget-manager": dialogWidgetManager,
+   
 }
 
 

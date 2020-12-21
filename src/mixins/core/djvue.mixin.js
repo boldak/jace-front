@@ -18,6 +18,7 @@ export default {
     isProductionMode() { return this.app.mode == 'production' },
     isNeedSave() { return this.app.needSave },
     appName() { return this.app.name },
+    cookie(){ return this.$cookie.getAll() },
 
 
     ...mapState({ app: state => state.Djvue.app })
@@ -82,6 +83,7 @@ export default {
       if (this.$route.path == path) return
       this.saveAppConfig()
         .then(() => {
+          if (this.$route.path == path) return
           this.emit("page-stop")
           this.$router.replace(path)
         })

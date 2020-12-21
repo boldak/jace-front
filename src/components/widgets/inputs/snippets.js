@@ -3,7 +3,7 @@ export default {
     {
             type:"inputs-widget", 
             name:"noname",
-            icon:"mdi-file-document-box-outline",
+            icon:"mdi-card-bulleted-outline",
             
             options: { 
 

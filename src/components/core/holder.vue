@@ -21,7 +21,7 @@
       </draggable>
     </v-layout>
     <v-layout align-center justify-end row fill-height class="pr-3">
-      <v-btn icon small text color="primary" class="ma-0" @click="insert()" v-if="!isProductionMode">
+      <v-btn icon small text color="primary" class="ma-0" @click.stop="insert()" v-if="!isProductionMode">
         <v-icon small class="primary--text">mdi-shape-square-plus</v-icon>
       </v-btn>
     </v-layout>
@@ -216,13 +216,18 @@ export default {
     this.on({
       event: "widget-clone",
       callback: (cloned) => {
-
+        if(!this.isHoldWidget(cloned)) return
+        // console.log("on clone", this)
         let widgetIndex = findIndex(this.widgets, w => w.id == cloned.config.id);
         // console.log("ORIGINAL", cloned, cloned.config)
+        // console.log("ORIGINAL INDEX", widgetIndex, this.widgets[widgetIndex])
+        // console.log(this.widgets)
+        
         let newWidget = cloneDeep(this.widgets[widgetIndex])
+        // console.log("CLONE", newWidget)
+       
         newWidget.id = this.$djvue.randomName();
         newWidget.name += "_clone_" + newWidget.id;
-        // console.log("CLONE", newWidget)
         this.widgets.splice(widgetIndex + 1, 0, newWidget)
 
       },
@@ -232,11 +237,13 @@ export default {
     this.on({
       event: "widget-delete",
       callback: (deleted) => {
-        if( deleted._delete() ){
+        if(!this.isHoldWidget(deleted)) return
+        // if( deleted._delete() ){
           let widgetIndex = findIndex(this.widgets, w => w.id == deleted.config.id);
+          // console.log(widgetIndex)
           if (widgetIndex > -1) this.widgets.splice(widgetIndex, 1)
           this.setNeedSave(true)  
-        }
+        // }
       },
       rule: this.isHoldWidget
     })

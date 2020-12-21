@@ -4,7 +4,7 @@ export default {
 
 	name:"inputs-widget",
 
-    icon: "mdi-file-document-box-outline",
+    icon: "mdi-card-bulleted-outline",
 
     getInitialConfig(snippet){
         snippet = snippet || "Line"

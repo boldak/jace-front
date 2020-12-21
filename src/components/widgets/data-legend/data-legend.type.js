@@ -3,7 +3,7 @@
 export default {
   name: "data-legend-widget",
 
-  icon: "mdi-loop",
+  icon: "mdi-repeat",
 
   getInitialConfig() {
     // snippet = snippet || "default"
@@ -14,7 +14,7 @@ export default {
 
       type: "data-legend-widget",
       name: "noname",
-      icon: "mdi-loop",
+      icon: "mdi-repeat",
 
       options: {
         widget: {

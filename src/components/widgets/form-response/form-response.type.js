@@ -4,13 +4,13 @@ import { toPairs } from "lodash"
 export default {
   name: "form-response-widget",
 
-  icon: "mdi-file-document-box-check-outline",
+  icon: "mdi-file-document-outline",
 
   getInitialConfig() {
     return {
       type: "form-response-widget",
       name: "noname",
-      icon: "mdi-file-document-box-check-outline",
+      icon: "mdi-file-document-outline",
       options: {
         widget: {
           visible: true

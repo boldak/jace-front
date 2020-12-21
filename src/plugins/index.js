@@ -24,6 +24,8 @@ import { isInteger, isObject, isString, extend, keys } from "lodash"
 // import store from "@/state/index.js"
 
 import dialogManager from "@/components/core/ext/dialog-manager"
+import dialogWidgetManager from "@/components/core/ext/dialog-widget-manager"
+
 
 import axios from "axios"
 
@@ -33,6 +35,13 @@ var _dialog_manager = (app) => {
   _dialog_manager = (new Vue(dialogManager)).$mount()
   app.$el.appendChild(_dialog_manager.$el)
 }
+
+
+var _dialog_widget_manager = (app) => {
+  _dialog_widget_manager = (new Vue(dialogWidgetManager)).$mount()
+  app.$el.appendChild(_dialog_widget_manager.$el)
+}
+
 
 // var _dialogManagerPlugin = (Vue, app) => {
 //     _dialog_manager =  (new Vue(dialogManager)).$mount()
@@ -60,6 +69,19 @@ export var dialogManagerPlugin = {
         return _dialog_manager;
       }
     });
+
+   Object.defineProperty(Vue.prototype, '$dialogWidgetManager', {
+      get: function() {
+        return _dialog_widget_manager;
+      }
+    });
+
+    Object.defineProperty(Vue, '$dialogWidgetManager', {
+      get: function() {
+        return _dialog_widget_manager;
+      }
+    });
+    console.log("VUE PROTO", Vue.prototype)
   }
 }
 
@@ -84,6 +106,14 @@ export var cookiePlugin = {
 
   get: function(name) {
     return Cookie.get(name);
+  },
+
+  getAll: function() {
+    return Cookie.getAll()
+  },
+
+  isEnabled: function() {
+    return Cookie.isEnabled()
   },
 
   delete: function(name, options) {
