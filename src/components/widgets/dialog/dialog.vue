@@ -66,7 +66,7 @@
 import { find, isUndefined, isArray, isNull, isString, includes, zipObject, keys, isEqual, extend, get, set, cloneDeep } from "lodash"
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
-
+import { v4 } from "uuid/dist"
 
 <<< if( jace.mode == "development") { >>>
   
@@ -74,7 +74,7 @@ import listenerMixin from "@/mixins/core/listener.mixin.js";
 
 <<< } >>> 
 
-  import selfComponent from "./dialog.vue"
+import selfComponent from "./dialog.vue"
 
 import components from "@/components/core/ext/inputs"
 
@@ -183,11 +183,16 @@ export default {
         
         }
         
+        this.opts._dlgId = v4() 
         return this.$dialogWidgetManager.showAndWait(selfComponent, this.opts.dialog, extend(cloneDeep(this.opts),{activated: true}) )
                 .then( res => {
                   this.opts.activated = false
                   return res
                 })
+    },
+
+    close(){
+      this.emit("close-dialog",this.opts._dlgId )
     },
 
     submitDialog(action){
@@ -212,6 +217,14 @@ export default {
 
   created() {
     this.opts = this.settings
+    this.on({
+      event:"close-dialog",
+      callback: (dialogId) => {
+        // console.log("close-dialog",dialogId, this)
+        if(this.opts._dlgId != dialogId) return
+        if(this.submit) this.submit(null)  
+      }
+    })
   },
 
   mounted() { this.$emit("init") },

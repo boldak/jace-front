@@ -287,7 +287,7 @@
 
       this.$nextTick(() => {
         this.options = temp
-
+        console.log("ANNOTATOR",this.options)
         if(this.options.events){
           let event = this.options.events.change || "change-document"
           this.emit(event, this.options.document, this)  

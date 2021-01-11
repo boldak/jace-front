@@ -200,7 +200,7 @@ export var dpsPlugin = {
     Vue.prototype.$dps = {
       run: ({ script, state, file }) => {
 
-        script = encodeURIComponent(JSON.stringify(script))
+        script =  encodeURIComponent(script)//encodeURIComponent(JSON.stringify(script))
 
         if (!file) {
           return transport.post(

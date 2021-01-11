@@ -56,6 +56,11 @@ import ScatterChartWidget from "./chart-scatter/scatter-chart.type.js"
 import Scatter1dChartWidget from "./chart-scatter1d/scatter1d-chart.type.js"
 
 import BubbleChartWidget from "./chart-bubble/bubble-chart.type.js"
+
+import ChartLowLevelWidget from "./chart-low-level/chart-low-level.type.js"
+
+
+
 import RadarChartWidget from "./chart-radar/radar-chart.type.js"
 import TreeChartWidget from "./chart-tree/tree-chart.type.js"
 import TreeMapChartWidget from "./chart-treemap/treemap-chart.type.js"
@@ -131,6 +136,8 @@ export default {
 	
 	// "echart-widget" : echartWidget,
 	"bar-chart-widget": BarChartWidget,
+	"chart-low-level-widget": ChartLowLevelWidget,
+	
 
 	"wordcloud-chart-widget": WordcloudChartWidget,
 	

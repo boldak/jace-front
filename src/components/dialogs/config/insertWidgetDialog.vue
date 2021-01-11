@@ -241,7 +241,8 @@ export default {
               "tab-bar-widget",
               // "button-bar-widget",
               "list-widget",
-              "dialog-widget"
+              "dialog-widget",
+              "chart-low-level-widget"
             ]
           },
 

@@ -48,6 +48,8 @@ export default {
 
       'bar-chart-widget': () => import("./chart-bar/bar-chart.vue"),
       
+      'chart-low-level-widget': () => import("./chart-low-level/chart-low-level.vue"),
+      
       'wordcloud-chart-widget': () => import("./chart-word-cloud/wordcloud-chart.vue"),
 
       'pie-chart-widget': () => import("./chart-pie/pie-chart.vue"),
