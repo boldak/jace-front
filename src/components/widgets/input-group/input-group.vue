@@ -113,7 +113,7 @@ export default {
 
     
     onUpdate({ data }, mode) {
-      
+      console.log(data, mode)
       if( mode ){
         if (mode.override) {
           set(this, mode.override, data)

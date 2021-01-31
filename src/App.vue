@@ -73,7 +73,9 @@
           </v-content>
           <dialog-manager></dialog-manager>
           <dialog-widget-manager></dialog-widget-manager>
+          
     </v-app>
+    <app-tooltip></app-tooltip>
   </div>
 </template>
 <script>
@@ -82,6 +84,8 @@ import listenerMixin from "@/mixins/core/listener.mixin.js"
 import holder from "@/components/core/holder.vue"
 import dialogManager from "@/components/core/ext/dialog-manager"
 import dialogWidgetManager from "@/components/core/ext/dialog-widget-manager"
+import appTooptip from "@/components/core/ext/app-tooltip"
+
  <<< if( jace.mode=="development" ) {>>>
   import settingsDialog from "@/components/dialogs/config/settings-dialog.vue"
  <<< } >>> 
@@ -91,7 +95,7 @@ let components = {
   holder,
   "dialog-manager": dialogManager,
   "dialog-widget-manager": dialogWidgetManager,
-   
+  "app-tooltip": appTooptip 
 }
 
 
