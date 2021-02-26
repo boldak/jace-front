@@ -30,7 +30,7 @@ import store from "@/state/index.js"
 import "@/modules/google-fonts/roboto.css"
 import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/dist/vuetify.min.css"
-
+import "@/modules/highlightjs/styles/github-gist.css"
 
 // import bluebird from "bluebird"
 
