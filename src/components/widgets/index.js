@@ -23,6 +23,8 @@ export default {
       
       'inputs-widget' :() => import("./inputs/inputs.vue"),
       'input-group-widget' :() => import("./input-group/input-group.vue"),
+      'timeline-widget' :() => import("./timeline/timeline.vue"),
+      
       'dialog-widget' :() => import("./dialog/dialog.vue"),
       
       

@@ -64,13 +64,13 @@
             </v-menu>
           </v-speed-dial>
         <<< } >>>  
-          <v-content>
+          <v-main>
             <div>
               <holder name="AppHeader" type="skin"></holder>
               <router-view></router-view>
               <holder name="AppFooter" type="skin"></holder>
             </div>
-          </v-content>
+          </v-main>
           <dialog-manager></dialog-manager>
           <dialog-widget-manager></dialog-widget-manager>
           

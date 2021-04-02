@@ -80,6 +80,10 @@ export default {
         } else {
           sender.options.data.value = data
         }
+        
+        let event = sender.options.data.event || "input-data"
+        this.emit(event, sender, data)
+
       }   
     },
 
@@ -95,7 +99,7 @@ export default {
     
     pushMenu(sender){
         let event = sender.event || "push-menu"
-        console.log(this._uid, event, this.options, sender)
+        // console.log(this._uid, event, this.options, sender)
         this.emit(event, this.options, sender)
       },
 
@@ -113,7 +117,7 @@ export default {
 
     
     onUpdate({ data }, mode) {
-      console.log(data, mode)
+      // console.log(data, mode)
       if( mode ){
         if (mode.override) {
           set(this, mode.override, data)

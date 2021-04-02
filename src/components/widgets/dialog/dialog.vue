@@ -182,7 +182,7 @@ export default {
           }
         
         }
-        console.log(this.config, this.opts)
+        // console.log(this.config, this.opts)
         this.opts._dlgId = v4() 
         return this.$dialogWidgetManager.showAndWait(selfComponent, this.opts.dialog, extend(cloneDeep(this.opts),{activated: true}) )
                 .then( res => {

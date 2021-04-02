@@ -11,6 +11,10 @@ import mdWidget from "./md/md.type.js"
 
 import inputsWidget from "./inputs/inputs.type.js"
 import inputGroupWidget from "./input-group/input-group.type.js"
+import TimelineWidget from "./timeline/timeline.type.js"
+
+
+
 import DialogWidget from "./dialog/dialog.type.js"
 
 
@@ -108,6 +112,8 @@ export default {
 	
 	'inputs-widget' : inputsWidget,
 	'input-group-widget' : inputGroupWidget,
+	'timeline-widget': TimelineWidget,
+
 	'dialog-widget' : DialogWidget,
 	
 	

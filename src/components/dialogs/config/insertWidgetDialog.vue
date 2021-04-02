@@ -242,7 +242,8 @@ export default {
               // "button-bar-widget",
               "list-widget",
               "dialog-widget",
-              "chart-low-level-widget"
+              "chart-low-level-widget",
+              "timeline-widget"
             ]
           },
 

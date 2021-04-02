@@ -17,5 +17,8 @@ export default {
     "menuInput": () => import("./menu.vue"),
     "submitInput": () => import("./submit.vue"),
     "htmlInput": () => import("./html.vue"),
+    "daterangeInput": () => import("./date-range.vue"),
+    "dateInput": () => import("./date.vue"),
+    "timelineInput": () => import("./timeline.vue"),
        
 }
