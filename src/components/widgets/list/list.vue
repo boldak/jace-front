@@ -75,7 +75,11 @@ export default {
         } else {
           sender.options.data.value = data
         }
-      }   
+      }
+
+      let event = sender.options.data.event || "input-data"
+        this.emit(event, sender, data)
+   
     },
 
   setData(data){

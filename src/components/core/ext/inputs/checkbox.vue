@@ -1,5 +1,7 @@
 <template>
-	<div>
+	<div 
+		:class="(options.decoration) ? getPropertyValue(options.decoration.classes) : ''" 
+		:style="(options.decoration) ? getPropertyValue(options.decoration.style) : ''" >
 
 		<v-checkbox 
 			:label="(options.data) ? getPropertyValue(options.data.label) : ''" 

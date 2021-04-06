@@ -16,7 +16,7 @@
 			:item-value="item => item" 
 			
 			:search-input.sync="search"
-
+			:prepend-icon = "(options.decoration) ? getPropertyValue(options.decoration['prepend-icon']) : ''"
 			:color="(options.decoration) ? getPropertyValue(options.decoration.color) : '' "
 			:flat="(options.decoration) ? getPropertyValue(options.decoration.flat) : false"
 			:outlined="(options.decoration) ? getPropertyValue(options.decoration.outlined) : false"
@@ -71,6 +71,7 @@ export default {
 		},
 
 		selection(){
+			this.search = null
 			this.$emit("change",this, this.selection)
 		}
 	},

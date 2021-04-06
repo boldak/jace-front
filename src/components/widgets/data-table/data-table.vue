@@ -124,7 +124,13 @@
     
       },
 
-      onUpdate ({data}) {
+      onUpdate (config) {
+        if(!config) return 
+        if(!config.data) return
+        if(!config.data.dataset) return
+        if(!config.data.dataset.source) return
+          
+        let data = config.data  
         // console.log("table update", data)
         this.data = data.dataset.source;
         let temp = {

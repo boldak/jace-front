@@ -70,6 +70,7 @@ export default {
   methods: {
 
     inputData(sender, data){
+
       if(
         !isUndefined(sender.options) 
         && !isUndefined(sender.options.data) 
@@ -85,6 +86,11 @@ export default {
         this.emit(event, sender, data)
 
       }   
+    },
+
+    setData(data){
+      this.data = data
+      this.onUpdate({data:null})
     },
 
     pushButton(sender){
@@ -130,6 +136,7 @@ export default {
       }
       let temp = this.options
       this.options = null
+      // console.log("update", temp, this)
       this.$nextTick(() => { this.options = temp})
     },
 
