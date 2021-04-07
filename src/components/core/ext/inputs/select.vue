@@ -12,7 +12,7 @@
 			
 
 			:items="(options.data) ? getPropertyValue(options.data.items) || [] : [] " 
-			
+			:item-text = "(options.data) ? getPropertyValue(options.data['item-text']) || '' : '' "
 			:item-value="item => item" 
 			
 			:search-input.sync="search"
