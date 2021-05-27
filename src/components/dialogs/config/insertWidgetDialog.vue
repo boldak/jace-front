@@ -224,7 +224,8 @@ export default {
               "geo-bubble-chart-widget:World Bubbles",
               "geo-bubble-chart-widget:Ukraine Bubbles",
               "geo-markers-chart-widget:World Markers",
-              "geo-markers-chart-widget:Ukraine Markers"
+              "geo-markers-chart-widget:Ukraine Markers",
+              "mapbox-widget"
               
 
             ]

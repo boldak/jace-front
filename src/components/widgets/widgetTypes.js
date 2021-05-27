@@ -1,6 +1,7 @@
 import htmlWidget from "./html/html.type.js"
 
 import loginWidget from "./login/login.type.js"
+import mapboxWidget from "./mapbox/mapbox.type.js"
 
 
 import nlpHighlightWidget from "./nlp-highlight/nlp-highlight.type.js"
@@ -102,7 +103,8 @@ import FormResponseWidget from "./form-response/form-response.type.js"
 export default {
 	'html-widget' : htmlWidget,
 	'login-widget' : loginWidget,
-	
+	'mapbox-widget' : mapboxWidget,
+		
 
 	'nlp-highlight-widget' : nlpHighlightWidget,
 	'nlp-annotator-widget' : nlpAnnotatortWidget,

@@ -7,7 +7,7 @@
       <p v-if="options" class="caption font-italic font-weight-light ma-0 pa-0" style="text-align: center;">
         {{config.note}}
       </p>
-      <echart v-if="options" :options="chartOptions" :height="options.widget.height"></echart>
+      <echart v-if="options" :options="chartOptions" :height="options.widget.height" @chart-event="chartEventHandler"></echart>
     </v-layout>
   </div>
 </template>
@@ -32,6 +32,11 @@ export default {
   components: { echart },
 
   methods: {
+
+    chartEventHandler(params){
+      // console.log("echart widget", params)
+      this.emit("chart-event", this, params)
+    },
 
 <<< if( jace.mode == "development") { >>>
 

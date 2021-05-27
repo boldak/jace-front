@@ -31,6 +31,8 @@ import "@/modules/google-fonts/roboto.css"
 import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/dist/vuetify.min.css"
 import "@/modules/highlightjs/styles/github-gist.css"
+// import "mapbox-gl/dist/mapbox-gl.css"
+
 
 // import bluebird from "bluebird"
 
@@ -83,6 +85,7 @@ Vue.use(keyControllerPlugin);
 
 Vue.use(VueRouter)
 // Vue.use(VueSSE)
+
 
 
 // Vue.PubSub.open({channel:'app'})// or { format: 'plain' }
