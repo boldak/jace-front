@@ -17,6 +17,12 @@ module.exports = {
 
     chainWebpack: config => {
 
+        config.module
+            .rule('raw')
+            .test(/\.(txt|dps|md)$/)
+            .use('raw-loader')
+            .loader('raw-loader')
+            .end()
        
 
         config.module
