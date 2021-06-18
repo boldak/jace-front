@@ -110,6 +110,8 @@ export default {
     },
 
     calculateStat() {
+      if (!this.options) return {}
+      
       if (!this.options.nominals) return {}
       // console.log(JSON.stringify(this.stat.responses, null, "\t"))
       let s = this.stat.responses.filter(a => a) // &&  find(this.options.nominals, n => n.id == a[0]))

@@ -232,6 +232,8 @@ export default {
 
 
     calculateStat() {
+      if (!this.options) return {}
+      
       if (!this.options.effects || !this.options.factors) return {}
 
       let s = this.stat.responses.filter(a => a)

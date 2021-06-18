@@ -46,10 +46,10 @@ export default {
             name: "Pages",
             editor: () => import("./parts/page-manager.vue")
           },
-          {
-            name: "I18n",
-            editor: () => import("./parts/i18n-manager.vue")
-          },
+          // {
+          //   name: "I18n",
+          //   editor: () => import("./parts/i18n-manager.vue")
+          // },
           {
             name: "Resources",
             editor: () => import("./parts/resource-manager.vue")

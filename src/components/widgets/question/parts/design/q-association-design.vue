@@ -204,6 +204,7 @@ export default {
     },
 
     calculateStat() {
+      if (!this.options) return {}
       if (!this.options.entities) return {}
 
       let s = this.stat.responses.filter(a => a)

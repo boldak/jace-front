@@ -45,8 +45,10 @@ export default {
         return { available: true }
       }
 
+      console.log("Access for user", this.app.user.email)
+
       if (this.form.config.access.type == "users") {
-        if (this.app.user.id) return { available: true };
+        if (this.app.user.email) return { available: true };
 
         return {
           available: false,

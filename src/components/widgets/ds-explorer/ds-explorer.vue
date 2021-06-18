@@ -1,5 +1,5 @@
 <template>
-  <v-card flat color="transparent">
+  <v-card flat color="transparent" style="min-height: 500px;">
     <v-divider></v-divider>
     <v-row class="mx-3" v-if="!config.metadata.concepts || !config.metadata.collections || error1 || error2 || error3">
       <h2 class="warning--text font-weight-light headline">{{message}}</h2>

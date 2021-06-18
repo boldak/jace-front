@@ -14,7 +14,7 @@
       </v-layout>
       <v-divider></v-divider>
       <v-layout align-center justify-end row>
-        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2019</p>
+        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2021</p>
       </v-layout>
     </v-container>
     
@@ -26,11 +26,21 @@
           <response v-if="needUpdateAnswer" :form="form" :answer="answer"></response>
       </v-layout> -->
       <v-layout v-if="form.config.access.enabled" align-center justify-end row class="mx-0 my-2">
+          <div class="primary--text">
+            Respondent: 
+          </div>
+          <v-avatar size="32" class="ml-2" v-on="on" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <dj-img :src="app.user.photo" icon="mdi-account"></dj-img>
+          </v-avatar>
+          <div class="caption pl-2">
+            {{app.user.name}}
+          </div>
+          <v-spacer></v-spacer>
           <v-btn text outlined color="primary" @click="submitForm()" :disabled="!needUpdateAnswer">Submit form</v-btn>  
       </v-layout>
       <v-divider></v-divider>
       <v-layout align-center justify-end row>
-        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2019</p>
+        <p class="ma-0 secondary--text font-weight-light" style="font-size:10px;">JACE FORMS SERVICE 2018-2021</p>
       </v-layout>
     </v-container>
     <div v-if="!isProductionMode">
@@ -282,8 +292,13 @@ export default {
     },
 
     loadStatistic() {
+
       this.getStat(this.form.id)
         .then(res => {
+          console.log("**************", res)
+          
+          if(res.events.total == 0) return true
+
           this.stat = res
           this.emit("question-set-stat", this.stat)
 
@@ -381,6 +396,7 @@ export default {
 
             this.createFormRequest()
               .then(res => {
+                console.log(res)
                 this.p.set({text:"Scan widgets in current page"})
                 this.config.form = res.id
                 res.config.questions = flattenDeep(toPairs(this.app.currentPage.holders).map( d => d[1].widgets))
@@ -389,6 +405,9 @@ export default {
                       id:d.id,
                       options: d.question.options
                     }))
+                
+                console.log("Updated form", res)    
+
                 this.p.set({text:"Syncronize Form with JACE service"})
                 this.updateForm(res).then(() => {
                   this.p.set({text:"Initiate Form on current page"})

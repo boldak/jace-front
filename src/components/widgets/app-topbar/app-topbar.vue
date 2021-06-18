@@ -1,8 +1,37 @@
 <template>
-  <v-app-bar v-if="options" dark dence flat color="primary darken-1" class="my-0 py-0" style="padding-top: 1em; font-weight:300;">
-    <div class="headline font-weight-light">
-      {{options.title}}
+  <div>
+  <v-app-bar 
+    v-if="options" 
+    :dark = "(options.decoration) ? options.decoration.dark  : true" 
+    :light = "(options.decoration) ? options.decoration.light : false"
+    :height = "(options.decoration) ? options.decoration.height : undefined"
+    :tile = "(options.decoration) ? options.decoration.tile : true"
+     
+    :dence = "(options.decoration) ? options.decoration.dence : true"
+    :flat =  "(options.decoration) ? options.decoration.flat : true"
+    :color="(options.decoration) ? options.decoration.color || 'primary darken-1' : 'primary darken-1'" 
+    :class="(options.decoration) ? options.decoration.class || 'my-0 py-0' : 'my-0 py-0'" 
+    :style="(options.decoration) ? options.decoration.style : 'padding-top: 1em; font-weight:300;'"
+    :src= "(options.decoration) ? options.decoration.bgImage : undefined"
+  >
+   
+    <template v-slot:img="{ props }">
+      <v-img
+        v-bind="props"
+      ></v-img>
+    </template>
+
+    <div>  
+      <div class="display-2 font-weight-light">
+        {{options.title}}
+      </div>
+      <div class="pl-1 headline font-weight-light">
+        {{options.subTitle}}
+      </div>  
     </div>
+
+    <template v-slot:extension>
+      
     <v-spacer></v-spacer>
     <span v-for="(page, pageIndex) in options.references" :key="pageIndex">
       <router-link v-if="page.id" :to="`/${page.id || ''}`" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
@@ -15,11 +44,12 @@
     <v-divider vertical v-if="options.login || options.locale || options.user"></v-divider>
     <v-tooltip left v-if="!app.user.isLoggedIn && options.login">
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on:click="login()" v-on="on">
-          <v-icon>mdi-google-plus</v-icon>
+        <v-btn outlined x-small  color="white" @click="login()">
+          Log in with Google
+          <!-- <v-icon>mdi-google-plus</v-icon> -->
         </v-btn>
       </template>
-      <span>Login with Google</span>
+      <span>Log in with Google</span>
     </v-tooltip>
     <v-menu offset-y v-if="options.locale">
       <template v-slot:activator="{ on }">
@@ -44,7 +74,9 @@
       </template>
       <span>{{app.user.name}}</span>
     </v-tooltip>
+  </template>
   </v-app-bar>
+ </div> 
 </template>
 <script>
 

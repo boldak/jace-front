@@ -251,10 +251,15 @@ export default {
     this.on({
       event: "holder-import-widgets",
       callback: (emitter, widgets) => {
-       
-        widgets = ( isArray(widgets) ) ? widgets : [widgets]
-        this.widgets = this.widgets.concat(widgets)
-        this.setNeedSave(true)  
+       if( find(this.widgets, w => w.id == emitter.config.id)) {
+
+          console.log("holder-import-widgets", this.widgets, emitter, widgets)
+
+          widgets = ( isArray(widgets) ) ? widgets : [widgets]
+          this.widgets = this.widgets.concat(widgets)
+          this.setNeedSave(true) 
+       }
+         
      
       },
       rule: this.isHoldWidget

@@ -47,6 +47,7 @@
       <template v-slot:item="{ item }">
         <v-row class="mx-0 pa-0">
           <v-col cols="1" class="pa-0">
+
             <v-avatar>
               <dj-img :src="item.photo" :icon="(item.icon) ? item.icon : 'mdi-account'"></dj-img>
             </v-avatar>
@@ -64,7 +65,7 @@
             <v-row class="mx-0 pa-0">
               <v-col cols="1" class="pa-0">
                 <v-avatar>
-                  <dj-img :src="item.icon" :icon="(item.icon) ? item.icon : 'mdi-account'"></dj-img>
+                  <dj-img :src="item.photo" :icon="(item.icon) ? item.icon : 'mdi-account'"></dj-img>
                 </v-avatar>
               </v-col>
               <v-col class="py-0 mx-2 pl-5">

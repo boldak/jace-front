@@ -23,6 +23,7 @@ export default {
        onUpdate ({data, options}) {
                 
         if(!data) return
+        console.log(data)
       
         this.options = _.extend({ widget:options.widget }, data)
 

@@ -1,7 +1,7 @@
 
 <template>
 <<< if (jace.mode == "development") { >>>
-  <v-card flat color="transparent">
+  <v-card flat color="transparent" style="min-height: 500px;">
     <v-card-title class="py-0" v-if="user.isLoggedIn">
      <v-spacer></v-spacer>
       
@@ -277,7 +277,10 @@ export default {
             .then(() => {
               this.loadAppList()
                 .then(() => {
-                  this.selected = find(this.appList, a => a.name = res.name)
+                  setTimeout(() => {
+                    this.selected = find(this.appList, a => a.name == res.name)  
+                  }, 100)
+                  
                 })
 
             })
@@ -323,7 +326,12 @@ export default {
               })
               this.loadAppList()
                 .then(() => {
-                  this.selected = find(this.appList, a => a.name = res.name)
+                  setTimeout(() => {
+                    // console.log(res.name)
+                    this.selected = find(this.appList, a => a.name == res.name)
+                    // console.log(this.selected)  
+                  }, 200)
+                  
                 })
 
             })
@@ -374,6 +382,7 @@ export default {
       return this.$portal
         .get('api/app/get-list')
         .then(response => {
+          // console.log(response.data)
           this._makeKeywords(response.data)
           this.appList = response.data.filter( d => d )
           // .map( d => {
@@ -381,7 +390,8 @@ export default {
           //   return d
           // })
 
-          if(!this.selected && this.appList.length>0) this.selected = this.appList[0] 
+          // if(!this.selected && this.appList.length>0) this.selected = this.appList[0] 
+          
           this.$nextTick(() => { 
             this.overlay = false 
           })  

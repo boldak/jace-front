@@ -151,7 +151,9 @@ export default {
           this.items_ = []
           return
         }
-        this.items_ = value.map(d => d)
+        setTimeout(() => {
+          this.items_ = value.map(d => d)
+        }, 20)
       },
       deep: true
     },

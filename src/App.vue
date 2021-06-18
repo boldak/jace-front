@@ -79,6 +79,8 @@
   </div>
 </template>
 <script>
+
+
 import djvueMixin from "@/mixins/core/djvue.mixin.js"
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 import holder from "@/components/core/holder.vue"
@@ -90,6 +92,7 @@ import appTooptip from "@/components/core/ext/app-tooltip"
   import settingsDialog from "@/components/dialogs/config/settings-dialog.vue"
  <<< } >>> 
 // import * as _ from "lodash"
+
 
 let components = {
   holder,
@@ -193,6 +196,7 @@ export default {
         }
       } else {
         this.setMode('production')
+        this.fullReload();
         // eslint-disable-next-line
         this.$cookie.set(window.__application_Mode_Key, "production")
         this.emit("switch-mode", "production")
@@ -205,12 +209,12 @@ export default {
 
 
     setupI18n() {
-      let currentLocale = this.$cookie.get("currentLanguage") || "en";
+      // let currentLocale = this.$cookie.get("currentLanguage") || "en";
 
-      this.$i18n.mergeLocaleMessage("en", this.app.config.i18n.en);
-      this.$i18n.mergeLocaleMessage("uk", this.app.config.i18n.uk);
+      // this.$i18n.mergeLocaleMessage("en", this.app.config.i18n.en);
+      // this.$i18n.mergeLocaleMessage("uk", this.app.config.i18n.uk);
 
-      this.setLocale(currentLocale)
+      // this.setLocale(currentLocale)
 
     }
 
@@ -223,13 +227,13 @@ export default {
 
     console.log("jaceApp",jaceApp)
 
-    this.$pubsub().then( service => service.publish({
-      channel:"app",
-      date: new Date(),
-      app: window.initialConfig.name,
-      user: window.initialConfig.user,
-      data:`Opened the application "${window.initialConfig.name}" in ${jaceApp.app.mode} mode`
-    }))
+    // this.$pubsub().then( service => service.publish({
+    //   channel:"app",
+    //   date: new Date(),
+    //   app: window.initialConfig.name,
+    //   user: window.initialConfig.user,
+    //   data:`Opened the application "${window.initialConfig.name}" in ${jaceApp.app.mode} mode`
+    // }))
 
 	
     <<< console.log(JSON.stringify(jace, null," ")) >>>

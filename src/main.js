@@ -2,7 +2,7 @@ import Vue from '@/plugins/vue'
 import vuetify from "@/plugins/vuetify"
 import VueRouter from "vue-router"
 import VueClipboard from "vue-clipboard2"
-import VueSSE from "./plugins/vue-sse"
+// import VueSSE from "./plugins/vue-sse"
 import Storage from 'vue-ls';
 import Fragment from 'vue-fragment'
 
@@ -68,7 +68,7 @@ Vue.use(Fragment.Plugin)
 
 Vue.use(cookiePlugin)
 Vue.use(portalPlugin, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/`})
-Vue.use(VueSSE, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/`, sse:"sse/" })
+// Vue.use(VueSSE, { baseURL: `${(window.initialConfig.portalUrl) ? window.initialConfig.portalUrl:''}/`, sse:"sse/" })
 
 Vue.use(dpsPlugin, {
   baseURL: window.dpsURL.trim() || "http://127.0.0.1:8098/",
@@ -166,13 +166,13 @@ let appCfg =  window.initialConfig
 window.onbeforeunload = (evt) => {
   // console.log(jaceApp)
   if(jaceApp.startedMode == "production") {
-    Vue.PubSub().then( service => service.publish({
-      channel:"app",
-      date: new Date(),
-      app: appCfg.name,
-      user: appCfg.user,
-      data:`Closed the application "${appCfg.name}"`
-    }))
+    // Vue.PubSub().then( service => service.publish({
+    //   channel:"app",
+    //   date: new Date(),
+    //   app: appCfg.name,
+    //   user: appCfg.user,
+    //   data:`Closed the application "${appCfg.name}"`
+    // }))
 
     return
   }  
@@ -188,13 +188,13 @@ window.onbeforeunload = (evt) => {
     }
     return message;
   } else {
-    Vue.PubSub().then( service => service.publish({
-      channel:"app",
-      date: new Date(),
-      app: appCfg.name,
-      user: appCfg.user,
-      data:`Closed the application "${appCfg.name}"`
-    }))
+    // Vue.PubSub().then( service => service.publish({
+    //   channel:"app",
+    //   date: new Date(),
+    //   app: appCfg.name,
+    //   user: appCfg.user,
+    //   data:`Closed the application "${appCfg.name}"`
+    // }))
   }
 }
 

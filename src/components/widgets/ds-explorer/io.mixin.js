@@ -545,7 +545,6 @@ export default {
       })
     },
 
-
     dpsLoadIndicators(metadata, p) {
 
       return new Promise((resolve, reject) => {

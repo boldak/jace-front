@@ -71,6 +71,8 @@ export default {
 
 
     calculateStat() {
+      if (!this.options) return {}
+      
       if (!this.options.nominals) return {}
       let stats = this.stat.responses.filter(a => a);
 

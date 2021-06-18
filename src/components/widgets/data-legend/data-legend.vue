@@ -1,15 +1,21 @@
 <template>
   <v-row class="pa-2 mx-0">
-    <div>
-      <a v-for="(item, index) in items" :key="index" @click="select(index)">
-        <span :class="decoration(index)">{{item}}</span>
-      </a>
-    </div>
+    <div class="d-flex align-center">
+      <div class="primary--text caption pr-5">{{title}}</div>
+      <div>
+        <a v-for="(item, index) in items" :key="index" @click="select(index)">
+          <span :class="decoration(index)">{{item}}</span>
+        </a>
+      </div>
+    </div>  
     <v-spacer></v-spacer>
     <div>
-      <a class="ma-3" @click="control()">
-        <v-icon class="primary--text">{{(!timer) ? "mdi-play" : "mdi-stop"}}</v-icon>
-      </a>
+      <v-btn text outlined color="primary" x-small class="ma-3" @click="control()">
+        <span class="caption">
+        {{(!timer) ? "play" : "stop"}}
+        <v-icon small class="primary--text">{{(!timer) ? "mdi-play" : "mdi-stop"}}</v-icon>
+        </span>
+      </v-btn>
     </div>
   </v-row>
 </template>
@@ -50,6 +56,7 @@ export default {
 
     onUpdate({ data }) {
       this.stop()
+      this.title = data.title || ""
       this.source = data.items
       this.event = data.event
       this.$nextTick(() => {
@@ -112,7 +119,8 @@ export default {
     selection: null,
     source: null,
     timer: null,
-    event: null
+    event: null,
+    title: ""
   }),
 
 
@@ -130,7 +138,7 @@ export default {
     this.on({
       event: "start-timer",
       callback: (emitter, data) => {
-        console.log("start-timer", data)
+        // console.log("start-timer", data)
         this.start()
       },
       rule: () => true
@@ -139,7 +147,7 @@ export default {
     this.on({
       event: "stop-timer",
       callback: (emitter, data) => {
-        console.log("stop-timer", data)
+        // console.log("stop-timer", data)
         this.stop()
       },
       rule: () => true

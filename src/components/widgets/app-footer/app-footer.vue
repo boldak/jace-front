@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <v-footer height="auto" color="primary darken-1 white--text" class="px-0">
+  <div v-if="options">
+    <v-footer 
+      height="auto" 
+      :color="(options.decoration) ? options.decoration.color || 'primary darken-1 white--text' : 'primary darken-1 white--text'" 
+      :class="(options.decoration) ? options.decoration.color || 'px-0' : 'px-0'" 
+    >
       <v-col cols-12>
         <v-row>
           <v-flex xs12 md6 px-5 py-2>
@@ -23,9 +27,7 @@
             </div>
           </v-layout>
         </v-row>
-      </v-col>
-    </v-footer>
-    <v-row class="font-weight-thin secondary darken-1 py-3 white--text justify-right pb-4 pt-1 px-3">
+        <v-row class="font-weight-thin  py-3 justify-right pb-4 pt-1 px-3">
       <v-spacer></v-spacer>
       <v-col class="py-0 px-2" style="max-width:18em;">
         <div class="ma-0" style="height: 1em;">
@@ -39,6 +41,10 @@
         </div>
       </v-col>
     </v-row>
+      </v-col>
+
+    </v-footer>
+    
   </div>
 </template>
 <script>
