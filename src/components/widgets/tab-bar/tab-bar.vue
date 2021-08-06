@@ -33,7 +33,7 @@
 
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
-import { isString } from "lodash"
+import { isString, findIndex } from "lodash"
 
 <<< if( jace.mode == "development") { >>>
 
@@ -53,7 +53,19 @@ export default {
 
   methods: {
 
-  
+    onUpdate ({data, options}) {
+      this.options = data
+      let t = findIndex(data.tabs, d => d.selected)
+      if( t != this.tab) 
+        this.$nextTick(() => {
+          this.tab = t
+        })
+         
+    },
+    select (tabIndex) {
+      this.tab = tabIndex
+    },
+      
     selectTab(tab){
       let event = tab.event || "select-tab"
       this.emit(event, tab) 
@@ -70,18 +82,37 @@ export default {
 
   },
 
+  // watch:{
+  //   tab: value => {
+  //     console.log("$TAB", value)
+  //   }
+  // },
 
   props: ["config"],
 
   data:() => ({
-    tab:null
+    tab:null,
+    options:{
+      "decoration": {
+        "color": "secondary lighten-1",
+        "bgColor": "#ffffff",
+        "sliderColor": "#232f3d",
+        "sliderSize": "3",
+        "activeClass": "active",
+        "classes": "title font-weight-light",
+        "right": false,
+        "left": true,
+        "vertical": true
+      },
+      tabs:[]
+    }
   }),
 
-  computed: {
-    options() {
-      return this.config.data.embedded
-    }
-  },
+  // computed: {
+  //   options() {
+  //     return this.config.data.embedded
+  //   }
+  // },
 
   mounted() { this.$emit("init") }
 
