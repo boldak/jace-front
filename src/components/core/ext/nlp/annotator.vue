@@ -274,7 +274,7 @@ export default {
   created(){
     if(this.data)
     forEachNode(this.data, node => {
-      node.id = `${this.id}-${v4()}`
+      node.id = node.id || `${this.id}-${v4()}`
     })
     
     this.$keyController.keydown(["shift"], e  => {

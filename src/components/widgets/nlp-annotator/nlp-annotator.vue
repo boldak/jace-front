@@ -107,13 +107,23 @@
         let start = findIndex(parent.childs, node => node.id == selection[0].id)
         let stop = findIndex(parent.childs, node => node.id == selection[selection.length-1].id)
         let childs = parent.childs.splice(start, stop-start+1)
+        
+
         let newAnnotation = {
           type: annotation,
           childs,
-          id: `${this.config.id}-${v4()}`
+          concept:"SEMANTIC",
+          id: `${this.config.id}-${v4()}`,
+          value: childs.map(node => node.value).join("") 
+        }
+
+        if(childs[0].pos) {
+            newAnnotation.pos = [childs[0].pos[0],childs[childs.length-1].pos[1]]
+        
         }
 
         parent.childs.splice(start, 0, newAnnotation)
+
 
         this.$nextTick(() => {this.$refs.annotator.select(newAnnotation)})
 
@@ -157,7 +167,7 @@
      
       if(this.options.events){
         let event = this.options.events.remove || "remove-annotation"
-        this.emit(event, selection[0], this)  
+        this.emit(event, selection[0], this, parent)  
       }
 
       if(this.options.events){
@@ -287,7 +297,7 @@
 
       this.$nextTick(() => {
         this.options = temp
-        console.log("ANNOTATOR",this.options)
+        // console.log("ANNOTATOR",this.options)
         if(this.options.events){
           let event = this.options.events.change || "change-document"
           this.emit(event, this.options.document, this)  

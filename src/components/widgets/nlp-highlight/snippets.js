@@ -31,207 +31,399 @@ export default {
                 }
 
               },
+
+              data:{
+                text:"Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня"
+              },
               
-                    document:{                                                                                                                                        
-               "id": "f9dc41dc-b2ad-48f5-aaf9-a1eecc284b24",                                                                                           
-               "type": "text",                                                                                                                         
-               "childs": [                                                                                                                             
-                {                                                                                                                                      
-                 "id": "a63264d8-88de-4272-a0f1-de5caca16d36",                                                                                         
-                 "type": "paragraph",                                                                                                                  
-                 "childs": [                                                                                                                           
-                  {                                                                                                                                    
-                   "id": "10480acb-8deb-4053-ae8a-313d8012bbc5",                                                                                       
-                   "type": "sentence",                                                                                                                 
-                   "childs": [                                                                                                                         
-                    {                                                                                                                                  
-                     "id": "d58e06c4-be96-459c-9f93-f200ba0c45cf",                                                                                     
-                     "type": "subSentence",                                                                                                            
-                     "childs": [                                                                                                                       
-                      {                                                                                                                                
-                       "id": "176af328-fc1b-453c-bf2e-58b58e2f88d9",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "Результати"                                                                                                           
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "2ca17a03-246b-489a-bdb3-42d1ff245077",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "a2c41876-9bb6-4e53-a77d-1370f45763f9",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "дослідження"                                                                                                          
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "cb41fd86-fa52-421f-b3f3-13394a953393",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },
-
-                      {
-                        type:"ORGANIZATION",
-                        id:"11111-111111-11111-1111",
-                        childs:[
-                        {                                                                                                                                
-                       "id": "a3195915-79a0-4476-9fdf-a8a598206d1b",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "Центру"                                                                                                               
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "5c623e9c-adc4-4897-a2f6-063c92f36f79",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "36a45b7f-f948-44e2-a1b6-2aae83c2d249",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "обчислювальних"                                                                                                       
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "685766b4-713d-4534-8c24-635cd41a0139",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "5bf30fda-a471-453a-a1e7-b5995292e74a",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "наук"                                                                                                                 
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "074c6247-9ef4-4c5d-aa38-4858ead20fe7",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "4c1f5313-33b3-45d8-864c-bf77ec10c57d",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "Рікена"                                                                                                               
-                      }
-
-                        ]
-
-                      },                                                                                                                               
-                      
-                      {                                                                                                                                
-                       "id": "a980744c-89d0-4ad5-9036-b51c2f42eb82",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      }                                                                                                                                
-                     ],                                                                                                                                
-                     "value": "Результати дослідження Центру обчислювальних наук Рікена "                                                              
-                    },                                                                                                                                 
-                    {                                                                                                                                  
-                     "id": "56c32f74-297a-4d02-bebf-bb72c5bb63dc",                                                                                     
-                     "type": "punctuation",                                                                                                            
-                     "value": "("                                                                                                                      
-                    },                                                                                                                                 
-                    {                                                                                                                                  
-                     "id": "5caefd50-7a71-41be-b131-c1f944566c2c",                                                                                     
-                     "type": "subSentence",
-
-                     "childs": [
-                      {
-                          type:"LOCATION",
-                          id:"22222-222222-22222-2222",
-                          childs:[
-                            {                                                                                                                                
-                             "id": "c2d74cf6-c7af-4090-90aa-776e704abd91",                                                                                   
-                             "type": "word",                                                                                                                 
-                             "value": "Японія"                                                                                                               
-                            }
-                          ]
-                          
-                      }                                                                                                                                
-                     ],                                                                                                                                
-                     "value": "Японія"                                                                                                                 
-                    },                                                                                                                                 
-                    {                                                                                                                                  
-                     "id": "e4f6bc19-978a-4384-a889-51c582b9bd68",                                                                                     
-                     "type": "punctuation",                                                                                                            
-                     "value": ")"                                                                                                                      
-                    },                                                                                                                                 
-                    {                                                                                                                                  
-                     "id": "d7d2b8e5-88c3-499a-9085-80c2132b7221",                                                                                     
-                     "type": "subSentence",                                                                                                            
-                     "childs": [                                                                                                                       
-                      {                                                                                                                                
-                       "id": "b4547830-9910-4f37-92c2-5120d0503935",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "ae6716b1-ba1e-40e6-814f-dda0eaed3d91",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "та"                                                                                                                   
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "802d7d87-564b-4beb-8f39-80fbe6f88f74",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "be3ef7b7-153b-44b7-8d0e-cda7ad04e769",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "інших"                                                                                                                
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "7ec4f9c1-84d8-4544-bb58-0bf040c37b3a",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "e3014d42-0083-43fe-af96-53985d81d93f",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "установ"                                                                                                              
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "6bfbee97-38fa-4a98-986a-4d802ad844ec",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "f6f37509-e036-4130-adf1-838a92a530a8",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "опублікували"                                                                                                         
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "fc8f79ec-b734-4302-a152-9aaee0aacec5",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "115b606e-06a6-4289-991f-4a44f1eeaf41",                                                                                   
-                       "type": "number",                                                                                                               
-                       "value": "13"                                                                                                                   
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "39651ab6-1a12-4a81-b7ba-e2b547fa9661",                                                                                   
-                       "type": "whitespace",                                                                                                           
-                       "value": " "                                                                                                                    
-                      },                                                                                                                               
-                      {                                                                                                                                
-                       "id": "9dea1ed3-720e-4e89-b0d9-a36614817a2f",                                                                                   
-                       "type": "word",                                                                                                                 
-                       "value": "жовтня"                                                                                                               
-                      }                                                                                                                                
-                     ],                                                                                                                                
-                     "value": " та інших установ опублікували 13 жовтня"                                                                               
-                    },                                                                                                                                 
-                    {                                                                                                                                  
-                     "id": "f83bafae-b0ba-4ff0-bf21-8da7cbb8732c",                                                                                     
-                     "type": "punctuation",                                                                                                            
-                     "value": "."                                                                                                                      
-                    }                                                                                                                                  
-                   ],                                                                                                                                  
-                   "value": "Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня"                
-                  }                                                                                                                                    
-                 ],                                                                                                                                    
-                 "value": "Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня"                  
-                }                                                                                                                                      
-               ],                                                                                                                                      
-               "value": "Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня"                    
-              } 
+                    document:{
+    "id": "p629bcslr3h-0907f1b4-cb20-4db7-87f7-787d3f77ed6e",
+    "type": "text",
+    "childs": [
+        {
+            "id": "p629bcslr3h-53bf1634-6d1c-42d4-a395-b1e0214681ea",
+            "type": "paragraph",
+            "childs": [
+                {
+                    "id": "p629bcslr3h-e82dfbd9-c6c4-4b09-bc76-a22b01540a97",
+                    "type": "sentence",
+                    "childs": [
+                        {
+                            "id": "p629bcslr3h-b402c63e-4bc3-4732-80c0-26522f499bd7",
+                            "type": "subSentence",
+                            "childs": [
+                                {
+                                    "id": "p629bcslr3h-f536c4a5-068a-438e-be32-d8c33f473023",
+                                    "type": "word",
+                                    "value": "Результати",
+                                    "pos": [
+                                        0,
+                                        9
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-fa85861b-8909-4473-b0b7-4b8929db15b2",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        10,
+                                        10
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-e7e5b6c5-eb65-4cfe-92b6-42b913620c67",
+                                    "type": "word",
+                                    "value": "дослідження",
+                                    "pos": [
+                                        11,
+                                        21
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-df37d905-6284-4e45-98e2-d0bd303ac815",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        22,
+                                        22
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-aee413b6-109a-4028-85f8-deb7ac0e2cf3",
+                                    "type": "word",
+                                    "value": "Центру",
+                                    "pos": [
+                                        23,
+                                        28
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-dfd5df1c-d6ae-4cb7-b02f-7c499607d640",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        29,
+                                        29
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-b2f90589-8041-4cba-98de-bbe887080e1d",
+                                    "type": "word",
+                                    "value": "обчислювальних",
+                                    "pos": [
+                                        30,
+                                        43
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-c8d11c9d-669b-45e4-baf0-71a213f2ca29",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        44,
+                                        44
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-4852c814-bc3a-4d8b-ab4b-0398b4f1732e",
+                                    "type": "word",
+                                    "value": "наук",
+                                    "pos": [
+                                        45,
+                                        48
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-08b84e25-9d85-4fb8-92ee-b3351a10a8a1",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        49,
+                                        49
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-83d32d29-0b7b-4cf5-8000-c0134721980e",
+                                    "type": "word",
+                                    "value": "Рікена",
+                                    "pos": [
+                                        50,
+                                        55
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-1a156fa7-08f0-4b5b-b296-54ecc454359b",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        56,
+                                        56
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                }
+                            ],
+                            "pos": [
+                                0,
+                                56
+                            ],
+                            "value": "Результати дослідження Центру обчислювальних наук Рікена ",
+                            "concept": "SYNTAX",
+                            "selected": false
+                        },
+                        {
+                            "id": "p629bcslr3h-3d18e5d6-6b7f-410f-91d1-c9b2c94b0fb3",
+                            "type": "punctuation",
+                            "value": "(",
+                            "pos": [
+                                57,
+                                57
+                            ],
+                            "concept": "SYNTAX",
+                            "selected": false
+                        },
+                        {
+                            "id": "p629bcslr3h-90eb8cdf-3680-459c-95e3-190e79fb8b89",
+                            "type": "subSentence",
+                            "childs": [
+                                {
+                                    "type": "LOCATION",
+                                    "childs": [
+                                        {
+                                            "id": "p629bcslr3h-a45a5881-38e1-4e77-bf0f-262ae69ba4dd",
+                                            "type": "word",
+                                            "value": "Японія",
+                                            "pos": [
+                                                58,
+                                                63
+                                            ],
+                                            "concept": "SYNTAX",
+                                            "selected": false
+                                        }
+                                    ],
+                                    "concept": "SEMANTIC",
+                                    "id": "p629bcslr3h-aa548abd-1400-426f-b9c0-6ba16717e7a9",
+                                    "pos": [
+                                        58,
+                                        63
+                                    ],
+                                    "value": "Японія",
+                                    "selected": true
+                                }
+                            ],
+                            "pos": [
+                                58,
+                                63
+                            ],
+                            "value": "Японія",
+                            "concept": "SYNTAX",
+                            "selected": false
+                        },
+                        {
+                            "id": "p629bcslr3h-1fcd2ab5-359e-48a8-8101-10c4b56ada59",
+                            "type": "punctuation",
+                            "value": ")",
+                            "pos": [
+                                64,
+                                64
+                            ],
+                            "concept": "SYNTAX",
+                            "selected": false
+                        },
+                        {
+                            "id": "p629bcslr3h-16d20c80-396c-446e-aa7f-12f686adbbe8",
+                            "type": "subSentence",
+                            "childs": [
+                                {
+                                    "id": "p629bcslr3h-1edef1d5-bf8e-43c6-84d1-2507cd392cb1",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        65,
+                                        65
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-9c562923-d8cb-4eea-a312-332bd0507108",
+                                    "type": "word",
+                                    "value": "та",
+                                    "pos": [
+                                        66,
+                                        67
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-e85f2498-b1c3-4907-9dcd-7961f89bff6f",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        68,
+                                        68
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-9dd29e8a-cf77-47fd-bbeb-2ea2c080ff40",
+                                    "type": "word",
+                                    "value": "інших",
+                                    "pos": [
+                                        69,
+                                        73
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-ad2dd29e-385f-4706-8676-a5ccd47f7fba",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        74,
+                                        74
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-d77ee42a-2c59-48b2-8875-71d6fad2fec8",
+                                    "type": "word",
+                                    "value": "установ",
+                                    "pos": [
+                                        75,
+                                        81
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-5af2e98b-a959-4f23-9bd5-7173a1f4f53f",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        82,
+                                        82
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-b10ec627-558c-4240-84eb-4a8f40d3e33b",
+                                    "type": "word",
+                                    "value": "опублікували",
+                                    "pos": [
+                                        83,
+                                        94
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-18721303-bbfd-4048-ba75-2d49bdb230f3",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        95,
+                                        95
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-0f510fd3-f8e6-4d6c-b792-cd8655969f00",
+                                    "type": "number",
+                                    "value": "13",
+                                    "pos": [
+                                        96,
+                                        97
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-c85579a0-0d54-4cd2-9ead-62ff7944d528",
+                                    "type": "whitespace",
+                                    "value": " ",
+                                    "pos": [
+                                        98,
+                                        98
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                },
+                                {
+                                    "id": "p629bcslr3h-afbe6c84-5c92-4bb9-af8f-660d2c637771",
+                                    "type": "word",
+                                    "value": "жовтня",
+                                    "pos": [
+                                        99,
+                                        104
+                                    ],
+                                    "concept": "SYNTAX",
+                                    "selected": false
+                                }
+                            ],
+                            "pos": [
+                                65,
+                                104
+                            ],
+                            "value": " та інших установ опублікували 13 жовтня",
+                            "concept": "SYNTAX",
+                            "selected": false
+                        }
+                    ],
+                    "pos": [
+                        0,
+                        104
+                    ],
+                    "value": "Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня",
+                    "concept": "SYNTAX",
+                    "selected": false
+                }
+            ],
+            "pos": [
+                0,
+                104
+            ],
+            "value": "Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня",
+            "concept": "SYNTAX",
+            "selected": false
+        }
+    ],
+    "pos": [
+        0,
+        104
+    ],
+    "value": "Результати дослідження Центру обчислювальних наук Рікена (Японія) та інших установ опублікували 13 жовтня",
+    "concept": "SYNTAX",
+    "selected": false
+} 
                       }
             },
 

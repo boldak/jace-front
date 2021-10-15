@@ -18,6 +18,9 @@
 			:hide-details="(options.decoration) ? getPropertyValue(options.decoration.hideDetails) : false"
 			:prepend-icon="(options.decoration) ? getPropertyValue(options.decoration.prependIcon) || '' : ''" 
 
+			:rows = "(options.decoration) ? getPropertyValue(options.decoration.rows) || 10 : 10"
+			:class = "(options.decoration) ? getPropertyValue(options.decoration.classes) || '' : ''"
+
 			@input="inputData"
 		
 		></v-textarea>

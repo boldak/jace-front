@@ -1,11 +1,25 @@
 <template>
   <div v-if="items">
-    <v-treeview class="pa-2" :items="items" item-key="key"  open-all open-on-click :open.sync="open" :active.sync="active" transition item-text="" color="transparent" dense>
+    <v-treeview 
+      class="pa-2" 
+      :items="items" 
+      item-key="key"  
+      open-all 
+      open-on-click 
+      :open.sync="open" 
+      :active.sync="active" 
+      transition 
+      item-text="" 
+      activatable
+      dense
+
+    >
       <template slot="prepend" slot-scope="{ item }">
         <div v-if="item.type == 'topic'" class="font-weight-bold"  @click="select(item)">
           {{item.title}}
         </div>
-        <v-layout align-center row v-else :class="itemClass(item)" @click="select(item)">
+        <v-layout align-center row v-else :class="itemClass(item)" @click="select(item)" :style="item.style || ''">
+          <i v-if="item.icon" :class="'pr-1 mdi '+item.icon"></i>
           {{item.title}}
         </v-layout>
       </template>
@@ -47,6 +61,7 @@
         this.event = data.event
         this.items = this.normalize(data.toc)
         this.open = this.items.map( d => d.key)
+   
       },
 
       normalize(data) {
@@ -63,6 +78,7 @@
           })
           return d
         }
+
         return f(data)
       },
 
