@@ -1,7 +1,7 @@
 <template>
   <<< if( jace.mode == "development") { >>>
    <v-container fluid class="pa-1">
-      <v-flex xs12>
+      <v-flex v-if="config.data.embedded.showLang || false" xs12>
         <v-row class="mx-0 px-0 my-2">
           <v-spacer></v-spacer>
           <span class="caption secondary--text px-2 mx-0">{{config.data.embedded.lang}}</span>
@@ -10,8 +10,10 @@
       <v-flex xs12>
         <editor
           v-if="!isProductionMode || !config.data.embedded.readOnly"       
-          :content="config.data.content" 
-          :lang="config.data.embedded.lang" 
+          :content="config.data.content"
+          ref="editor" 
+          :lang="config.data.embedded.lang"
+          :theme="config.data.embedded.theme" 
           :sync="true"
           @change="onUpdateSource"
           style="border:1px solid #999"
@@ -82,6 +84,10 @@
     mixins:[djvueMixin, listenerMixin],
 
     methods:{
+
+      getEditor() {
+        return this.$refs.editor
+      },
 
       onUpdate ({data}) {
         if(isString(data)) this.config.data.content = data;

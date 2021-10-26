@@ -7,6 +7,7 @@
           :class="(row.decoration) ? row.decoration.classes +' '+ ((row.selected) ? ((options.decoration) ? options.decoration.activeClass : 'selected'):'') : ((row.selected) ? ((options.decoration) ? options.decoration.activeClass : 'selected'):'')" 
           :style="(row.decoration) ? row.decoration.style : ''"
         >
+
           <td 
             v-for="(col, colIndex) in row.cols" 
             :key="colIndex" 
@@ -89,7 +90,7 @@ export default {
 
   selectItem(indexes){
     if(this.options){
-        console.log(indexes)
+        // console.log(indexes)
     
         this.options.rows.forEach(row => {
           row.selected = false
@@ -124,16 +125,31 @@ export default {
       },
 
     getPropertyValue(v){
-     
-      return ( (/^\{\{.+\}\}$/gi).test(v) ) 
-        ? get(this, v
-                    .replace("{{","")
-                    .replace("}}","")
-                    .replace("$rowIndex", this.$rowIndex)
-                    .replace("$colIndex", this.$colIndex)
-                    .trim()
-          ) 
-        : v  
+      
+      if((/^\{\{.+\}\}$/gi).test(v))
+        return get(this, v
+                  .replace("{{","")
+                  .replace("}}","")
+                  .replace("$rowIndex", this.$rowIndex)
+                  .replace("$colIndex", this.$colIndex)
+                  .trim()
+        )
+
+      if((/^\$\{.+\}$/gi).test(v)) {
+        
+        let f = `(${v
+                  .replace("${","")
+                  .replace(/}$/gim,"")
+                  .replace(/\$rowIndex/gm, this.$rowIndex)
+                  .replace(/\$colIndex/gm, this.$colIndex)
+                })`
+        
+        
+        return eval(f)
+      }
+      
+
+      return v  
     },
 
     setPropertyValue(v, data){

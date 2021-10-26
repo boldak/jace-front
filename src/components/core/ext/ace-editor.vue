@@ -3,11 +3,16 @@
 </template>
 
 <script>
+import djvueMixin from "@/mixins/core/djvue.mixin.js";
+import listenerMixin from "@/mixins/core/listener.mixin.js";
+
 let range;
 
 export default {
 
   name: "editor",
+
+  mixins:[djvueMixin, listenerMixin],
 
   // template: '<div></div>',
 
@@ -43,8 +48,16 @@ export default {
     insert(snippet) {
       range = range || this.editor.selection.getRange()
       if (range) this.session.replace(range, snippet)
-    }
+    },
 
+    setAnnotations(annotations){
+      this.session.setAnnotations(annotations)
+    },
+
+    clearAnnotations(){
+      this.session.clearAnnotations()
+    }
+    
   },
 
   watch: {
@@ -75,12 +88,16 @@ export default {
     editor.setTheme('ace/theme/' + theme);
     session.setValue(vm.content, 1);
     session.on('change', () => {
+      vm.emit('editor-change-content', session.getValue(), vm);
       vm.$emit('change', session.getValue());
     });
 
     editor.selection.on("changeSelection", () => {
       range = vm.editor.selection.getRange().clone();
     })
+
+    
+    
     this.$emit("mount", this)
   }
 
