@@ -2,6 +2,7 @@ import { isFunction, isArray, find, last, drop, findIndex, take, flatten } from 
 import Diff from "@netilon/differify"
 import * as se from "./sentence-extractor/index.js"
 import { v4 as uuid } from 'uuid';
+import tinycolor from "./tinycolor.js"
 
 
 let forEachNode = (node, beforeAction, afterAction) => {
@@ -456,6 +457,7 @@ let createAnnotation = (tom, annotation) => {
 
 let buildTom = opts => extractSentences(opts.text)
     .then(tom => {
+        // console.log(JSON.stringify(tom, null," "))
         if (opts.entities) {
             opts.entities.forEach(e => {
                 createAnnotation(tom, e)
@@ -504,6 +506,7 @@ export {
     tokenize,
     extractSentences,
     buildTom,
-    buildText
+    buildText,
+    tinycolor
 
 }

@@ -20,13 +20,14 @@ const res = sample => {
     })
 
     sample = sample
-        .split(/(\r\n)+|(\n)+/gm)
+        .replace(/(\r\n)+/gm,"\n")
+        .split(/\n/gm)
         .filter(l => l)
-        // .map(l => l.trim())
-        .filter(l => l)
+        .map(l => l.trim())
+        // .filter(l => l)
         .join("\n")
-        .replace(/\s{2,}/gm, " ")
-
+        // .replace(/\s{2,}/gm, " ")
+// console.log(sample)   
 
     let createStructure = tokens => {
 
@@ -140,7 +141,7 @@ const res = sample => {
             },
 
             endOfParagraph: item => {
-                p.value = p.childs.map(item => item.value).join("")
+                p.value = p.childs.map(item => item.value).join("")+"\n"
                 text.childs.push(p)
                 p.pos.push(p.pos[0] + p.value.length - 1)
 

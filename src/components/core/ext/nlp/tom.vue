@@ -3,7 +3,7 @@
         :id="node.id" 
         :is="(node.type == 'text') ? 'text-node' : (node.type == 'paragraph') ? 'paragraph-node' : (node.type == 'DIFF') ? 'diff': (node.type == 'BRANCH') ? 'branch' : 'node'" 
         class="tom no-select" 
-        :class="`${(selectable) ? 'selectable' : ''} ${(!!node.childs) ? 'node-container': ''} ${(selected) ? 'selected' : ''} ${classes}`"
+        :class="`${node.type} ${(selectable) ? 'selectable' : ''} ${(!!node.childs) ? 'node-container': ''} ${(selected) ? 'selected' : ''} ${classes}`"
         :style="nodeStyle"
       >
           <span
