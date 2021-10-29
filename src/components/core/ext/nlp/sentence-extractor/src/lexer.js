@@ -23,7 +23,7 @@ const res = sample => {
         .replace(/(\r\n)+/gm,"\n")
         .split(/\n/gm)
         .filter(l => l)
-        .map(l => l.trim())
+        //.map(l => l.trim().replace(/\ {2,}/gm, " "))
         // .filter(l => l)
         .join("\n")
         // .replace(/\s{2,}/gm, " ")
@@ -141,7 +141,7 @@ const res = sample => {
             },
 
             endOfParagraph: item => {
-                p.value = p.childs.map(item => item.value).join("")+"\n"
+                p.value = p.childs.map(item => item.value).join("")
                 text.childs.push(p)
                 p.pos.push(p.pos[0] + p.value.length - 1)
 
