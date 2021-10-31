@@ -20,5 +20,6 @@ export default {
     "daterangeInput": () => import("./date-range.vue"),
     "dateInput": () => import("./date.vue"),
     "timelineInput": () => import("./timeline.vue"),
-       
+    "editorInput":  () => import("./editor.vue"),
+    "fileInput":  () => import("./file.vue"), 
 }

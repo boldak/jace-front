@@ -1,6 +1,6 @@
 <template>
 	<div v-if="options && getPropertyValue">
-		<v-menu offset-y >
+		<v-menu offset-y close-on-click>
 	        <template v-slot:activator="{ on, attrs }">
 	          <v-btn    
 	            v-bind="attrs"
@@ -33,7 +33,7 @@
 	          <v-list-item
 	            v-for="(c, c_index) in getPropertyValue(options.data.items)"
 	            :key="c_index"
-	            @click.stop="resolve(c)"
+	            @click="resolve(c)"
 	          >
 	            <v-list-item-icon v-if="!!c.icon" class="mr-1">
 	              <v-icon v-text="c.icon"></v-icon>

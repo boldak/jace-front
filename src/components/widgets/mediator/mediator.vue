@@ -22,6 +22,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import axios from "axios";
+import * as YAML from "js-yaml/dist/js-yaml.mjs"
 
 <<<
 if (jace.mode == "development") { >>>
@@ -113,6 +114,24 @@ export default {
             res
         },
 
+        upload: (url, file, data) => {
+          let formData = new FormData();
+          if(data) formData.append("data", JSON.stringify(data))
+          formData.append('file', file);
+          return axios.post(url,
+            formData, 
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+          )
+        },
+
+        download: url => {
+          this.openUrl(url,"_blank")
+        },
+
         on: this.on,
         off: this.off,
         emit: (event, data) => { this.emit(event, this, data) },
@@ -125,6 +144,7 @@ export default {
         _: _,
         moment: moment,
         axios: axios,
+        YAML: YAML,
 
         Cookie: this.$cookie,
 
@@ -197,6 +217,8 @@ export default {
               let moment = this.api.moment;
               let _ = this.api._;
               let Cookie = this.api.Cookie;
+              let YAML = this.api.YAML;
+              let axios = this.api.axios;
 
               ${this.config.data.script} }
             )
