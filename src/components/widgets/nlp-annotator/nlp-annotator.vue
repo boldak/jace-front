@@ -238,7 +238,7 @@
             classes(node){ 
               return   (node)
                         ?  (self.options && self.options.decoration.classes) 
-                                ? self.options.decoration.classes[node.type] 
+                                ? compile(self.options.decoration.classes[node.type], {node} ) 
                                 : null
                         : null        
             },
@@ -246,7 +246,7 @@
             color(node){
               return   (node)
                         ?  (self.options && self.options.decoration.color) 
-                                ? self.options.decoration.color[node.type] 
+                                ? compile(self.options.decoration.color[node.type], {node} )  
                                 : null
                         : null        
             },

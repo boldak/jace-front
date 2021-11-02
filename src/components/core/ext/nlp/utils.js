@@ -52,8 +52,13 @@ let replaceNodeByContent = (tom, node) => {
 }
 
 let getParent = (node, root) => {
+    // return findNode(root, n => n.childs && find(n.childs, item => diff.compare(item, node).status == "EQUAL"))
+    return findNode(root, n => n.childs && find(n.childs, item => item.id == node.id))
+    
+
+
     // if(root){
-    return findNode(root, n => n.childs && find(n.childs, item => diff.compare(item, node).status == "EQUAL"))
+    // return findNode(root, n => n.childs && find(n.childs, item => diff.compare(item, node).status == "EQUAL"))
     // } else {
     //   return node._tom_parent
     // }

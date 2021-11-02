@@ -43,6 +43,10 @@ let abbreviations = [
             label:"endOfSubSentence",
             test: value => /[\,\-\:\;\.\!\?\n\(\)\[\]\{\}\"]/gi.test(value)
         },
+        // {
+        //     label:"endOfSubSentence",
+        //     test: value => /[\,\;\.\!\?\n"]/gi.test(value)
+        // },
         {
             label:"endOfSentence",
             test: value => /[\.\!\?\n]/gi.test(value)
