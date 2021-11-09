@@ -22,7 +22,22 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import axios from "axios";
+
+import * as ast from "yaml-ast-parser"
+
+
+import Ajv from "ajv"
+const ajv = new Ajv({ allErrors: true })
+
+import ajvErrors from "ajv-errors"
+
+ajvErrors(ajv /*, {singleError: true} */ )
+
+
 import * as YAML from "js-yaml/dist/js-yaml.mjs"
+
+
+import Validator from "@/components/core/ext/molfar/schema-validator/index.js"
 
 <<<
 if (jace.mode == "development") { >>>
@@ -145,6 +160,9 @@ export default {
         moment: moment,
         axios: axios,
         YAML: YAML,
+        SchemaValidator: Validator,
+        ajv,
+        ast,
 
         Cookie: this.$cookie,
 
@@ -219,6 +237,10 @@ export default {
               let Cookie = this.api.Cookie;
               let YAML = this.api.YAML;
               let axios = this.api.axios;
+              let ast = this.api.ast;
+              let ajv = this.api.ajv;
+              let SchemaValidator = this.api.SchemaValidator
+
 
               ${this.config.data.script} }
             )

@@ -16,6 +16,7 @@
           :theme="config.data.embedded.theme" 
           :sync="true"
           @change="onUpdateSource"
+          @mount = "onMountEditor"
           style="border:1px solid #999"
         > 
         </editor>
@@ -103,6 +104,12 @@
         this.emit(event, this.config.data.content, this) 
       },
 
+      onMountEditor (instance) {
+        // console.log("SEND mount-editor")
+        this.emit("mount-editor", instance, this)
+        this.$emit("init")
+      },
+
 <<< if( jace.mode == "development") { >>>
       onReconfigure (widgetConfig) {
        return this.$dialogManager.showAndWait(EduEditorConfig, {width:"90%"},{config:widgetConfig})
@@ -123,7 +130,7 @@
 
     mounted(){
       // console.log(this.config)
-       this.$emit("init")
+       // this.$emit("init")
     }
 
   }

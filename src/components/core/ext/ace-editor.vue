@@ -96,9 +96,9 @@ export default {
       range = vm.editor.selection.getRange().clone();
     })
 
-    
-    
+    // console.log("MOUNTED")
     this.$emit("mount", this)
+    // this.$emit("init", this)
   }
 
 
