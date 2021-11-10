@@ -32,7 +32,9 @@
 
 
       let mode = window.ace.require("ace/mode/"+ this.lang);
+      console.log("created ",mode)
       mode = (mode) ? mode.Mode : mode;  
+      
       let theme = window.ace.require("ace/theme/tomorrow");
       
       if(!mode){
@@ -66,6 +68,8 @@
           "ace_highlight"
       );     
       
+      this.$emit("mount")
+
       // elm.html(highlighted.html)
 // var session = vm.session = editor.getSession();
 // editor.$blockScrolling = Infinity;
@@ -83,6 +87,7 @@
       
       content: function (newContent) {
         let mode = window.ace.require("ace/mode/"+ this.lang);
+        console.log(mode)
         mode = (mode) ? mode.Mode : mode;  
         let theme = window.ace.require("ace/theme/tomorrow");
         

@@ -26,6 +26,7 @@
           :content="config.data.content" 
           :lang="config.data.embedded.lang" 
           :style="config.data.embedded.style"
+          @mount = "onMountEditor"
         >
         </highlight>
       
