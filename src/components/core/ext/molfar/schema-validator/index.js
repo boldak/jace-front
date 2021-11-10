@@ -6,6 +6,9 @@ import * as ast from "yaml-ast-parser"
 import Ajv from "ajv"
 const ajv = new Ajv({ allErrors: true })
 
+import * as addFormats from "ajv-formats"
+addFormats(ajv)
+
 import ajvErrors from "ajv-errors"
 
 ajvErrors(ajv)
