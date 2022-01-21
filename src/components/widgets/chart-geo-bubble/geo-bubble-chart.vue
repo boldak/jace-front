@@ -4,7 +4,9 @@ import getLocations from "./locations.js"
 // import geo_util from "./utils.js"
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue"
 import { find, min, max } from "lodash"
-import echarts from "echarts/dist/echarts-en"
+// import echarts from "echarts/dist/echarts.esm" //"echarts/dist/echarts-en"
+
+import * as echarts from 'echarts'
 
 export default {
 

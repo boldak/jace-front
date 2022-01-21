@@ -3,7 +3,8 @@ import getGeoJson from "./maps.js"
 import geo_util from "./utils.js"
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue"
 import { isNull, min, max, find } from "lodash"
-import echarts from "echarts/dist/echarts-en"
+// import echarts from "echarts/dist/echarts.esm" // dist/echarts-en"
+import * as echarts from 'echarts'
 
 export default {
 

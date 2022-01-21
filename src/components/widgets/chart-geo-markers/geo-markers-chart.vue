@@ -2,9 +2,9 @@
 import getGeoJson from "./maps.js";
 import echartWidget from "@/components/widgets/echart-widget/echart-widget.vue";
 import  { extend, flattenDeep, min, max } from "lodash"
+import * as echarts from 'echarts'
 
-
-import echarts from "echarts/dist/echarts-en"
+// import echarts from "echarts/dist/echarts.esm"  //"echarts/dist/echarts-en"
 export default {
 
   extends: echartWidget,

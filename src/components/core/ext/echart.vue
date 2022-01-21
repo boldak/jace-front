@@ -3,10 +3,12 @@
 </template>
 <script>
 
-import echarts from "echarts/dist/echarts-en"
+import * as echarts from 'echarts'
 
-import registerWordCloud from "@/modules/echarts-wordcloud"
-registerWordCloud(echarts)
+// import echarts from "echarts/dist/echarts.esm"//"echarts/dist/echarts-en"
+
+// import registerWordCloud from "@/modules/echarts-wordcloud"
+// registerWordCloud(echarts)
 
 import listenerMixin from "@/mixins/core/listener.mixin.js"
 
