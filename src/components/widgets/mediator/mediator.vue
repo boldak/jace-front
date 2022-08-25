@@ -22,7 +22,7 @@
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
 import axios from "axios";
-
+import {v4} from "uuid"
 import * as ast from "yaml-ast-parser"
 
 
@@ -111,7 +111,8 @@ export default {
       window._ = window._ || _
       window.axios = window.axios || axios
       window.moment = window.moment || moment
-      
+      window.uuid = window.uuid || v4
+
       this.api = {
         selectWidgets: (filter) => {
           filter = filter || (() => true);

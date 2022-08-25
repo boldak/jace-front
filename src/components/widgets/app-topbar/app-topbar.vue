@@ -20,12 +20,30 @@
         v-bind="props"
       ></v-img>
     </template>
+    
+    <div>
+      <img
+          v-if="options.decoration && options.decoration.appIcon"
+          :src= "options.decoration.appIcon.src"
+          :class="options.decoration.appIcon.class || ''" 
+          :style="options.decoration.appIcon.style || ''"
+      
+      ></img>
+    </div>
 
     <div>  
-      <div class="display-2 font-weight-light">
+      <div 
+        :class="(options.decoration && options.decoration.title) ? options.decoration.title.class || 'display-2 font-weight-light white--text' : 'display-2 font-weight-light white--text'"
+        :style="(options.decoration && options.decoration.title) ? options.decoration.title.style || '' : ''"
+      
+      >
         {{options.title}}
+      
       </div>
-      <div class="pl-1 headline font-weight-light">
+      <div 
+        :class="(options.decoration && options.decoration.subTitle) ? options.decoration.subTitle.class || 'pl-1 headline font-weight-light white--text' : 'pl-1 headline font-weight-light white--text'"
+        :style="(options.decoration && options.decoration.subTitle) ? options.decoration.subTitle.style || '' : ''"
+      >
         {{options.subTitle}}
       </div>  
     </div>
@@ -33,6 +51,7 @@
     <template v-slot:extension>
       
     <v-spacer></v-spacer>
+
     <span v-for="(page, pageIndex) in options.references" :key="pageIndex">
       <router-link v-if="page.id" :to="`/${page.id || ''}`" class="white--text" style="text-decoration: none; padding: 0 0.5em;">
         {{page.title}}

@@ -89,6 +89,7 @@ export default {
     },
 
     setData(data){
+      // console.log("IG.setData",data)
       this.data = data
       this.onUpdate({data:null})
     },
@@ -135,6 +136,7 @@ export default {
         this.options = data  
       }
       let temp = this.options
+      // console.log("IG ONUPDATE", data, mode, extend({},temp), this)
       this.options = null
       // console.log("update", temp, this)
       this.$nextTick(() => { this.options = temp})

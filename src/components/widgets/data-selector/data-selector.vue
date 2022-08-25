@@ -1,8 +1,64 @@
 <template>
   <div>
-    <v-autocomplete v-model="selection" :items="items" :filter="filter" color="primary" outlined dense :label="config.options.widget.label" :multiple="config.options.widget.multiple" :clearable="config.options.widget.multiple" v-if="source" item-text="title" :item-value="item => item" class="body-1" :search-input.sync="search">
-    </v-autocomplete>
-  </div>
+    <div v-if="!config.options.widget.chips">
+      <v-autocomplete 
+        v-model="selection" 
+        :items="items" 
+        :filter="filter" 
+        color="primary" 
+        outlined 
+        dense 
+        :label="config.options.widget.label" 
+        :multiple="config.options.widget.multiple" 
+        :clearable="config.options.widget.multiple" 
+        v-if="source" 
+        item-text="title" 
+        :item-value="item => item" 
+        class="body-1" 
+        :search-input.sync="search"
+      >
+        
+      </v-autocomplete>
+    </div>
+
+    <div v-if="config.options.widget.chips">
+      <v-autocomplete
+        v-model="selection" 
+        :items="items" 
+        :filter="filter" 
+        color="primary" 
+        outlined 
+        dense 
+        :label="config.options.widget.label" 
+        :multiple="config.options.widget.multiple" 
+        :clearable="config.options.widget.multiple" 
+        v-if="source" 
+        item-text="title" 
+        :item-value="item => item" 
+        class="body-1" 
+        :search-input.sync="search"
+        chips
+      >
+        
+        <template v-slot:selection="data">
+          <v-chip
+            style="margin:0.2em"
+            v-bind="data.attrs"
+            :input-value="data.item.title"
+            close
+            outlined 
+            label
+            color="primary--text"
+            @click:close="remove(data.item)"
+          >
+            {{ data.item.title }}
+          </v-chip>
+        </template>
+      </v-autocomplete>  
+
+    </div>
+  </div>   
+
 </template>
 <script>
 import djvueMixin from "@/mixins/core/djvue.mixin.js";

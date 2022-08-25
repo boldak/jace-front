@@ -32,6 +32,12 @@
           </v-flex>
           
           <v-switch
+            label="Chips decoration"
+            v-model="config.options.widget.chips"
+            color="primary"
+          ></v-switch>
+
+          <v-switch
             label="Multiple selection"
             v-model="config.options.widget.multiple"
             color="primary"
