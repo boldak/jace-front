@@ -10,6 +10,7 @@
         v-model="drawer"
         height="inherit"
         :style = "drawerDisplay"
+        width = "25%"
 
       >
                 
