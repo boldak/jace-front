@@ -110,9 +110,36 @@ export default {
         this.emit(event, this.options, sender)
       },
 
+    // getPropertyValue(v){
+    //   return ( (/^\{\{.+\}\}$/gi).test(v) ) ? get(this, v.replace("{{","").replace("}}","").trim()) : v  
+    // },
+
+
     getPropertyValue(v){
-      return ( (/^\{\{.+\}\}$/gi).test(v) ) ? get(this, v.replace("{{","").replace("}}","").trim()) : v  
+      
+      if((/^\{\{.+\}\}$/gi).test(v))
+        return get(this, v
+                  .replace("{{","")
+                  .replace("}}","")
+                  .trim()
+        )
+
+      if((/^\$\{.+\}$/gi).test(v)) {
+        
+        let f = `(${v
+                  .replace("${","")
+                  .replace(/}$/gim,"")
+                })`
+        
+        
+        return eval(f)
+      }
+      
+
+      return v  
     },
+
+
 
     setPropertyValue(v, data){
       if((/^\{\{.+\}\}$/gi).test(v)) {
@@ -122,9 +149,11 @@ export default {
       }
     },
 
+
+
     
     onUpdate({ data }, mode) {
-      // console.log(data, mode)
+      // console.log("ONUPDATE WIDGET", this, data, mode)
       if( mode ){
         if (mode.override) {
           set(this, mode.override, data)
@@ -135,7 +164,7 @@ export default {
       } else {
         this.options = data  
       }
-      let temp = this.options
+      let temp = extend({},this.options)
       // console.log("IG ONUPDATE", data, mode, extend({},temp), this)
       this.options = null
       // console.log("update", temp, this)
