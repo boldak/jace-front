@@ -24,6 +24,7 @@ import listenerMixin from "@/mixins/core/listener.mixin.js";
 import axios from "axios";
 import {v4} from "uuid"
 import * as ast from "yaml-ast-parser"
+import activityDetector from 'activity-detector'
 
 
 import Ajv from "ajv"
@@ -112,6 +113,7 @@ export default {
       window.axios = window.axios || axios
       window.moment = window.moment || moment
       window.uuid = window.uuid || v4
+      window.activityDetector = window.activityDetector || activityDetector
 
       this.api = {
         selectWidgets: (filter) => {

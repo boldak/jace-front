@@ -9,7 +9,7 @@
 			:required="(options.data) ? getPropertyValue(options.data.required) : false"  
 			:clearable="(options.data) ? getPropertyValue(options.data.clearable) : false"
 			:multiple="(options.data) ? getPropertyValue(options.data.multiple) : false" 
-			
+			:auto-select-first = "(options.data) ? getPropertyValue(options.data.autoSelectFirst) : false"
 
 			:items="(options.data) ? getPropertyValue(options.data.items) || [] : [] " 
 			:item-text = "(options.data) ? getPropertyValue(options.data['item-text']) || '' : '' "

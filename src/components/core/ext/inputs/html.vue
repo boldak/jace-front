@@ -1,6 +1,6 @@
 <template>
-	<span v-if="options && getPropertyValue" v-html="getPropertyValue(settings.value)"> 
-	</span>
+	<div v-if="options && getPropertyValue" v-html="getPropertyValue(settings.value)"> 
+	</div>
 </template>	
 
 <script>

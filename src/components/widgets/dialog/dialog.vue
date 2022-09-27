@@ -133,8 +133,32 @@ export default {
         this.emit(event, this.opts, sender)
       },
 
+    // getPropertyValue(v){
+    //   return ( (/^\{\{.+\}\}$/gi).test(v) ) ? get(this, v.replace("{{","").replace("}}","").trim()) : v  
+    // },
+
     getPropertyValue(v){
-      return ( (/^\{\{.+\}\}$/gi).test(v) ) ? get(this, v.replace("{{","").replace("}}","").trim()) : v  
+      
+      if((/^\{\{.+\}\}$/gi).test(v))
+        return get(this, v
+                  .replace("{{","")
+                  .replace("}}","")
+                  .trim()
+        )
+
+      if((/^\$\{.+\}$/gi).test(v)) {
+        
+        let f = `(${v
+                  .replace("${","")
+                  .replace(/}$/gim,"")
+                })`
+        
+        
+        return eval(f)
+      }
+      
+
+      return v  
     },
 
     setPropertyValue(v, data){
@@ -158,7 +182,7 @@ export default {
       } else {
         this.opts = sets.data || this.opts  
       }
-      let temp = this.opts
+      let temp = extend({},cloneDeep(this.opts))
       this.opts = null
       this.$nextTick(() => { this.opts = temp})
     },

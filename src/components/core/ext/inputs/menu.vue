@@ -33,6 +33,7 @@
 	          <v-list-item
 	            v-for="(c, c_index) in getPropertyValue(options.data.items)"
 	            :key="c_index"
+	            :disabled = "(c.disabled) ? getPropertyValue(c.disabled) : false"
 	            @click="resolve(c)"
 	          >
 	            <v-list-item-icon v-if="!!c.icon" class="mr-1">

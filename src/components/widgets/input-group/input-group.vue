@@ -6,17 +6,17 @@
     </pre>  
      -->
     <div v-if="options" 
-      :class="(options.decoration) ? options.decoration.classes : ''" 
-      :style="(options.decoration) ? options.decoration.style : ''"
+      :class="(options.decoration) ? getPropertyValue(options.decoration.classes) : ''" 
+      :style="(options.decoration) ? getPropertyValue(options.decoration.style) : ''"
     >
 
       <div v-for="(row, rowIndex) in options.rows" :key="rowIndex" 
-        :class="(row.decoration) ? row.decoration.classes : ''" 
-        :style="(row.decoration) ? row.decoration.style : ''"
+        :class="(row.decoration) ? getPropertyValue(row.decoration.classes) : ''" 
+        :style="(row.decoration) ? getPropertyValue(row.decoration.style) : ''"
       >
         <component v-if="components[`${col.type}Input`]" v-for="(col, colIndex) in row.cols" :key="colIndex" 
-          :class="(col.decoration) ? col.decoration.classes : ''" 
-          :style="(col.decoration) ? col.decoration.style : ''"
+          :class="(col.decoration) ? getPropertyValue(col.decoration.classes) : ''" 
+          :style="(col.decoration) ? getPropertyValue(col.decoration.style) : ''"
           :is="`${col.type}Input`" 
           :options="col"
           :getPropertyValue="getPropertyValue"
