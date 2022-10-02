@@ -10,22 +10,22 @@
       <v-flex xs12>
         <editor
           v-if="!isProductionMode || !config.data.embedded.readOnly"       
-          :content="config.data.content"
+          :content="(config) ? config.data.content : ' '"
           ref="editor" 
-          :lang="config.data.embedded.lang"
-          :theme="config.data.embedded.theme" 
+          :lang="(config) ? config.data.embedded.lang : ''"
+          :theme="(config) ? config.data.embedded.theme : ''" 
           :sync="true"
           @change="onUpdateSource"
           @mount = "onMountEditor"
-          style="border:1px solid #999"
+          :style="(config) ? config.data.embedded.style : ''"
         > 
         </editor>
         
         <highlight
           v-else 
-          :content="config.data.content" 
-          :lang="config.data.embedded.lang" 
-          :style="config.data.embedded.style"
+          :content="(config) ? config.data.content : ' '" 
+          :lang="(config) ? config.data.embedded.lang : ''" 
+          :style="(config) ? config.data.embedded.style : ''"
           @mount = "onMountEditor"
         >
         </highlight>
@@ -126,7 +126,7 @@
       this.config.data.content = this.config.data.content || " "
       this.config.data.embedded.button = (this.config.data.embedded.button) ? 
         (isArray(this.config.data.embedded.button)) ? this.config.data.embedded.button : [this.config.data.embedded.button]
-        : null  
+        : null 
     },
 
     mounted(){

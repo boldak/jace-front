@@ -1,5 +1,8 @@
 <template>
-  <div class="editor"></div>
+  <div 
+    :class="editorClass" 
+    :style="editorStyle"
+  ></div>
 </template>
 
 <script>
@@ -33,6 +36,14 @@ export default {
     sync: {
       type: Boolean,
       default: true
+    },
+    "editorClass":{
+      type: String,
+      default: 'editor'
+    },
+    "editorStyle":{
+      type: String,
+      default: ''
     }
   },
 
