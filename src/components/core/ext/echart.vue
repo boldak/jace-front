@@ -77,6 +77,31 @@ export default {
         },
         rule: () => true
       })
+
+     this.on({
+        event: "update-dialog-view",
+        callback: () => {
+          // console.log(this._uid, "UPDATE-DIALOG-VIEW")
+         setTimeout(()=>{
+         // this.$nextTick(()=>{ 
+            // console.log("Slide start",this._uid)
+            // if(!this.chart && this.$el.clientWidth > 0){
+            //   this.initChart(this.options)
+            //   return
+            //   console.log("Create chart", _uid)
+            //   // this.chart = echarts.init(this.$el, null, { height: this.height,  width: "auto" })
+
+            // }
+            if (this.chart && this.options)
+              // console.log("Slide start", this._uid, this.options) 
+              this.chart.setOption(this.options, true)
+              this.chart.resize()
+              // console.log(this._uid, "RESIZE",this.$el.clientWidth)
+          }, 10)   
+        },
+        rule: () => true
+      })
+
     }
   },
 

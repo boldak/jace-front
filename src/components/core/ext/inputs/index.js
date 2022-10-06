@@ -22,4 +22,5 @@ export default {
     "timelineInput": () => import("./timeline.vue"),
     "editorInput":  () => import("./editor.vue"),
     "fileInput":  () => import("./file.vue"), 
+    "chartInput":  () => import("./chart.vue"),
 }

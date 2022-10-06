@@ -1,6 +1,5 @@
 <template>
 	<div v-if="options && getPropertyValue">
-		{{getPropertyValue(options.data.value)}}
 		<v-switch 
 			:label="(options.data) ? getPropertyValue(options.data.label) : ''" 
 			:v-model="(options.data && options.data.value) ? getPropertyValue(options.data.value) : null" 

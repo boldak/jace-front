@@ -8,10 +8,15 @@
   </div>
 </template>
 <script>
-import Vue from "vue"
-import { findIndex, extend, clone, cloneDeep } from "lodash"
-export default {
 
+import Vue from "vue"
+
+import listenerMixin from "@/mixins/core/listener.mixin.js"
+
+import { findIndex, extend, clone, cloneDeep } from "lodash"
+
+export default {
+  mixins: [listenerMixin],
   data() {
     return {
       items: [],
@@ -69,8 +74,19 @@ export default {
         }
 
         this.items.push(component)
-
+        // if(component.updateForce){
+        // let temp = cloneDeep(component.props)
+        //  component.props = {}   
+        //   setTimeout(() => {
+        //     component.props = temp
+        //   }, 10)
+        // // } 
+        setTimeout(() => {
+          this.emit("update-dialog-view")
+        }, 20)
         // console.log(component)
+
+        // console.log(component.props)
 
       })
 

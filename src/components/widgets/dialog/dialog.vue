@@ -81,6 +81,7 @@ import components from "@/components/core/ext/inputs"
 
 import moment from "moment"
 
+import { last } from "lodash"
 
 export default {
 
@@ -187,11 +188,22 @@ export default {
       this.$nextTick(() => { this.opts = temp})
     },
 
+    updateForce(){
+      clnsole.log("updateForce")
+      let temp = extend({},cloneDeep(this.opts))
+      this.opts = null
+      this.$nextTick(() => { this.opts = temp})
+    },
+
     preview(){
-        return this.$dialogWidgetManager.showAndWait(selfComponent, this.opts.dialog, extend(this.opts,{activated: true}) )
+        let dlg = this.$dialogWidgetManager.showAndWait(selfComponent, this.opts.dialog, extend(this.opts,{activated: true}) )
+        
+        return dlg
     },
 
     showAndWait(sets, mode){
+        
+        
         if(sets){
         
           if( mode ){
@@ -208,11 +220,13 @@ export default {
         }
         // console.log(this.config, this.opts)
         this.opts._dlgId = v4() 
-        return this.$dialogWidgetManager.showAndWait(selfComponent, this.opts.dialog, extend(cloneDeep(this.opts),{activated: true}) )
+        let dlg = this.$dialogWidgetManager.showAndWait(selfComponent, this.opts.dialog, extend(cloneDeep(this.opts),{activated: true}) )
                 .then( res => {
                   this.opts.activated = false
                   return res
                 })
+
+        return dlg        
     },
 
     close(){
@@ -249,6 +263,7 @@ export default {
         if(this.submit) this.submit(null)  
       }
     })
+    
   },
 
   mounted() { this.$emit("init") },
