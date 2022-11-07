@@ -98,6 +98,7 @@ import QuestionWidget from "./question/question.type.js"
 import FormReportWidget from "./form-report/form-report.type.js"
 import FormResponseWidget from "./form-response/form-response.type.js"
 
+import FileViewerWidget from "./file-viewer/file-viewer.type.js"
 
 
 export default {
@@ -188,8 +189,9 @@ export default {
 	"form-widget": FormWidget,
 	"question-widget": QuestionWidget,
 	"form-report-widget": FormReportWidget,
-	"form-response-widget": FormResponseWidget
+	"form-response-widget": FormResponseWidget,
 
+	"file-viewer-widget": FileViewerWidget,
 }	
 
 

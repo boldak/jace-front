@@ -244,7 +244,8 @@ export default {
               "list-widget",
               "dialog-widget",
               "chart-low-level-widget",
-              "timeline-widget"
+              "timeline-widget",
+              "file-viewer-widget"
             ]
           },
 
