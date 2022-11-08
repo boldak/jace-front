@@ -14,7 +14,7 @@
     "@turf/turf": "^6.3.0",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-service": "^5.0.8",
     "activity-detector": "^3.0.0",
     "ajv": "^8.6.3",
     "ajv-errors": "^3.0.0",
