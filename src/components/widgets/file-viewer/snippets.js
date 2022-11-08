@@ -14,7 +14,9 @@ export default {
     
     data:{
         source:"embedded",
-        embedded:{}
+        embedded:{
+            data:"data"
+        }
     }
 
 } 

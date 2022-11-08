@@ -1,22 +1,23 @@
 <template>
-  <div>
-    <div> File Viewer Config </div>
-    <pre class="caption">${config}</pre>
-    <div> File Viewer Options </div>
-    <pre class="caption">${options}</pre>
-  </div>  
+    <div id="webviewer" ref="viewer"></div>
 </template>
-
 <script>
-
 import djvueMixin from "@/mixins/core/djvue.mixin.js";
 import listenerMixin from "@/mixins/core/listener.mixin.js";
+import isString from "lodash"
 
-<<< if( jace.mode == "development") { >>>
-  
-  import configDialog from "./file-viewer-config.vue";
+import { ref, onMounted } from "vue";
+import WebViewer from "@pdftron/webviewer";
 
-<<< } >>> 
+<<< 
+if (jace.mode == "development") { 
+>>>
+
+    import configDialog from "./file-viewer-config.vue";
+
+<<<
+} 
+>>>
 
 
 
@@ -24,62 +25,90 @@ import moment from "moment"
 
 export default {
 
-  name: "file-viewer-widget",
+    name: "file-viewer-widget",
 
-  icon: "mdi-file-document-box-outline",
+    icon: "mdi-file-document-box-outline",
 
-  mixins: [djvueMixin, listenerMixin],
+    mixins: [djvueMixin, listenerMixin],
 
+    props: ["config"],
 
-  data: () => ({
-  }),
+    data: () => ({
+        options: null,
+        instance: null
+    }),
 
-  watch: {},
-
-  methods: {
-
-    onValidate(data,options){
-      if( isString(data) ) {
-          try {
-            data = JSON.parse(data)
-            return data
-          } catch (e) {
-            return { error: e.toString() }
-          }
+    watch: {
+        options: {
+            handler(newValue, oldValue) {
+                if (newValue && newValue.url && this.instance) {
+                  // if(oldValue && oldValue.url != newValue.url)
+                    this.instance.loadDocument(newValue.url)
+                }
+            },
+            deep: true
         }
-      return data  
     },
 
+    methods: {
 
-    onUpdate({ data }) {
-      if (!data) {
-        this.opts = []
-        this.options = null
-        return
-      }
-      // console.log("data", data)
-      // this.opts = this.normalizeOptions(data)
-      this.options = data
+        // onValidate(data,options){
+        //   if( isString(data) ) {
+        //       try {
+        //         data = JSON.parse(data)
+        //         return data
+        //       } catch (e) {
+        //         return { error: e.toString() }
+        //       }
+        //     }
+        //   return data  
+        // },
+
+
+        onUpdate({ data }) {
+            console.log("onUpdate", data)
+            if (!data) {
+                this.options = null
+                return
+            }
+            // console.log("data", data)
+            // this.opts = this.normalizeOptions(data)
+            this.options = null
+            this.$nextTick(() => {
+              this.options = data  
+            })
+        },
+
+
+        <<<
+        if (jace.mode == "development") { 
+        >>>
+
+            onReconfigure(widgetConfig) {
+                    return this.$dialogManager.showAndWait(configDialog, { width: "90%" }, { config: widgetConfig })
+                },
+
+        <<<
+        } >>>
+
+
+
     },
 
-
-<<< if( jace.mode == "development") { >>>
-
-    onReconfigure(widgetConfig) {
-      return this.$dialogManager.showAndWait(configDialog, { width: "90%" }, { config: widgetConfig })
+    created() {
+        this.options = this.config.data.embedded || null
+        console.log("created", this.options)
     },
 
-<<< } >>>    
+    async mounted() {
+        const path = `modules/webviewer`
+        this.instance = await WebViewer({
+            path,
+            // initialDoc: newValue.url, // replace with your own PDF file
+        }, this.$refs.viewer)
 
+        this.$emit("init")
 
-    
-  },
-
-  created() {
-    // this.opts = this.normalizeOptions(_.extend(this.options))
-  },
-
-  mounted() { this.$emit("init") },
+    },
 }
-
 </script>

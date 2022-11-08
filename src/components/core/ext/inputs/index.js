@@ -23,4 +23,5 @@ export default {
     "editorInput":  () => import("./editor.vue"),
     "fileInput":  () => import("./file.vue"), 
     "chartInput":  () => import("./chart.vue"),
+    "progressInput":  () => import("./progress.vue"),
 }
