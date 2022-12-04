@@ -132,6 +132,22 @@ export default {
             res
         },
 
+        selectSections: (filter) => {
+          filter = filter || (() => true);
+          if (!_.isFunction(filter)) {
+            let identifiers = (_.isArray(filter)) ? filter : [filter];
+            filter = (item) => item.config && identifiers.includes(item.config.id)
+          }
+
+          let res = this.$djvue.selectSections(this.$root, item => filter(item));
+
+          return (res.length == 0) ?
+            undefined :
+            (res.length == 1) ?
+            res[0] :
+            res
+        },
+
         upload: (url, file, data) => {
           let formData = new FormData();
           if(data) formData.append("data", JSON.stringify(data))
@@ -232,6 +248,7 @@ export default {
           `
             (function() { 
               let selectWidgets = this.api.selectWidgets;
+              let selectSections = this.api.selectSections;
               let on = this.api.on;
               let off = this.api.off;
               let emit = this.api.emit;

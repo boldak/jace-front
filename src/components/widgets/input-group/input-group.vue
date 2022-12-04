@@ -1,10 +1,10 @@
 <template>
   <div>
 
-    <!-- <pre class="caption" style="line-height:1;">
+<!--     <pre class="caption" style="line-height:1;">
       {{options}}
     </pre>  
-     -->
+  -->   
     <div v-if="options" 
       :class="(options.decoration) ? getPropertyValue(options.decoration.classes) : ''" 
       :style="(options.decoration) ? getPropertyValue(options.decoration.style) : ''"
@@ -70,18 +70,33 @@ export default {
   methods: {
 
     inputData(sender, data){
-
+      // console.log("IG Input data",sender,data)
       if(
         !isUndefined(sender.options) 
         && !isUndefined(sender.options.data) 
         && !isUndefined(sender.options.data.value)
       ) {
         if((/^\{\{.+\}\}$/gi).test(sender.options.data.value)) {
+          console.log(sender.options.data.value.replace("{{","").replace("}}","").trim())
           set( this, sender.options.data.value.replace("{{","").replace("}}","").trim(), data )
         } else {
-          sender.options.data.value = data
-        }
+          if((/^\$\{.+\}$/gi).test(sender.options.data.value)) {
         
+            let f = sender.options.data.value
+                      .replace("${","")
+                      .replace(/}$/gim,"")
+                      .replace(/this\./gim,"")
+                    
+
+            console.log(JSON.stringify(f))
+            set( this, f , data )
+
+          } else {
+            sender.options.data.value = data
+          }
+        }  
+        
+        // console.log(sender.options.data.event)
         let event = sender.options.data.event || "input-data"
         this.emit(event, sender, data)
 

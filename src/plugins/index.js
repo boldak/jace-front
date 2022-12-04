@@ -242,7 +242,6 @@ export var dpsPlugin = {
 
 
 var findChild = (component, filter, res) => {
-
   res = res || []
   if (component.$children) {
     res = res.concat(component.$children.filter(filter))
@@ -250,7 +249,7 @@ var findChild = (component, filter, res) => {
       res = res.concat(findChild(child, filter))
     })
   }
-
+  // console.log("res", res)
   return res
 }
 
@@ -417,6 +416,12 @@ export var djvuePlugin = {
       selectWidgets(root, filter) {
         return findChild(root, filter).filter(item => item.widgetWrapper)
       },
+
+      selectSections(root, filter) {
+        // console.log("root", root)
+        return findChild(root, filter).filter(item => item.config.type == "section")
+      },
+
 
       loadLocalFile(file, encoding) {
 

@@ -32,7 +32,7 @@
   
     <div pa-2 mt-2 class="holder producttion">
     
-      <v-layout column wrap>
+      <v-layout column wrap pa-0>
         <dj-widget :config="widget" :holder="name" v-for="widget in widgets" :key="widget.id" @init="onInitChild"></dj-widget>
       </v-layout>
     
@@ -140,7 +140,6 @@ export default {
           this._waitList = []
         }
       }
-
       if (this._waitList.length == 0) {
         this.$emit("init", this)
       }

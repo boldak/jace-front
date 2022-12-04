@@ -1,4 +1,27 @@
-export default [{
+export default [
+    
+    {
+        primary: '#3C5F70',
+        accent: '#615B62',
+        secondary: '#1B272C',
+        success: '#008048',
+        info: '#00D5FF',
+        warning: '#FB7F00',
+        error: '#bc3442'
+    },
+    
+    {
+        primary: '#769CB2',
+        accent: '#615B62',
+        secondary: '#1B272C',
+        success: '#00D176',
+        info: '#00D5FF',
+        warning: '#FB7F00',
+        error: '#FF475A'
+    },    
+
+
+    {
         primary: '#232F3D',
         accent: '#615B62',
         secondary: '#18191e',

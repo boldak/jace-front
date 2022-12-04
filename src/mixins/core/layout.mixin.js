@@ -114,6 +114,7 @@ export default {
     this.on({
       event: "layout-page-start",
       callback: (caller) => {
+        console.log("layout-page-start")
         if( this.beforeLayoutStart ) this.beforeLayoutStart()
         // this.pageStart() 
       },

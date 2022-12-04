@@ -41,3 +41,8 @@ export default {
 	}
 }
 </script>
+<style scoped>
+    .v-input--selection-controls {
+        margin:0px !important;
+    }
+</style>

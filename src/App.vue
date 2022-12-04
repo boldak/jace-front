@@ -273,6 +273,7 @@ export default {
     this.on({
       event: "page-start",
       callback: () => {
+        console.log("page start")
         this.started = true;
 
 

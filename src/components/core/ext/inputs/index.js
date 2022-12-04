@@ -23,5 +23,10 @@ export default {
     "editorInput":  () => import("./editor.vue"),
     "fileInput":  () => import("./file.vue"), 
     "chartInput":  () => import("./chart.vue"),
-    "progressInput":  () => import("./progress.vue"),
+    "multiple-choiceInput":  () => import("./multiple-choice.vue"),
+    "one-of-manyInput":  () => import("./multiple-choice.vue"),
+    "checkboxesInput":  () => import("./checkboxes.vue"),
+    "many-of-manyInput":  () => import("./checkboxes.vue"),
+    "ratesInput":  () => import("./rates.vue"),
+             
 }
