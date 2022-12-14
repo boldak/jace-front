@@ -33,7 +33,6 @@
     "es6-module-loader": "^0.17.11",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "fibers": "^4.0.1",
     "flowchart.js": "^1.11.3",
     "github-markdown-css": "^2.10.0",
     "highlightjs-cypher": "^1.1.1",
