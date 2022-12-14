@@ -20,7 +20,7 @@
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^2.1.1",
     "asciimath-to-latex": "^0.3.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.2",
     "babel-eslint": "^10.0.1",
     "core-js": "^2.6.5",
     "deepmerge": "^4.0.0",
